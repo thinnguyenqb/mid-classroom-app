@@ -10,54 +10,87 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import React, {useState} from "react";
-import { Link } from "react-router-dom";
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Link, useHistory } from "react-router-dom";
 import { useStyles } from "./style";
 import FacebookLogin from "react-facebook-login";
 import { GoogleLogin } from "react-google-login";
 import { FaFacebookSquare } from "react-icons/fa";
+import axios from 'axios'
+import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
+import {dispatchLogin} from '../../redux/actions/authAction'
+import { useDispatch } from "react-redux";
 
-const schema = yup.object().shape({
-  username: yup.string().required('Username is required'),
-  password: yup.string().required('Password is required'),
-});
+const initialState = {
+  email: '',
+  password: '',
+  err: '',
+  success: ''
+}
 
 
 const Login = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  const [user, setUser] = useState(initialState);
+  const { email, password, err, success } = user;
+
+  const handleChangeInput = e => {
+    const { name, value } = e.target;
+    setUser({...user, [name]: value, err: '', success: ''})
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const res = await axios.post('/user/login', { email, password })
+      setUser({...user, err: '', success: res.data.msg})
+      localStorage.setItem('first login', true);
+      
+      dispatch(dispatchLogin())
+      history.push("/")
+    } catch (err) {
+      err.response.data.msg &&
+      setUser({...user, err: err.response.data.msg, success: ''})
+    }
+  }
   
+
   return (
     <Container component="main" maxWidth="sm">
       <Paper className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
-        <form className={classes.form} noValidate>
+        <Avatar className={classes.avatar}> <LockOutlinedIcon /> </Avatar>
+        <Typography component="h1" variant="h5"> Login </Typography>
+        {err && showErrMsg(err)}
+        {success && showSuccessMsg(success)}
+
+        <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
-            variant="outlined"
             margin="normal"
-            inputRef=""
             required
             fullWidth
+            id="email"
+            variant="outlined"
             label="Username"
-            name="username"
+            name="email"
+            autoComplete="email"
             autoFocus
+            value={user.email}
+            onChange={handleChangeInput}
+            
           />
           <TextField
+            fullWidth
+            required
+            type="password"
             variant="outlined"
             margin="normal"
-            inputRef=""
-            required
-            fullWidth
             name="password"
             label="Password"
-            type="password"
-            autoComplete="current-password"
+            value={user.password}
+            onChange={handleChangeInput}
           />
           <Button
             type="submit"

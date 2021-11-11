@@ -1,100 +1,65 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
     Avatar,
     Button,
     CircularProgress,
     Container,
     Grid,
-    makeStyles,
     Paper,
     TextField,
     Typography,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useStyles } from "./style";
 import { Link, useHistory } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import * as yup from 'yup';
-//import { axiosUser } from '../../../api/axiosUser';
+import axios from 'axios'
+import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
+import { isEmpty, isEmail, isLength, isMatch } from './../../components/Validation/Validation';
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(7),
-        paddingBottom: theme.spacing(3),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-    },
-    avatar: {
-        marginTop: theme.spacing(5),
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '80%',
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
-
-const schema = yup.object().shape({
-    username: yup.string().required('Username is required'),
-    password: yup.string().required('Password is required'),
-    confirmPassword: yup.string().oneOf([yup.ref('password'), null], "Password doesn't match"),
-    fullname: yup.string().required('Fullname is required'),
-    email: yup.string().email('Email is not correct').required('Email is required'),
-});
+const initialState = {
+    username: '',
+    email: '',
+    password: '',
+    cf_password: '',
+    err: '',
+    success: ''
+}
 
 const SignUp = () => {
     const classes = useStyles();
-    // const { register, handleSubmit, errors, setError } = useForm({
-    //     resolver: yupResolver(schema),
-    // });
     const history = useHistory();
     const [loading, setLoading] = useState(false);
+   
+    const [user, setUser] = useState(initialState)
 
-    // const onSubmit = async (data) => {
-    //     try {
-    //         setLoading(true);
-    //         const { username, password, fullname, email } = data;
+    const {username, email, password, cf_password, err, success} = user
 
-    //         const res = await axiosUser.post('/auth/signup', {
-    //             username,
-    //             password,
-    //             fullname,
-    //             email,
-    //         });
+    const handleChangeInput = e => {
+        const {name, value} = e.target;
+        setUser({...user, [name]:value, err: '', success:''})
+    }
 
-    //         if (res.status === 'success') {
-    //             setLoading(false);
+    const handleSubmit = async e => {
+        e.preventDefault()
+        const name = username;
+        if (isEmpty(name) || isEmpty(password))
+            return setUser({...user, err: "Please fill in all fields", success: ''})
+        if (!isEmail(email))
+            return setUser({...user, err: "Invalid emails", success: ''})
+        if (isLength(password))
+            return setUser({...user, err: "Password must be at least 6 characters", success: ''})
+        if (!isMatch(password, cf_password))
+            return setUser({ ...user, err: "Password did not match", success: '' })
+        
+        try {
+            const res = await axios.post('/user/register', {name, email, password})
+            setUser({...user, err:'', success: res.data.msg})
 
-    //             Swal.fire({
-    //                 icon: 'info',
-    //                 title: "We've just send you an email",
-    //                 text: 'Please check it to complete activate your account',
-    //                 showConfirmButton: true,
-    //             }).then(() => {
-    //                 history.push('/login');
-    //             });
-    //         }
-    //     } catch (error) {
-    //         if (error.data.errors) {
-    //             for (let err of Object.keys(error.data.errors)) {
-    //                 setError(`${err}`, {
-    //                     type: 'apiValidate',
-    //                     message: error.data.errors[err],
-    //                 });
-    //             }
-    //         }
-    //         setLoading(false);
-    //         console.log(error);
-    //     }
-    // };
-
+        } catch (err) {
+            err.response.data.msg && setUser({...user, err: err.response.data.msg, success:''})
+        }
+    }
+    
     return (
         <Container maxWidth="sm">
             <Paper className={classes.paper}>
@@ -104,58 +69,56 @@ const SignUp = () => {
                 <Typography component="h1" variant="h5">
                     Signup
                 </Typography>
-                <form className={classes.form} noValidate>
+                {err && showErrMsg(err)}
+                {success && showSuccessMsg(success)}
+
+                <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        inputRef=""
                         required
                         fullWidth
                         label="Username"
                         name="username"
                         autoFocus
+                        value={user.username}
+                        onChange={handleChangeInput}
                         
                     />
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        inputRef=""
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        inputRef=""
-                        required
-                        fullWidth
-                        name="confirmPassword"
-                        label="Confirm Password"
-                        type="password"
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        inputRef=""
-                        fullWidth
-                        required
-                        name="fullname"
-                        label="Full Name"
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        inputRef=""
                         fullWidth
                         name="email"
                         label="Email"
                         type="email"
                         required
+                        value={user.email}
+                        onChange={handleChangeInput}
                     />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        value={user.password}
+                        onChange={handleChangeInput}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="cf_password"
+                        label="Confirm Password"
+                        type="password"
+                        value={user.cf_password}
+                        onChange={handleChangeInput}
+                    />
+                    
                     <Button
                         type="submit"
                         fullWidth

@@ -3,8 +3,10 @@ import { AppBar, Avatar, Menu,
   MenuItem, Toolbar, Typography, Button} from "@material-ui/core";
 import { Add } from "@material-ui/icons"
 import { useStyles } from "./style";
-import { CreateClass, JoinClass } from '..'
+import CreateClass from '../CreateClass/CreateClass'
+import JoinClass from '../JoinClass/JoinClass'
 import Logo from '../../assets/images/logo_fit.png'
+import { Link } from 'react-router-dom'
 
 const Navbar = ({ children }) => {
   const classes = useStyles();
@@ -30,15 +32,17 @@ const Navbar = ({ children }) => {
       <AppBar className={classes.appBar} position="static">
         <Toolbar className={classes.toolbar}>
           <div className={classes.headerWrapper}>
-          { children }
-            <img
-              src={Logo}
-              alt="Classroom"
-              style={{width: "110px"}}
-            />
-            <Typography variant="h6" className={classes.title}>
-              Classroom
-            </Typography>
+            {children}
+            <Link to="/">
+              <img
+                src={Logo}
+                alt="Classroom"
+                style={{width: "110px"}}
+              />
+            </Link>
+              <Typography variant="h6" className={classes.title}>
+                Classroom
+              </Typography>
           </div>
           <div className={classes.header__wrapper__right}>
             <Button

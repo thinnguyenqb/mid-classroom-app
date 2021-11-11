@@ -3,10 +3,12 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(12),
-    paddingBottom: theme.spacing(3),
+    paddingBottom: theme.spacing(5),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+    borderRadius: '15px'
   },
   avatar: {
     marginTop: theme.spacing(5),
