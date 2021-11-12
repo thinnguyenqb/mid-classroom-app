@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
-import { useStyles } from "./style";
-import { Link, useHistory } from 'react-router-dom';
+import { useStyles } from "./styles";
+import { Link } from 'react-router-dom';
 import axios from 'axios'
 import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
 import { isEmpty, isEmail, isLength, isMatch } from './../../components/Validation/Validation';
@@ -27,7 +27,6 @@ const initialState = {
 
 const SignUp = () => {
     const classes = useStyles();
-    const history = useHistory();
     const [loading, setLoading] = useState(false);
    
     const [user, setUser] = useState(initialState)
@@ -41,6 +40,7 @@ const SignUp = () => {
 
     const handleSubmit = async e => {
         e.preventDefault()
+        setLoading(true)
         const name = username;
         if (isEmpty(name) || isEmpty(password))
             return setUser({...user, err: "Please fill in all fields", success: ''})
@@ -50,11 +50,10 @@ const SignUp = () => {
             return setUser({...user, err: "Password must be at least 6 characters", success: ''})
         if (!isMatch(password, cf_password))
             return setUser({ ...user, err: "Password did not match", success: '' })
-        
         try {
             const res = await axios.post('/user/register', {name, email, password})
-            setUser({...user, err:'', success: res.data.msg})
-
+            setLoading(false)
+            setUser({ ...user, err: '', success: res.data.msg })
         } catch (err) {
             err.response.data.msg && setUser({...user, err: err.response.data.msg, success:''})
         }
@@ -135,7 +134,7 @@ const SignUp = () => {
                     <Grid container>
                         <Grid item xs></Grid>
                         <Grid item>
-                            <Link to="/login" variant="body2">
+                            <Link to="/login" variant="body2" style={{textDecoration: 'none'}}>
                                 {'Return to login'}
                             </Link>
                         </Grid>

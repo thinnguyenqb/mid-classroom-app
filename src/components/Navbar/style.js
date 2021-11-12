@@ -35,6 +35,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   icon: {
     marginRight: "5px",
+    marginLeft: "-5px",
     color: "#5f6368",
     cursor: "pointer",
   },

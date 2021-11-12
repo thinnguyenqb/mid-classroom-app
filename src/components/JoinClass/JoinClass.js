@@ -10,7 +10,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const JoinClass = (props) => {
   const { joinClassDiglog, setJoinClassDiglog } = props;
   const [classCode, setClassCode] = useState("");
-  const [error, setError] = useState();
 
   return (
     <div>
@@ -78,8 +77,6 @@ const JoinClass = (props) => {
                 variant="outlined"
                 value={classCode}
                 onChange={(e) => setClassCode(e.target.value)}
-                error={error}
-                helperText={error && "No class was found"}
               />
             </div>
           </div>

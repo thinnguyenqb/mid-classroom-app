@@ -11,7 +11,7 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import React, {useState} from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useStyles } from "./style";
+import { useStyles } from "./styles";
 import FacebookLogin from "react-facebook-login";
 import { GoogleLogin } from "react-google-login";
 import { FaFacebookSquare } from "react-icons/fa";
@@ -45,11 +45,12 @@ const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault()
     try {
+      setLoading(true)
       const res = await axios.post('/user/login', { email, password })
       setUser({...user, err: '', success: res.data.msg})
       localStorage.setItem('first login', true);
-      
       dispatch(dispatchLogin())
+      setLoading(false)
       history.push("/")
     } catch (err) {
       err.response.data.msg &&
@@ -93,11 +94,11 @@ const Login = () => {
             onChange={handleChangeInput}
           />
           <Button
-            type="submit"
+            className={classes.submit}
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            type="submit"
           >
             {loading ? (
                 <CircularProgress size={25} thickness={4} color="white" />
@@ -107,12 +108,12 @@ const Login = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="/forgot-password" variant="body2">
+              <Link to="/forgot-password" variant="body2" style={{textDecoration: 'none'}}>
                 Forgot your password?
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/signup" variant="body2">
+              <Link to="/signup" variant="body2" style={{textDecoration: 'none'}}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
