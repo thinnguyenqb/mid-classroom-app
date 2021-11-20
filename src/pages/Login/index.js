@@ -57,6 +57,20 @@ const Login = () => {
       setUser({...user, err: err.response.data.msg, success: ''})
     }
   }
+  const responseGoogle = async (response) => {
+    console.log(response)
+    try {
+      const res = await axios.post('/user/google_login', { tokenId: response.tokenId })
+      setUser({...user, err: '', success: res.data.msg})
+      localStorage.setItem('first login', true);
+      dispatch(dispatchLogin())
+      history.push("/")
+
+    } catch (err) {
+      err.response.data.msg &&
+      setUser({...user, err: err.response.data.msg, success: ''})
+    }
+  }
   
 
   return (
@@ -123,10 +137,13 @@ const Login = () => {
           Or
         </Typography>
         <GoogleLogin
-          buttonText="Login with Google"
-          cookiePolicy="single_host_origin"
+          clientId="243157071866-dv8qfonmlum4u3kkv2asdi0qph1pb882.apps.googleusercontent.com"
+          buttonText="Login with google"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={'single_host_origin'}
           className={classes.googleBtn}
-        />
+        />,
         <FacebookLogin
           icon={<FaFacebookSquare className={classes.fbIcon} />}
           cssClass={classes.facebookBtn}

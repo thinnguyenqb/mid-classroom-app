@@ -1,5 +1,6 @@
 import React from 'react'
 import Drawer from '../../components/Drawer/Drawer'
+import ClassCard from '../../components/ClassCard/ClassCard'
 import './styles.scss'
 
 function Home() {
@@ -7,7 +8,14 @@ function Home() {
     <>
       <Drawer />
       <div className="home">
-        <h1>ClassCard</h1>
+        <ClassCard />
+        <ClassCard />
+        <ClassCard />
+        <ClassCard />
+        <ClassCard />
+        <ClassCard />
+        <ClassCard />
+        
       </div>
     </>
   )

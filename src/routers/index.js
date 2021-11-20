@@ -25,7 +25,6 @@ const Body = () => {
         <Route path="/forgot-password" component={ForgotPassword} exact/>
         <Route path="/profile" component={Profile} exact/>
       </Switch>
-      
     </section>
   )
 }
