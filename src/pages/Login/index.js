@@ -58,7 +58,6 @@ const Login = () => {
     }
   }
   const responseGoogle = async (response) => {
-    console.log(response)
     try {
       const res = await axios.post('/user/google_login', { tokenId: response.tokenId })
       setUser({...user, err: '', success: res.data.msg})

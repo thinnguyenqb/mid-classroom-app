@@ -1,10 +1,10 @@
 import { Avatar } from "@material-ui/core";
 import { FolderOpen, PermContactCalendar } from "@material-ui/icons";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import "./styles.scss";
 
-const ClassCard = ({ classData }) => {
+const ClassCard = ({ id, name, desc, teacherName, teacherAvatar}) => {
   return (
     <li className="card__list">
       <div className="card__wrapper">
@@ -12,15 +12,15 @@ const ClassCard = ({ classData }) => {
           <div className="card__imgWrapper" />
           <div className="card__image" />
           <div className="card__content">
-            <Link className="card__title" to="/">
-              <h2>PTUDW</h2>
+            <Link className="card__title" to={`/class/${id}`}>
+              <h2>{name}</h2>
             </Link>
-            <p className="card__owner">HUY KHANH</p>
+            <p className="card__owner">{teacherName}</p>
           </div>
         </div>
         <Avatar
           className="card__avatar"
-          src="https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/s75-c-fbw=1/photo.jpg"
+          src={teacherAvatar}
         />
       </div>
       <div className="card__bottom">

@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from './../pages/ResetPassword/index';
 import Profile from '../pages/Profile'
+import Material from '../pages/Material'
 
 const Body = () => {
   const auth = useSelector(state => state.auth);
@@ -24,6 +25,7 @@ const Body = () => {
         <Route path="/user/reset/:token" component={ResetPassword} exact/>
         <Route path="/forgot-password" component={ForgotPassword} exact/>
         <Route path="/profile" component={Profile} exact/>
+        <Route path="/class/:id" component={Material} exact/>
       </Switch>
     </section>
   )

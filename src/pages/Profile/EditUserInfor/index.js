@@ -8,28 +8,28 @@ import {
   FormControlLabel,
   Radio,
 } from "@material-ui/core";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
+//import { useSelector } from "react-redux";
 import "./styles.scss";
 
-const initialState = {
-  username: "",
-  password: "",
-  cf_password: "",
-  err: "",
-  success: "",
-};
+// const initialState = {
+//   username: "",
+//   password: "",
+//   cf_password: "",
+//   err: "",
+//   success: "",
+// };
 
 function EditUserInfor() {
-  const auth = useSelector((status) => status.auth);
-  const token = useSelector((status) => status.token);
+  // const auth = useSelector((status) => status.auth);
+  // const token = useSelector((status) => status.token);
 
-  const { user } = auth;
-  const [data, setData] = useState(initialState);
-  const { name, password, cf_password, err, success } = data;
+  // const { user } = auth;
+  // const [data, setData] = useState(initialState);
+  // const { name, password, cf_password, err, success } = data;
 
-  const [avatar, setAvatar] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [avatar, setAvatar] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   return (
     <div className="user-info-wrapper">
