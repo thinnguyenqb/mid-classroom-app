@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Avatar, Button, Dialog, Slide, TextField } from "@material-ui/core";
+import { DialogTitle, Button, Dialog, Slide, TextField } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import "./style.css";
+import axios from "axios";
+import { API_URL } from "../../utils/config";
+import { useSelector } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -10,6 +13,29 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const JoinClass = (props) => {
   const { joinClassDiglog, setJoinClassDiglog } = props;
   const [classCode, setClassCode] = useState("");
+  const token = useSelector((state) => state.token);
+  
+  const joinClass = (e) => {
+    e.preventDefault();
+    if (classCode.trim().length > 0) {
+      const data = {
+        classroom_id: classCode
+      }
+      axios
+        .post(`${API_URL}/classroom/join`, data, {
+          headers: { Authorization: token },
+        })
+        .then((result) => {
+          alert(result.data.message)
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } else {
+      alert("Please Enter Class Name to Create.");
+    }
+    setJoinClassDiglog(false)
+  }
 
   return (
     <div>
@@ -32,40 +58,20 @@ const JoinClass = (props) => {
               className="joinClass__btn"
               variant="contained"
               color="primary"
+              onClick={joinClass}
             >
               Join
             </Button>
           </div>
           <div className="joinClass__form">
-            <p className="joinClass__formText">
-              You're currently signed in as 
-            </p>
-            <div className="joinClass__loginInfo">
-              <div className="joinClass__classLeft">
-                <Avatar src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png" />
-                <div className="joinClass__loginText">
-                  <div className="joinClass__loginName">
-                    Thin Nguyen
-                  </div>
-                  <div className="joinClass__loginEmail">
-                    thinnguyen2625@gmail.com
-                  </div>
-                </div>
-              </div>
-              <Button variant="outlined" color="primary">
-                Logout
-              </Button>
-            </div>
-          </div>
-          <div className="joinClass__form">
             <div
-              style={{ fontSize: "1.25rem", color: "#3c4043" }}
+              style={{ fontSize: "1.5rem", color: "#3c4043" }}
               className="joinClass__formText"
             >
               Class Code
             </div>
             <div
-              style={{ color: "#3c4043", marginTop: "-5px" }}
+              style={{ color: "#3c4043", marginTop: "-5px", marginBottom: "20px" }}
               className="joinClass__formText"
             >
               Ask your teacher for the class code, then enter it here.
@@ -75,6 +81,7 @@ const JoinClass = (props) => {
                 id="outlined-basic"
                 label="Class Code"
                 variant="outlined"
+                fullWidth
                 value={classCode}
                 onChange={(e) => setClassCode(e.target.value)}
               />

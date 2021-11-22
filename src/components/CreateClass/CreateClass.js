@@ -11,11 +11,10 @@ import "./style.css";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 const CreateClass = (props) => {
   const { createClassDiglog, setCreateClassDiglog } = props;
-  const handleOpen = () => setCreateClassDiglog(true);
+  //const handleOpen = () => setCreateClassDiglog(true);
   const handleClose = () => setCreateClassDiglog(false);
 
   const [name, setName] = useState("");
@@ -105,9 +104,7 @@ const CreateClass = (props) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Link to="/">
-          <Button onClick={addClass} >Create</Button>
-        </Link>
+        <Button onClick={addClass} >Create</Button>
       </DialogActions>
     </Dialog>
   );

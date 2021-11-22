@@ -19,7 +19,7 @@ export const dispatchGetUser = (res) => {
     return{
         type: ACTIONS.GET_USER,
         payload: { 
-            user: res.data,
+            user: res.data
         }
     }
 }  

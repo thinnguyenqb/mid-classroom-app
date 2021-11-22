@@ -75,10 +75,11 @@ ol {
 }
 .card__avatar {
   float: right;
-  height: 4.6875rem !important;
+  height: 5rem !important;
+  width: 5rem !important;
   position: relative !important;
-  margin-top: -3.09375rem !important;
-  width: 4.6875rem !important;
+  margin-top: -3rem !important;
+  margin-right: 0.5rem !important;
   text-align: left;
 }
 .card__bottom {

@@ -1,5 +1,5 @@
 import { Avatar } from "@material-ui/core";
-import { FolderOpen, PermContactCalendar } from "@material-ui/icons"
+//import { FolderOpen, PermContactCalendar } from "@material-ui/icons"
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { Tooltip, IconButton } from '@mui/material';
 import React from "react";
@@ -48,7 +48,7 @@ const ClassCard = ({ id, name, desc, teacherName, teacherAvatar }) => {
         />
       </div>
       <div className="card__bottom">
-        <Tooltip title="Exercise">
+        {/* <Tooltip title="Exercise">
           <IconButton color="primary">
             <PermContactCalendar />
           </IconButton>
@@ -57,8 +57,8 @@ const ClassCard = ({ id, name, desc, teacherName, teacherAvatar }) => {
           <IconButton color="primary">
             <FolderOpen />
           </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete" onClick={removeClass}>
+        </Tooltip> */}
+        <Tooltip title="Delete Or Left" onClick={removeClass}>
           <IconButton color="primary">
             <ExitToAppRoundedIcon />
           </IconButton>
