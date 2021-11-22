@@ -1,10 +1,34 @@
 import { Avatar } from "@material-ui/core";
-import { FolderOpen, PermContactCalendar } from "@material-ui/icons";
+import { FolderOpen, PermContactCalendar } from "@material-ui/icons"
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import { Tooltip, IconButton } from '@mui/material';
 import React from "react";
 import { Link } from 'react-router-dom';
 import "./styles.scss";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { API_URL } from "../../utils/config";
 
-const ClassCard = ({ id, name, desc, teacherName, teacherAvatar}) => {
+
+const ClassCard = ({ id, name, desc, teacherName, teacherAvatar }) => {
+  const token = useSelector((state) => state.token);
+  const removeClass = () => {
+    const data = {
+      id: id,
+    };
+    axios
+      .put(`${API_URL}/classroom/delete`, data, {
+        headers: { Authorization: token },
+      })
+      .then((result) => {
+        alert(result.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+    });
+  };
+
   return (
     <li className="card__list">
       <div className="card__wrapper">
@@ -24,8 +48,21 @@ const ClassCard = ({ id, name, desc, teacherName, teacherAvatar}) => {
         />
       </div>
       <div className="card__bottom">
-        <PermContactCalendar />
-        <FolderOpen />
+        <Tooltip title="Exercise">
+          <IconButton color="primary">
+            <PermContactCalendar />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Drive Google">
+          <IconButton color="primary">
+            <FolderOpen />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Delete" onClick={removeClass}>
+          <IconButton color="primary">
+            <ExitToAppRoundedIcon />
+          </IconButton>
+        </Tooltip>
       </div>
     </li>
   );

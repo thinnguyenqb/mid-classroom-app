@@ -1,73 +1,116 @@
-import React, {useState} from 'react'
-import { Button, Checkbox, Dialog, DialogActions, DialogTitle, DialogContent, } from "@material-ui/core";
-import './style.css'
-import Form from "./Form";
+import React, { useState } from "react";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@material-ui/core";
+import "./style.css";
+import axios from "axios";
+import { API_URL } from "../../utils/config";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const CreateClass = (props) => {
-  const {createClassDiglog, setCreateClassDiglog } = props;
-  const [check, setChecked] = useState(false);
-  const [showForm, setShowForm] = useState(false)
+  const { createClassDiglog, setCreateClassDiglog } = props;
+  const handleOpen = () => setCreateClassDiglog(true);
+  const handleClose = () => setCreateClassDiglog(false);
+
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const [topic, setTopic] = useState("");
+  const [room, setRoom] = useState("");
+  const token = useSelector((state) => state.token);
+
+  const addClass = async (e) => {
+    e.preventDefault();
+    if (name.trim().length > 0 && desc.trim().length > 0) {
+      const data = {
+        name: name,
+        desc: desc,
+        topic: topic,
+        room: room,
+      };
+
+      axios
+        .post(`${API_URL}/classroom/create`, data, {
+          headers: { Authorization: token },
+        })
+        .then((result) => {
+          
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } else {
+      alert("Please Enter Class Name to Create.");
+    }
+    setCreateClassDiglog(false)
+  };
 
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
-      maxWidth={showForm ? "ls" : "xs"}
+      maxWidth="ls"
       className="form__dialog"
       open={createClassDiglog}
+      onClose={handleClose}
     >
-      
-      {showForm ? (
-        <Form />
-      ) : (
-        <>
-          <DialogTitle className="class__title">
-            Using Classroom at a school with students?
-          </DialogTitle>
-          <DialogContent className="class__content">
-            <p className="class__text">
-              <p>If so, your school must sign up for a free</p>
-              <a href="/help" className="class__link">
-                G Suite for Education
-              </a>
-              account before you can use Classroom
-              <a href="/learn" className="class__link2">
-                Learn More.
-              </a>
-            </p>
-            <p>
-              G Suite for Education lets schools decide which Google services
-              their students can use, and provides additional
-              <a href="/privacy" className="class__link2 class__link">
-                privacy and security
-              </a>
-              protections that are important in a school setting. Students
-              cannot use Google Classroom at a school with personal accounts.
-            </p>
-
-            <div className="class__checkboxWrapper">
-              <Checkbox color="primary" onChange={() => setChecked(!check)}/>
-              <p>
-                I've read and understand the above notice, and I'm not using
-                Classroom at a school with students
-              </p>
-            </div>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={() => setCreateClassDiglog(false)}>
-              Close
-            </Button>
-
-            <Button autoFocus color="primary" disabled={!check}
-              onClick={() => setShowForm(true)}
-            >
-              Continue
-            </Button>
-          </DialogActions>
-        </>
-      )}
-      
+      <DialogTitle>Create Class</DialogTitle>
+      <DialogContent>
+        <TextField
+          id="filled-basic"
+          label="Class Name (required)"
+          name="name"
+          variant="standard"
+          margin="dense"
+          required
+          autoFocus
+          fullWidth
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <TextField
+          id="filled-basic"
+          label="Description"
+          variant="standard"
+          margin="dense"
+          autoFocus
+          fullWidth
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+        <TextField
+          id="filled-basic"
+          label="Topic"
+          variant="standard"
+          margin="dense"
+          autoFocus
+          fullWidth
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+        />
+        <TextField
+          id="filled-basic"
+          label="Room"
+          variant="standard"
+          margin="dense"
+          autoFocus
+          fullWidth
+          value={room}
+          onChange={(e) => setRoom(e.target.value)}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Cancel</Button>
+        <Link to="/">
+          <Button onClick={addClass} >Create</Button>
+        </Link>
+      </DialogActions>
     </Dialog>
-  )
-}
+  );
+};
 
-export default CreateClass
+export default CreateClass;
