@@ -26,20 +26,6 @@ const PaginationMenu = (id) => {
               color: "black",
               backgroundColor: "#fff",
               marginBottom: "10px",
-              marginRight: "10px"
-            }}
-          >
-             <Tooltip title="Invite">
-              <IconButton color="primary">
-                <PersonAddAlt1Icon />
-              </IconButton>
-            </Tooltip>
-          </Button>
-          <Button
-            style={{
-              color: "black",
-              backgroundColor: "#fff",
-              marginBottom: "10px",
             }}
             onClick={handleJoin}
           >

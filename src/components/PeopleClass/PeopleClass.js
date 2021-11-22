@@ -7,6 +7,9 @@ import { API_URL } from "../../utils/config";
 import { useSelector } from "react-redux";
 import { Divider } from "@material-ui/core";
 import UserCard from "../UserCard/UserCard";
+import { Tooltip, IconButton } from "@mui/material";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import InviteMember from "./../InviteMember/InviteMember";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -14,9 +17,21 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const PeopleClass = (props) => {
   const { peopleDiglog, setPeopleDiglog, id } = props;
+  const [createClassDiglog, setCreateClassDiglog] = useState(false);
   const [teacher, setTeacher] = useState({});
   const [students, setStudents] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
+  // console.log(auth.user._id)
+  // console.log(123)
+  // console.log(teacher.teacherId)
+  const handleClose = () => setAnchorEl(null);
+
+  const handleCreate = () => {
+    handleClose();
+    setCreateClassDiglog(true);
+  };
 
   useEffect(() => {
     axios
@@ -25,14 +40,13 @@ const PeopleClass = (props) => {
       })
       .then((result) => {
         //console.log(result)
-        setTeacher(result.data.teacher)
-        setStudents(result.data.students)
+        setTeacher(result.data.teacher);
+        setStudents(result.data.students);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [token, id.id]);
-
 
   return (
     <div>
@@ -53,30 +67,55 @@ const PeopleClass = (props) => {
             </div>
           </div>
           <div className="peopleClass__table">
-            <div className="peopleClass__table-header">Teacher</div>
+            <div className="peopleClass__table-header">
+              Teacher
+              {auth.user._id === teacher.teacherId ? (
+                <Tooltip title="Invite">
+                  <IconButton color="primary">
+                    <PersonAddAlt1Icon />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <></>
+              )}
+            </div>
             <div className="">
               <Divider />
-              <UserCard teacher={teacher}/>
+              <UserCard teacher={teacher} />
             </div>
           </div>
           <div className="peopleClass__table">
             <div className="peopleClass__table-header">
               <span>Students</span>
-              <span style={{fontSize: "18px", color: "#1967d2"}}>{students.length} Member</span>
+              <div>
+                <span style={{ fontSize: "18px", color: "#1967d2" }}>
+                  {students.length} Member
+                </span>
+                {auth.user._id === teacher.teacherId ? (
+                  <Tooltip title="Invite" onClick={handleCreate}>
+                    <IconButton color="primary">
+                      <PersonAddAlt1Icon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
             <div className="">
               <Divider />
-              {
-                students.map((item) => {
-                  return (
-                    <UserCard key={item.id} id={item.id} teacher={item} />
-                  );
-                })
-              }
+              {students.map((item) => {
+                return <UserCard key={item.id} id={item.id} teacher={item} />;
+              })}
             </div>
           </div>
         </div>
       </Dialog>
+      <InviteMember
+        createClassDiglog={createClassDiglog}
+        setCreateClassDiglog={setCreateClassDiglog}
+        id={id}
+      />
     </div>
   );
 };

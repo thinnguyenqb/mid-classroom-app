@@ -16,6 +16,7 @@ const Material = () => {
   const token = useSelector((state) => state.token);
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInput] = useState("");
+  const [teacherName, setTeacherName] = useState("");
   const [image, setImage] = useState(null);
   
   useEffect(() => {
@@ -25,18 +26,19 @@ const Material = () => {
       })
       .then(result => {
         setClasses(result.data)
+        setTeacherName(result.data.teacher.name)
       })
       .catch(err=>{
-          console.log(err)
-    })
-  }, [token, id]);
-  
-  const handleChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
-
+        console.log(err)
+      })
+    }, [token, id]);
+    
+    const handleChange = (e) => {
+      if (e.target.files[0]) {
+        setImage(e.target.files[0]);
+      }
+    };
+    
   return (
     <>
       <Drawer />
@@ -53,15 +55,19 @@ const Material = () => {
                 <div className="material__wrapper2">
                   <em className="material__code">Topic :</em>
                   <div className="material__id">{classes.topic}</div>
+                  <em className="material__code" style={{marginLeft: "20px"}}>- Room :</em>
+                  <div className="material__id">{classes.room}</div>
                 </div>
                 <div className="material__wrapper2">
-                  <em className="material__code">Room :</em>
-                  <div className="material__id">{classes.room}</div>
+                  
+                  <em className="material__code">Teacher :</em>
+                  <div className="material__id">{teacherName}</div>
                 </div>
                 <div className="material__wrapper2">
                   <em className="material__code">Class Code :</em>
                   <div className="material__id">{classes.id}</div>
                 </div>
+                
               </div>
               <div className="material__button">
                 <PaginationMenu id={id}/>
