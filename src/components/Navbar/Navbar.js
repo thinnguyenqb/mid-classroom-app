@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
 } from "@material-ui/core";
+import { Tooltip } from '@mui/material';
 import AddIcon from "@mui/icons-material/Add";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
@@ -96,24 +97,26 @@ const Navbar = ({ children }) => {
             </Typography>
           </div>
           <div className={classes.header__wrapper__right}>
-            <Link to="/" style={{ textDecoration: "none", marginRight: '5px' }}>
+          </div>
+          <div className={classes.header__wrapper__right}>
+            <Link to="/" style={{marginRight: "10px"}}>
               <Button variant="outlined">
                 <HomeRoundedIcon className={classes.icon} />
-                Home
               </Button>
             </Link>
-            <Button
-              id="basic-button"
-              aria-controls="basic-menu"
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-              variant="outlined"
-              style={{marginRight: '5px'}}
-            >
-              <AddIcon className={classes.icon} />
-              Create & Join
-            </Button>
+            <Tooltip title="Create & Join" style={{marginRight: "10px"}}>
+                <Button
+                  id="basic-button"
+                  aria-controls="basic-menu"
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
+                  variant="outlined"
+                >
+                  <AddIcon className={classes.icon} />
+                </Button>
+              
+            </Tooltip>
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}

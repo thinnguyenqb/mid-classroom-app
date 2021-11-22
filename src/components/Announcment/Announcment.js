@@ -1,8 +1,7 @@
 import { Avatar } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./styles.scss";
 const Announcment = ({ classData }) => {
-  const [announcment, setAnnouncment] = useState([]);
 
   return (
     <div>

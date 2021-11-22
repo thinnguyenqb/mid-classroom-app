@@ -1,0 +1,16 @@
+.usercard {
+  background-color: #fff;
+  overflow: hidden;
+  margin-top: 1rem;
+  margin-bottom: 0rem;
+}
+.usercard__top {
+  display: flex;
+  align-items: center;
+}
+.usercard__top > * {
+  margin-left: 10px;
+}
+.usercard__Cnt {
+  padding: 0.5rem 0;
+}

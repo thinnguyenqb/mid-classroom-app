@@ -16,7 +16,7 @@ function Home() {
   useEffect(() => {
     axios
       .get(`${API_URL}/classroom/list-teacher`, {
-        headers: { Authorization: token },
+        headers: { Authorization: token }
       })
       .then((result) => {
         setClassTeacher(result.data);
@@ -26,7 +26,7 @@ function Home() {
       });
     axios
       .get(`${API_URL}/classroom/list-student`, {
-        headers: { Authorization: token },
+        headers: { Authorization: token }
       })
       .then((result) => {
         setClassStudent(result.data);

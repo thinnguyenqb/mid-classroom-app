@@ -34,13 +34,12 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   icon: {
-    marginRight: "5px",
-    marginLeft: "-5px",
+    padding: "3px",
     color: "#5f6368",
     cursor: "pointer",
   },
   menu: {
-    marginTop: "40px",
-    marginLeft: "0px",
+    marginTop: "50px",
+    marginLeft: "-50px",
   }
 }));

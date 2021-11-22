@@ -52,7 +52,7 @@ const CreateClass = (props) => {
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
-      maxWidth="ls"
+      maxWidth="lg"
       className="form__dialog"
       open={createClassDiglog}
       onClose={handleClose}

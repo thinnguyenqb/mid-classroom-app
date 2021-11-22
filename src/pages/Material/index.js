@@ -7,6 +7,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { API_URL } from '../../utils/config'
 import { useParams } from "react-router-dom";
+import PaginationMenu from "../../components/PaginationMenu/PaginationMenu";
 
 const Material = () => {
   const { id } = useParams()
@@ -28,7 +29,7 @@ const Material = () => {
       .catch(err=>{
           console.log(err)
     })
-  }, [token]);
+  }, [token, id]);
   
   const handleChange = (e) => {
     if (e.target.files[0]) {
@@ -62,8 +63,12 @@ const Material = () => {
                   <div className="material__id">{classes.id}</div>
                 </div>
               </div>
+              <div className="material__button">
+                <PaginationMenu id={id}/>
+              </div>
             </div>
           </div>
+          
           <div className="material__announce">
             <div className="material__status">
               <p>Upcoming</p>

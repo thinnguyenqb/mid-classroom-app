@@ -16,6 +16,12 @@
   position: relative;
   width: 100%;
 }
+.material__button {
+  position: absolute;
+  top: 100%;
+  left: 80%;
+  transform: translateY(-100%);
+}
 .material__bgImage {
   background-image: url(https://gstatic.com/classroom/themes/img_backtoschool.jpg);
   background-size: cover;
@@ -70,6 +76,7 @@
   flex-wrap: wrap;
   margin-top: 1rem;
 }
+
 .material__code {
   font-weight: 500;
   font-style: normal;
