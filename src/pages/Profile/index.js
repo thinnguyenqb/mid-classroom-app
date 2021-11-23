@@ -13,7 +13,6 @@ function Profile() {
         <div className="right">
           <EditUserInfor />
         </div>
-        <h1>TotalScore</h1>
       </div>
     </>
   );
