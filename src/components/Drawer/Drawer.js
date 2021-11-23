@@ -87,7 +87,7 @@ export default function TemporaryDrawer() {
   );
 
   return (
-    <div>
+    <div style={{}}>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Navbar>

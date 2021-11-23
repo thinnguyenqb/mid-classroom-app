@@ -77,7 +77,7 @@ const Navbar = ({ children }) => {
       <>
         <div style={{ display: "flex", alignItems: "center" }}>
           <AccountMenu avatar={user.avatar} />
-          {user.name}
+          {user.fullname}
         </div>
       </>
     );
