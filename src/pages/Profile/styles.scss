@@ -16,6 +16,12 @@
 		display: grid;
 		grid-template-rows: 500px auto;
 		row-gap: 10px;
+		.edit-user-info {
+			border-radius: 5px;
+			padding-left: 50px;
+			padding-right: 50px;
+			padding-top: 30px;
+		}
 	} 
 
 	.profile-header{
@@ -40,5 +46,39 @@
 				margin-left: 20px;
 			}
     }
+		.user-info {
+			border-radius: 5px;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		
+			.name {
+				margin-top: 10px;
+				font-size: 20px;
+				font-weight: 600;
+			}
+			.email {
+				margin-top: 20px;
+				font-size: 14px;
+				display: flex;
+				align-items: center;
+			}
+			.teacher {
+				margin-top: 20px;
+			}
+			.student {
+				margin-top: 15px;
+			}
+		
+			span {
+				color: rgb(255, 5, 59);
+				margin-right: 10px;
+				background-color: rgb(255, 212, 227);
+				border-radius: 5px;
+				padding-left: 5px;
+				padding-right: 6px;
+				padding-top: 5px;
+			}
+		}
 	}
 }

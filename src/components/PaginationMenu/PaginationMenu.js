@@ -5,16 +5,11 @@ import Box from "@mui/material/Box";
 import PeopleClass from "./../PeopleClass/PeopleClass";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { Tooltip, IconButton } from '@mui/material';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const PaginationMenu = (id) => {
   const [peopleDiglog, setPeopleDiglog] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  //const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
-
   const handleJoin = () => {
-    handleClose();
+    
     setPeopleDiglog(true);
   };
   return (

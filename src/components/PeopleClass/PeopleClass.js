@@ -20,16 +20,10 @@ const PeopleClass = (props) => {
   const [createClassDiglog, setCreateClassDiglog] = useState(false);
   const [teacher, setTeacher] = useState({});
   const [students, setStudents] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
   const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
-  // console.log(auth.user._id)
-  // console.log(123)
-  // console.log(teacher.teacherId)
-  const handleClose = () => setAnchorEl(null);
 
   const handleCreate = () => {
-    handleClose();
     setCreateClassDiglog(true);
   };
 

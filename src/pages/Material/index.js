@@ -17,7 +17,7 @@ const Material = () => {
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInput] = useState("");
   const [teacherName, setTeacherName] = useState("");
-  const [image, setImage] = useState(null);
+  //const [image, setImage] = useState(null);
   
   useEffect(() => {
     axios
@@ -34,9 +34,9 @@ const Material = () => {
     }, [token, id]);
     
     const handleChange = (e) => {
-      if (e.target.files[0]) {
-        setImage(e.target.files[0]);
-      }
+      // if (e.target.files[0]) {
+      //   setImage(e.target.files[0]);
+      // }
     };
     
   return (

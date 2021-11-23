@@ -10,7 +10,6 @@ import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from './../pages/ResetPassword/index';
 import Profile from '../pages/Profile'
 import Material from '../pages/Material'
-import UserProfile from '../pages/UserProfile';
 
 const Body = () => {
   const auth = useSelector(state => state.auth);
@@ -27,7 +26,6 @@ const Body = () => {
         <Route path="/forgot-password" component={ForgotPassword} exact/>
         <Route path="/profile" component={Profile} exact/>
         <Route path="/class/:id" component={Material} exact/>
-        <Route path="/profile" component={Profile} exact/>
       </Switch>
     </section>
   )
