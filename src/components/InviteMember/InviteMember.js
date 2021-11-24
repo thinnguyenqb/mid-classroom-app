@@ -15,9 +15,9 @@ import { API_URL } from "../../utils/config";
 import { useSelector } from "react-redux";
 
 const InviteMember = (props) => {
-  const { createClassDiglog, setCreateClassDiglog, id } = props;
+  const { showInviteDiglog, setShowInviteDiglog, id } = props;
   //const handleOpen = () => setCreateClassDiglog(true);
-  const handleClose = () => setCreateClassDiglog(false);
+  const handleClose = () => setShowInviteDiglog(false);
 
   const [email, setEmail] = useState("");
 
@@ -38,6 +38,7 @@ const InviteMember = (props) => {
         .then((result) => {
           
           alert(result.data.msg);
+          if(!result.data.showErr) setShowInviteDiglog(false)
         })
         .catch((err) => {
           alert(err.message);
@@ -52,7 +53,7 @@ const InviteMember = (props) => {
       aria-labelledby="customized-dialog-title"
       maxWidth="lg"
       className="form__dialog"
-      open={createClassDiglog}
+      open={showInviteDiglog}
       onClose={handleClose}
     >
       <DialogTitle>INVITE MEMBER</DialogTitle>

@@ -13,28 +13,34 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const JoinClass = (props) => {
   const { joinClassDiglog, setJoinClassDiglog } = props;
   const [classCode, setClassCode] = useState("");
+  const [studentCode, setStudentCode] = useState("");
   const token = useSelector((state) => state.token);
   
   const joinClass = (e) => {
     e.preventDefault();
-    if (classCode.trim().length > 0) {
-      const data = {
-        classroom_id: classCode
+    if (classCode.trim().length > 0 && studentCode.trim().length > 0) {
+      if (!classCode.includes(' ') && !studentCode.includes(' ')) {
+        const data = {
+          classroom_id: classCode,
+          student_code: studentCode
+        }
+        axios
+          .post(`${API_URL}/classroom/join`, data, {
+            headers: { Authorization: token },
+          })
+          .then((result) => {
+            alert(result.data.msg)
+            if(!result.data.showErr) setJoinClassDiglog(false)
+          })
+          .catch((err) => {
+            alert(err.msg);
+          });
+      }else {
+        alert("Code hasn't white space");
       }
-      axios
-        .post(`${API_URL}/classroom/join`, data, {
-          headers: { Authorization: token },
-        })
-        .then((result) => {
-          alert(result.data.message)
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
     } else {
-      alert("Please Enter Class Name to Create.");
+      alert("Please enter both fields");
     }
-    setJoinClassDiglog(false)
   }
 
   return (
@@ -71,7 +77,7 @@ const JoinClass = (props) => {
               Class Code
             </div>
             <div
-              style={{ color: "#3c4043", marginTop: "-5px", marginBottom: "20px" }}
+              style={{ color: "#3c4043", marginTop: "10px", marginBottom: "5px" }}
               className="joinClass__formText"
             >
               Ask your teacher for the class code, then enter it here.
@@ -84,6 +90,23 @@ const JoinClass = (props) => {
                 fullWidth
                 value={classCode}
                 onChange={(e) => setClassCode(e.target.value)}
+              />
+            </div>
+
+            <div
+              style={{ color: "#3c4043", marginTop: "15px", marginBottom: "5px" }}
+              className="joinClass__formText"
+            >
+              Each student can only use 1 student ID.
+            </div>
+            <div className="joinClass__loginInfo">
+              <TextField
+                id="outlined-basic"
+                label="Student ID"
+                variant="outlined"
+                fullWidth
+                value={studentCode}
+                onChange={(e) => setStudentCode(e.target.value)}
               />
             </div>
           </div>
