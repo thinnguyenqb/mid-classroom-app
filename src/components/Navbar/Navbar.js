@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   AppBar,
   Menu,
@@ -17,12 +17,6 @@ import CreateClass from "../CreateClass/CreateClass";
 import JoinClass from "../JoinClass/JoinClass";
 import Logo from "../../assets/images/logo_fit.png";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import {
-  dispatchLogin,
-  fetchUser,
-  dispatchGetUser,
-} from "../../redux/actions/authAction";
 import AccountMenu from "./AccountMenu";
 
 const Navbar = ({ children }) => {
@@ -35,33 +29,6 @@ const Navbar = ({ children }) => {
   const handleClose = () => setAnchorEl(null);
   const auth = useSelector((state) => state.auth);
   const { user, isLogged } = auth;
-
-  const dispatch = useDispatch();
-  const token = useSelector((state) => state.token);
-
-  useEffect(() => {
-    const firstLogin = localStorage.getItem("first login");
-    if (firstLogin) {
-      const getToken = async () => {
-        const res = await axios.post("/user/refresh_token", null);
-        dispatch({ type: "GET_TOKEN", payload: res.data.access_token });
-      };
-      getToken();
-    }
-  }, [auth.isLogged, dispatch]);
-
-  useEffect(() => {
-    if (token) {
-      const getUser = () => {
-        dispatch(dispatchLogin());
-
-        return fetchUser(token).then((res) => {
-          dispatch(dispatchGetUser(res));
-        });
-      };
-      getUser();
-    }
-  }, [token, dispatch]);
 
   const handleCreate = () => {
     handleClose();

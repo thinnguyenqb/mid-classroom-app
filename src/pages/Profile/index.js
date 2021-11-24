@@ -11,7 +11,6 @@ import {
   Radio,
 } from "@material-ui/core";
 import "./styles.scss";
-import Drawer from "../../components/Drawer/Drawer";
 import { Divider } from "@mui/material";
 import { useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
@@ -135,7 +134,6 @@ const Profile = () => {
 
   return (
     <>
-      <Drawer />
       <div className="profile-wrapper">
         <div style={{ display: "flex", justifyContent: "center" }}>
           {err && showErrMsg(err)}

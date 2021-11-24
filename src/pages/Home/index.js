@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Drawer from "../../components/Drawer/Drawer";
 import ClassCard from "../../components/ClassCard/ClassCard";
 import { Divider } from "@material-ui/core";
 
@@ -38,7 +37,6 @@ function Home() {
 
   return (
     <>
-      <Drawer />
       <div className="home">
       <Divider />
         <div className="home__class">

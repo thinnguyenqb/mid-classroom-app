@@ -25,7 +25,7 @@ export default function AccountMenu({ avatar }) {
   const handleLogout = async () => {
     try {
       await axios.get('/user/logout')
-      localStorage.removeItem('first login')
+      localStorage.removeItem('firsLogin')
       window.location.href = "/";
     } catch (err) {
       window.location.href = "/";
