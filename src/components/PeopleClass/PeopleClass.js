@@ -22,7 +22,6 @@ const PeopleClass = (props) => {
   const [students, setStudents] = useState([]);
   const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
-
   const handleCreate = () => {
     setCreateClassDiglog(true);
   };
@@ -33,15 +32,14 @@ const PeopleClass = (props) => {
         headers: { Authorization: token },
       })
       .then((result) => {
-        //console.log(result)
         setTeacher(result.data.teacher);
         setStudents(result.data.students);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [token, id.id]);
-
+    }, [token, id.id, auth]);
+    
   return (
     <div>
       <Dialog
@@ -75,7 +73,8 @@ const PeopleClass = (props) => {
             </div>
             <div className="">
               <Divider />
-              <UserCard teacher={teacher} />
+              <UserCard user={teacher} isTeacher={true}/>
+              
             </div>
           </div>
           <div className="peopleClass__table">
@@ -98,9 +97,11 @@ const PeopleClass = (props) => {
             </div>
             <div className="">
               <Divider />
-              {students.map((item) => {
-                return <UserCard key={item.id} id={item.id} teacher={item} />;
-              })}
+              {students.map((item, index) => (
+                <div key={index}>
+                  <UserCard user={item} isTeacher={false}/>;
+                </div>
+              ))}
             </div>
           </div>
         </div>

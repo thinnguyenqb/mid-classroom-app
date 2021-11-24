@@ -3,6 +3,12 @@
   overflow: hidden;
   margin-top: 1rem;
   margin-bottom: 0rem;
+  font-weight: 500;
+}
+.usercard__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .usercard__top {
   display: flex;
