@@ -57,5 +57,5 @@
   "devDependencies": {
     "node-sass": "^6.0.1"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "https://classroom-hcmus-api.herokuapp.com/"
 }
