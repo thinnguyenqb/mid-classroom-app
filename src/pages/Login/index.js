@@ -19,7 +19,6 @@ import axios from 'axios'
 import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
 import {dispatchLogin} from '../../redux/actions/authAction'
 import { useDispatch } from "react-redux";
-import { API_URL } from "../../utils/config";
 
 const initialState = {
   email: '',

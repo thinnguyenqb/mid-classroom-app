@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react'
 import { BrowserRouter as Router } from "react-router-dom"
 import Body from './routers/index'
-import { API_URL } from "./utils/config";
 import {useDispatch, useSelector} from 'react-redux'
 import { dispatchLogin, fetchUser, dispatchGetUser } from './redux/actions/authAction'
 import axios from 'axios';
