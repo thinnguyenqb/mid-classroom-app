@@ -17,13 +17,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const PeopleClass = (props) => {
   const { peopleDiglog, setPeopleDiglog, id } = props;
-  const [createClassDiglog, setCreateClassDiglog] = useState(false);
+  const [showInviteDiglog, setShowInviteDiglog] = useState(false);
   const [teacher, setTeacher] = useState({});
   const [students, setStudents] = useState([]);
   const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
   const handleCreate = () => {
-    setCreateClassDiglog(true);
+    setShowInviteDiglog(true);
   };
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const PeopleClass = (props) => {
               <Divider />
               {students.map((item, index) => (
                 <div key={index}>
-                  <UserCard user={item} isTeacher={false}/>;
+                  <UserCard user={item} isTeacher={false}/>
                 </div>
               ))}
             </div>
@@ -107,8 +107,8 @@ const PeopleClass = (props) => {
         </div>
       </Dialog>
       <InviteMember
-        createClassDiglog={createClassDiglog}
-        setCreateClassDiglog={setCreateClassDiglog}
+        showInviteDiglog={showInviteDiglog}
+        setShowInviteDiglog={setShowInviteDiglog}
         id={id}
       />
     </div>

@@ -12,13 +12,12 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import React, {useState} from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useStyles } from "./styles";
-import FacebookLogin from "react-facebook-login";
 import { GoogleLogin } from "react-google-login";
-import { FaFacebookSquare } from "react-icons/fa";
 import axios from 'axios'
 import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
-import {dispatchLogin} from '../../redux/actions/authAction'
+import {dispatchLogin } from '../../redux/actions/authAction'
 import { useDispatch } from "react-redux";
+import { API_URL } from "../../utils/config";
 
 const initialState = {
   email: '',
@@ -46,11 +45,11 @@ const Login = () => {
     e.preventDefault()
     try {
       setLoading(true)
-      const res = await axios.post('/user/login', { email, password })
+      const res = await axios.post(`${API_URL}/user/login`, { email, password })
+      console.log(res)
       setUser({...user, err: '', success: res.data.msg})
-      localStorage.setItem('first login', true);
+      localStorage.setItem('access_token', res.data.access_token);
       dispatch(dispatchLogin())
-      setLoading(false)
       history.push("/")
     } catch (err) {
       err.response.data.msg &&
@@ -59,12 +58,12 @@ const Login = () => {
   }
   const responseGoogle = async (response) => {
     try {
-      const res = await axios.post('/user/google_login', { tokenId: response.tokenId })
+      const res = await axios.post(`${API_URL}/user/google_login`, { tokenId: response.tokenId })
+      console.log(res)
       setUser({...user, err: '', success: res.data.msg})
-      localStorage.setItem('first login', true);
+      localStorage.setItem('access_token', res.data.access_token);
       dispatch(dispatchLogin())
       history.push("/")
-
     } catch (err) {
       err.response.data.msg &&
       setUser({...user, err: err.response.data.msg, success: ''})
@@ -133,7 +132,7 @@ const Login = () => {
           </Grid>
         </form>
         <Typography variant="body1" className={classes.separator}>
-          Or
+        ------------------------------------------------ OR ------------------------------------------------
         </Typography>
         <GoogleLogin
           clientId="243157071866-dv8qfonmlum4u3kkv2asdi0qph1pb882.apps.googleusercontent.com"
@@ -142,10 +141,6 @@ const Login = () => {
           onFailure={responseGoogle}
           cookiePolicy={'single_host_origin'}
           className={classes.googleBtn}
-        />,
-        <FacebookLogin
-          icon={<FaFacebookSquare className={classes.fbIcon} />}
-          cssClass={classes.facebookBtn}
         />
       </Paper>
     </Container>

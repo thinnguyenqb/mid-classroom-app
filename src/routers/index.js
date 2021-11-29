@@ -14,18 +14,19 @@ import Material from '../pages/Material'
 const Body = () => {
   const auth = useSelector(state => state.auth);
   const { isLogged } = auth;
+  const token = localStorage.getItem('access_token')
 
   return (
     <section>
       <Switch>
-        <Route path="/" component={Home} exact/>
-        <Route path="/login" component={isLogged ? NotFound : Login} exact/>
+        <Route path="/" component={token ? Home : Login } exact/>
+        <Route path="/login" component={Login} exact/>
         <Route path="/signup" component={isLogged ? NotFound : SignUp} exact/>
         <Route path="/user/activate/:activation_token" component={ActivationEmail} exact/>
         <Route path="/user/reset/:token" component={ResetPassword} exact/>
         <Route path="/forgot-password" component={ForgotPassword} exact/>
-        <Route path="/profile" component={Profile} exact/>
-        <Route path="/class/:id" component={Material} exact/>
+        <Route path="/profile" component={token ? Profile : NotFound} exact/>
+        <Route path="/class/:id" component={token ? Material : NotFound} exact/>
       </Switch>
     </section>
   )

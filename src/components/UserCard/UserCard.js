@@ -27,7 +27,7 @@ const UserCard = ({user, isTeacher}) => {
         </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default UserCard;

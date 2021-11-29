@@ -1,6 +1,5 @@
 import { Avatar, Button, TextField } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import Drawer from "../../components/Drawer/Drawer";
 import "./styles.scss";
 import Announcment from "../../components/Announcment/Announcment";
 import axios from "axios";
@@ -41,7 +40,6 @@ const Material = () => {
     
   return (
     <>
-      <Drawer />
       <div className="material">
         <div className="material__wrapper">
           <div className="material__content">

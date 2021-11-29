@@ -11,6 +11,7 @@ import "./style.css";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const CreateClass = (props) => {
   const { createClassDiglog, setCreateClassDiglog } = props;
@@ -22,6 +23,7 @@ const CreateClass = (props) => {
   const [topic, setTopic] = useState("");
   const [room, setRoom] = useState("");
   const token = useSelector((state) => state.token);
+  const history = useHistory()
 
   const addClass = async (e) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ const CreateClass = (props) => {
           headers: { Authorization: token },
         })
         .then((result) => {
-          
+          history.go(0)
         })
         .catch((err) => {
           alert(err.message);

@@ -5,6 +5,7 @@ import "./style.css";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -15,7 +16,8 @@ const JoinClass = (props) => {
   const [classCode, setClassCode] = useState("");
   const [studentCode, setStudentCode] = useState("");
   const token = useSelector((state) => state.token);
-  
+  const history = useHistory()
+
   const joinClass = (e) => {
     e.preventDefault();
     if (classCode.trim().length > 0 && studentCode.trim().length > 0) {
@@ -30,7 +32,8 @@ const JoinClass = (props) => {
           })
           .then((result) => {
             alert(result.data.msg)
-            if(!result.data.showErr) setJoinClassDiglog(false)
+            if (!result.data.showErr) setJoinClassDiglog(false)
+            history.go(0)
           })
           .catch((err) => {
             alert(err.msg);
