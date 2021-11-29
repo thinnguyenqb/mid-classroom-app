@@ -135,7 +135,7 @@ const Login = () => {
         ------------------------------------------------ OR ------------------------------------------------
         </Typography>
         <GoogleLogin
-          clientId="243157071866-dv8qfonmlum4u3kkv2asdi0qph1pb882.apps.googleusercontent.com"
+          clientId="593320437073-2ojo48v5551ovh11stopijh8264hhduv.apps.googleusercontent.com"
           buttonText="Login with google"
           onSuccess={responseGoogle}
           cookiePolicy={'single_host_origin'}
