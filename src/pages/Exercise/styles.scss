@@ -1,0 +1,94 @@
+.container {
+    width: 800px;
+    margin: auto auto;
+}
+
+.content {
+    height: 120px;
+    border-top: solid 8px #1967D2;
+    border-radius: 4px;
+    box-shadow: 5px 10px 18px #888888;
+    margin: 20px 0px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.form-grade{
+    height: 200px;
+    border-radius: 4px;
+    box-shadow: 5px 10px 18px #888888 ;
+    box-sizing: border-box;
+    margin: 20px 0px;
+}
+.form-creator {
+    height: 250px;
+    border-radius: 4px;
+    box-shadow: 5px 10px 18px #888888 ;
+    box-sizing: border-box;
+    margin: 20px 0px;
+}
+.form-creator-content {
+    padding: 14px 20px;
+}
+h2 {
+    font-size: 21px;
+    margin: 15px 0;
+}
+.input {
+    margin: 20px 40px 20px 0px;
+}
+.grid{
+    float: left;
+}
+.grid-left {
+    width: 90%;
+}
+.grid-right {
+    width: 5%;
+    float: right;
+}
+.btn-exit{
+    text-align: center;
+}
+
+.btn-add {
+    background-color:#1a8354;
+    height: 250px;
+    justify-content: center;
+    color: #fff;
+    width: 100%;
+    border-style: unset;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.btn-edit {
+    background-color:#1355cf;
+    height: 100px;
+    justify-content: center;
+    color: #fff;
+    width: 100%;
+    border-style: unset;
+    border-top-right-radius: 4px;
+}
+.btn-save {
+    background-color:#20c997;
+    height: 100px;
+    justify-content: center;
+    color: #fff;
+    width: 100%;
+    border-style: unset;
+    border-top-right-radius: 4px;
+}
+
+.btn-delete {
+    background-color:#c7071a;
+    height: 100px;
+    justify-content: center;
+    color: #fff;
+    width: 100%;
+    border-style: unset;
+    border-bottom-right-radius: 4px;
+}
+.btn-add:hover, .btn-delete:hover, .btn-edit:hover, .btn-save:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
