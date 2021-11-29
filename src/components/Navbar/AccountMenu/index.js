@@ -27,8 +27,8 @@ export default function AccountMenu({ avatar }) {
   const handleLogout = async () => {
     try {
       localStorage.removeItem('access_token')
-      await history.go(0)
       history.push("/login")
+      history.go(0)
     } catch (err) {
       history.push("/login")
     }

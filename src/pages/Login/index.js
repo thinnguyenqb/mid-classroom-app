@@ -138,7 +138,6 @@ const Login = () => {
           clientId="243157071866-dv8qfonmlum4u3kkv2asdi0qph1pb882.apps.googleusercontent.com"
           buttonText="Login with google"
           onSuccess={responseGoogle}
-          onFailure={responseGoogle}
           cookiePolicy={'single_host_origin'}
           className={classes.googleBtn}
         />
