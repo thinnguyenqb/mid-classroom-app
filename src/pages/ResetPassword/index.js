@@ -15,6 +15,7 @@ import { useStyles } from './styles';
 import axios from 'axios'
 import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
 import { isLength, isMatch } from './../../components/Validation/Validation';
+import { API_URL } from '../../utils/config';
 
 const initialState = {
     password: '',
@@ -46,7 +47,7 @@ const ResetPassword = () => {
         
         setLoading(true)
         try {
-            const res = await axios.post('/user/reset', {password}, {
+            const res = await axios.post(`${API_URL}/user/reset`, {password}, {
                 headers: {Authorization: token}
             })
             setLoading(false)

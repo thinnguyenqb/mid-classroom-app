@@ -1,39 +1,63 @@
 import React, { useState, useEffect } from "react";
 import ClassCard from "../../components/ClassCard/ClassCard";
 import { Divider } from "@material-ui/core";
-
+import { useHistory } from "react-router-dom";
 import "./styles.scss";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { API_URL } from "../../utils/config";
+import { useDispatch } from "react-redux";
+import { dispatchGetUser, dispatchLogin, fetchUser } from "../../redux/actions/authAction";
 
 function Home() {
   const [classTeacher, setClassTeacher] = useState([]);
   const [classStudent, setClassStudent] = useState([]);
-  const token = useSelector((state) => state.token);
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const token = localStorage.getItem('access_token')
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/classroom/list-teacher`, {
-        headers: { Authorization: token }
-      })
-      .then((result) => {
-        setClassTeacher(result.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    axios
-      .get(`${API_URL}/classroom/list-student`, {
-        headers: { Authorization: token }
-      })
-      .then((result) => {
-        setClassStudent(result.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [token]);
+    if (token) {
+      
+      const getUser = () => {
+        dispatch(dispatchLogin())
+        return fetchUser(token).then((res) => {
+          dispatch(dispatchGetUser(res));
+        });
+      };
+      getUser();
+      dispatch({type: 'GET_TOKEN', payload: token})
+    }
+  }, [token, dispatch]);
+  
+  useEffect(() => {
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      const getData = async () => {
+        try {
+          const { data: teachers} = await axios
+          .get(`${API_URL}/classroom/list-teacher`, {
+            headers: { Authorization: token }
+          })
+    
+          setClassTeacher(teachers);
+          const {data: students} = await axios
+          .get(`${API_URL}/classroom/list-student`, {
+            headers: { Authorization: token }
+          })
+          
+          setClassStudent(students);
+        } catch (error) {
+          if (error) {
+            if (error.response.status === 401) {
+              history.push('/login')
+            }
+            console.log(error.response.data.msg);
+         }
+        }
+      }
+      getData();
+      }
+  }, [history]);
 
   return (
     <>

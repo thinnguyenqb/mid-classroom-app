@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios'
 import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
 import { isEmpty, isEmail, isLength, isMatch } from './../../components/Validation/Validation';
+import { API_URL } from '../../utils/config';
 
 const initialState = {
     username: '',
@@ -51,7 +52,7 @@ const SignUp = () => {
         if (!isMatch(password, cf_password))
             return setUser({ ...user, err: "Password did not match", success: '' })
         try {
-            const res = await axios.post('/user/register', {name, email, password})
+            const res = await axios.post(`${API_URL}/user/register`, {name, email, password})
             setLoading(false)
             setUser({ ...user, err: '', success: res.data.msg })
         } catch (err) {

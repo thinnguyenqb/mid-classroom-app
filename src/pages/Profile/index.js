@@ -19,6 +19,7 @@ import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { isLength, isMatch } from "../../components/Validation/Validation";
 import AlternateEmailRoundedIcon from "@mui/icons-material/AlternateEmailRounded";
+import { useHistory } from 'react-router-dom';
 import {
   showErrMsg,
   showSuccessMsg,
@@ -45,12 +46,12 @@ const Profile = () => {
   const [data, setData] = useState(initialState);
   const [avatar, setAvatar] = useState(false);
   const { name, fullname, gender, password, cf_password, err, success } = data;
-
+  
+  const history = useHistory()
 
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
-    console.log(data);
     setData({ ...data, [name]: value, err: "", success: "" });
   };
 
@@ -70,7 +71,7 @@ const Profile = () => {
       });
       setAvatar(res.data.url);
     } catch (err) {
-      // setData({...data, err: err.response.data.msg , success: ''})
+      setData({...data, err: err.response.data.msg , success: ''})
     }
   };
 
@@ -94,6 +95,7 @@ const Profile = () => {
         err: "",
         success: "Updated Information Successfully!",
       });
+      history.go(0)
     } catch (err) {
       setData({ ...data, err: err.response.data.msg, success: "" });
     }
@@ -111,10 +113,7 @@ const Profile = () => {
       return setData({ ...data, err: "Password did not match.", success: "" });
 
     try {
-      axios.post(
-        "/user/reset",
-        { password },
-        {
+      axios.post( `${API_URL}/user/reset`, { password }, {
           headers: { Authorization: token },
         }
       );
@@ -243,7 +242,6 @@ const Profile = () => {
                 </FormControl>
                 <Button
                   type="primary"
-                  htmlType="submit"
                   shape="round"
                   variant="contained"
                   color="primary"
@@ -259,7 +257,6 @@ const Profile = () => {
                 </Typography>
                 <TextField
                   required
-                  id="outlined-required"
                   label="Password"
                   name="password"
                   fullWidth
@@ -270,7 +267,6 @@ const Profile = () => {
                 />
                 <TextField
                   required
-                  id="outlined-required"
                   label="Confirm Password"
                   name="cf_password"
                   fullWidth
@@ -282,7 +278,6 @@ const Profile = () => {
                 <div>
                   <Button
                     type="primary"
-                    htmlType="submit"
                     shape="round"
                     variant="contained"
                     style={{ marginTop: "20px" }}

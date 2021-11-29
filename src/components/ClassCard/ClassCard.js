@@ -3,7 +3,7 @@ import { Avatar } from "@material-ui/core";
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { Tooltip, IconButton } from '@mui/material';
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import "./styles.scss";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import { API_URL } from "../../utils/config";
 
 const ClassCard = ({ id, name, desc, teacherName, teacherAvatar }) => {
   const token = useSelector((state) => state.token);
+  const history = useHistory()
   const removeClass = () => {
     const data = {
       id: id,
@@ -22,6 +23,7 @@ const ClassCard = ({ id, name, desc, teacherName, teacherAvatar }) => {
       })
       .then((result) => {
         alert(result.data.message);
+        history.go(0)
       })
       .catch((err) => {
         console.log(err);
