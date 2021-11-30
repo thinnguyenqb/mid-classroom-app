@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    zIndex: '100',
+    marginBottom: '80px'
   },
   menuButton: {
     marginRight: theme.spacing(1),
@@ -41,5 +43,13 @@ export const useStyles = makeStyles((theme) => ({
   menu: {
     marginTop: "50px",
     marginLeft: "-50px",
-  }
+  },
+  hover: {
+    fontSize: 17,
+    textTransform: "none",
+    fontFamily: '"Google Sans",Roboto,Arial,sans-serif,',
+    "&:hover": {
+      color: "#fc2c03",
+    },
+  },
 }));

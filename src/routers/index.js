@@ -10,6 +10,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from './../pages/ResetPassword/index';
 import Profile from '../pages/Profile'
 import Material from '../pages/Material'
+import Exercises from './../pages/Exercises/index';
 
 const Body = () => {
   const auth = useSelector(state => state.auth);
@@ -19,7 +20,7 @@ const Body = () => {
   return (
     <section>
       <Switch>
-        <Route path="/" component={token ? Home : Login } exact/>
+        <Route path="/" component={Home} exact/>
         <Route path="/login" component={Login} exact/>
         <Route path="/signup" component={isLogged ? NotFound : SignUp} exact/>
         <Route path="/user/activate/:activation_token" component={ActivationEmail} exact/>
@@ -27,6 +28,7 @@ const Body = () => {
         <Route path="/forgot-password" component={ForgotPassword} exact/>
         <Route path="/profile" component={token ? Profile : NotFound} exact/>
         <Route path="/class/:id" component={token ? Material : NotFound} exact/>
+        <Route path="/class/:id/exercises" component={Exercises} exact/>
       </Switch>
     </section>
   )

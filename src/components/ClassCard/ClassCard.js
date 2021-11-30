@@ -1,6 +1,6 @@
 import { Avatar } from "@material-ui/core";
 //import { FolderOpen, PermContactCalendar } from "@material-ui/icons"
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { Tooltip, IconButton } from '@mui/material';
 import React from "react";
 import { Link, useHistory } from 'react-router-dom';
@@ -62,7 +62,7 @@ const ClassCard = ({ id, name, desc, teacherName, teacherAvatar }) => {
         </Tooltip> */}
         <Tooltip title="Delete Or Left" onClick={removeClass}>
           <IconButton color="primary">
-            <ExitToAppRoundedIcon />
+            <DeleteOutlinedIcon />
           </IconButton>
         </Tooltip>
       </div>

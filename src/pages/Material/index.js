@@ -6,7 +6,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { API_URL } from '../../utils/config'
 import { useParams } from "react-router-dom";
-import PaginationMenu from "../../components/PaginationMenu/PaginationMenu";
+import PeopleButton from "../../components/PeopleButton/index";
+import ExercisesButton from './../../components/ExercisesButton/index';
 
 const Material = () => {
   const { id } = useParams()
@@ -68,8 +69,10 @@ const Material = () => {
                 
               </div>
               <div className="material__button">
-                <PaginationMenu id={id}/>
+                <ExercisesButton id={id}/>
+                <PeopleButton id={id}/>
               </div>
+              
             </div>
           </div>
           

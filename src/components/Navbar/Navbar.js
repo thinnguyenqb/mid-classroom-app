@@ -50,9 +50,11 @@ const Navbar = ({ children }) => {
     );
   };
 
+  
+
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appBar} position="static">
+      <AppBar className={classes.appBar} position="fixed">
         <Toolbar className={classes.toolbar}>
           <div className={classes.headerWrapper}>
             {children}

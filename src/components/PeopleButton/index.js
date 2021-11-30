@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Button } from "@material-ui/core";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
-import PeopleClass from "./../PeopleClass/PeopleClass";
+import PeopleClass from "../PeopleClass/PeopleClass";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { Tooltip, IconButton } from '@mui/material';
 
-const PaginationMenu = (id) => {
+const PeopleButton = (id) => {
   const [peopleDiglog, setPeopleDiglog] = useState(false);
   const handleJoin = () => {
-    
     setPeopleDiglog(true);
   };
+  
   return (
     <>
       <Box>
@@ -42,4 +42,4 @@ const PaginationMenu = (id) => {
   );
 };
 
-export default PaginationMenu;
+export default PeopleButton;
