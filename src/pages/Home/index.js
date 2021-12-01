@@ -7,6 +7,7 @@ import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { useDispatch } from "react-redux";
 import { dispatchGetUser, dispatchLogin, fetchUser } from "../../redux/actions/authAction";
+import { Typography } from "@mui/material";
 
 function Home() {
   const [classTeacher, setClassTeacher] = useState([]);
@@ -62,43 +63,52 @@ function Home() {
   return (
     <>
       <div className="home">
-      <Divider />
-        <div className="home__class">
-          <div className="home__class--title">Lớp giảng dạy</div>
+        {!token ?
+          <>
+          <Typography variant="h4" gutterBottom>Chào mừng bạn đến với Classroom Hcmus 😍💻📒🔎🎓😇</Typography>
+          <Typography variant="h5" gutterBottom>Hãy đăng nhập để trải nghiệm mô hình giảng dạy và học tập này thôi nào!!!</Typography>
+        </> :
+          <>
+            <Divider />
+      <div className="home__class">
+        <div className="home__class--title">Lớp giảng dạy</div>
 
-          <div className="home__class--item">
-            {classTeacher.map((item) => {
-              return (
-                <ClassCard
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  desc={item.desc}
-                  teacherName={item.teacher.name}
-                  teacherAvatar={item.teacher.avatar}
-                />
-              );
-            })}
-          </div>
+        <div className="home__class--item">
+          {classTeacher.map((item) => {
+            return (
+              <ClassCard
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                desc={item.desc}
+                teacherName={item.teacher.name}
+                teacherAvatar={item.teacher.avatar}
+              />
+            );
+          })}
         </div>
-        <Divider />
-        <div className="home__class">
-          <div className="home__class--title">Lớp đã đăng ký học</div>
-          <div className="home__class--item">
-            {classStudent.map((item) => {
-              return (
-                <ClassCard
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  desc={item.desc}
-                  teacherName={item.teacher.name}
-                  teacherAvatar={item.teacher.avatar}
-                />
-              );
-            })}
-          </div>
+      </div>
+      <Divider />
+      <div className="home__class">
+        <div className="home__class--title">Lớp đã đăng ký học</div>
+        <div className="home__class--item">
+          {classStudent.map((item) => {
+            return (
+              <ClassCard
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                desc={item.desc}
+                teacherName={item.teacher.name}
+                teacherAvatar={item.teacher.avatar}
+              />
+            );
+          })}
         </div>
+      </div>
+          </>
+        }
+      
       </div>
     </>
   );
