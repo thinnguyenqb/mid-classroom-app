@@ -29,7 +29,6 @@ function Exercise() {
   const [open, setOpen] = useState(false);
   const [assignment, setAssignment] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  //const [expanded, setExpanded] = React.useState(false);
   const [curMenu, setCurMenu] = useState(null);
   const [curAssignment, setCurAssignment] = useState(null);
   const token = localStorage.getItem("access_token");
@@ -71,16 +70,6 @@ function Exercise() {
     setAnchorEl(null);
   };
 
-  function handleOnDragEnd(result) {
-    if (!result.destination) return;
-
-    const items = Array.from(assignment);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setAssignment(items);
-  }
-
   useEffect(() => {
     if (token) {
       const getTeacher = async () => {
@@ -118,7 +107,40 @@ function Exercise() {
       getData();
     }
   }, [classId.id, token]);
-  console.log(teacher);
+
+  function handleOnDragEnd(result) {
+    if (!result.destination) return;
+
+    const items = Array.from(assignment);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setAssignment(items);
+
+    const newArrange = items.map(({ id }, index) => ({ id: id, order: index }));
+    if (newArrange && newArrange.length > 0) {
+      axios
+        .put(
+          `${API_URL}/exercise/arrange`,
+          {
+            classId: classId.id,
+            newArrange: newArrange,
+          },
+          {
+            headers: { Authorization: token },
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+  
   return (
     <Grid
       container
@@ -135,154 +157,151 @@ function Exercise() {
         </Link>
       </Box>
 
-      {!assignment.length ? (
-        <Typography>Hiện tại không có bài tập</Typography>
-      ) : (
-        <Container sx={{ maxWidth: "850px !important", mt: 2 }}>
-          {auth.user._id === teacher.teacherId ? (
-            <CreateAssignment
-              openState={[open, setOpen]}
-              classId={classId.id}
-              assignmentState={[assignment, setAssignment]}
-              curAssignmentState={[curAssignment, setCurAssignment]}
-            />
-          ) : (
-            <></>
-          )}
+      {!assignment.length ? <Typography>Hiện tại không có bài tập</Typography> : <></>}
+      <Container sx={{ maxWidth: "850px !important", mt: 2 }}>
+        {auth.user._id === teacher.teacherId ? (
+          <CreateAssignment
+            openState={[open, setOpen]}
+            classId={classId.id}
+            assignmentState={[assignment, setAssignment]}
+            curAssignmentState={[curAssignment, setCurAssignment]}
+          />
+        ) : (
+          <></>
+        )}
 
-          <Grid container direction="column" sx={{ mt: 4 }}>
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-              <Droppable droppableId="assigns">
-                {(provided) => (
-                  <Grid
-                    className="characters"
-                    item
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {assignment.map(({ id, name, desc, point }, index) => {
-                      return (
-                        <Draggable
-                          key={id}
-                          draggableId={id}
-                          index={index}
-                          styled
-                        >
-                          {(provided) => (
-                            <div>
-                              <Accordion
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                ref={provided.innerRef}
-                                // disableGutters={true}
-                                sx={{
-                                  mb: 0.5,
-                                  border: "1px solid #ddd",
-                                  boxShadow:
-                                    "0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%)",
-                                  borderRadius: "0.5rem",
-                                  "&:not(:hover)": { boxShadow: "none" },
-                                }}
-                                className="assignment"
+        <Grid container direction="column" sx={{ mt: 4 }}>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="assigns">
+              {(provided) => (
+                <Grid
+                  className="characters"
+                  item
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {assignment.map(({ id, name, desc, point }, index) => {
+                    return (
+                      <Draggable
+                        key={id}
+                        draggableId={id}
+                        index={index}
+                        styled
+                      >
+                        {(provided) => (
+                          <div>
+                            <Accordion
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              ref={provided.innerRef}
+                              // disableGutters={true}
+                              sx={{
+                                mb: 0.5,
+                                border: "1px solid #ddd",
+                                boxShadow:
+                                  "0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%)",
+                                borderRadius: "0.5rem",
+                                "&:not(:hover)": { boxShadow: "none" },
+                              }}
+                              className="assignment"
+                            >
+                              <AccordionSummary>
+                                <Grid container alignItems="center">
+                                  <Avatar sx={{ backgroundColor: "#3f51b5" }}>
+                                    <AssignmentOutlinedIcon />
+                                  </Avatar>
+                                  <Typography
+                                    sx={{
+                                      ml: 2,
+                                      color: "#3c404a",
+                                      fontSize: "0.875rem",
+                                      letterSpacing: ".01785714em",
+                                    }}
+                                  >
+                                    {name}
+                                  </Typography>
+                                  {auth.user._id === teacher.teacherId ? (
+                                    <IconButton
+                                      sx={{
+                                        ml: "auto",
+                                        height: 40,
+                                        width: 40,
+                                      }}
+                                      className="menu-button"
+                                      data-id={id}
+                                      onClick={handleClickMenu}
+                                    >
+                                      <MoreVertOutlinedIcon />
+                                    </IconButton>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </Grid>
+                              </AccordionSummary>
+                              <AccordionDetails
+                                sx={{ border: "1px solid #ccc", padding: 0 }}
                               >
-                                <AccordionSummary>
-                                  <Grid container alignItems="center">
-                                    <Avatar sx={{ backgroundColor: "#3f51b5" }}>
-                                      <AssignmentOutlinedIcon />
-                                    </Avatar>
-                                    <Typography
-                                      sx={{
-                                        ml: 2,
-                                        color: "#3c404a",
-                                        fontSize: "0.875rem",
-                                        letterSpacing: ".01785714em",
-                                      }}
-                                    >
-                                      {name}
-                                    </Typography>
-                                    {auth.user._id === teacher.teacherId ? (
-                                      <IconButton
-                                        sx={{
-                                          ml: "auto",
-                                          height: 40,
-                                          width: 40,
-                                        }}
-                                        className="menu-button"
-                                        data-id={id}
-                                        onClick={handleClickMenu}
-                                      >
-                                        <MoreVertOutlinedIcon />
-                                      </IconButton>
-                                    ) : (
-                                      <></>
-                                    )}
+                                <Grid container direction="row">
+                                  <Grid
+                                    item
+                                    xs={8}
+                                    sx={{
+                                      p: 2,
+                                      pl: 4,
+                                      fontSize: "13px",
+                                      lineHeight: "20px",
+                                      letterSpacing: "normal",
+                                      borderRight: "1px solid #ccc",
+                                    }}
+                                    dangerouslySetInnerHTML={{ __html: desc }}
+                                  ></Grid>
+                                  <Grid
+                                    item
+                                    xs={4}
+                                    sx={{
+                                      p: 2,
+                                      pl: 4,
+                                      fontSize: "13px",
+                                      lineHeight: "20px",
+                                      letterSpacing: "normal",
+                                      borderRight: "1px solid #ccc",
+                                    }}
+                                  >
+                                    Point: {point}
                                   </Grid>
-                                </AccordionSummary>
-                                <AccordionDetails
-                                  sx={{ border: "1px solid #ccc", padding: 0 }}
-                                >
-                                  <Grid container direction="row">
-                                    <Grid
-                                      item
-                                      xs={8}
-                                      sx={{
-                                        p: 2,
-                                        pl: 4,
-                                        fontSize: "13px",
-                                        lineHeight: "20px",
-                                        letterSpacing: "normal",
-                                        borderRight: "1px solid #ccc",
-                                      }}
-                                      dangerouslySetInnerHTML={{ __html: desc }}
-                                    ></Grid>
-                                    <Grid
-                                      item
-                                      xs={4}
-                                      sx={{
-                                        p: 2,
-                                        pl: 4,
-                                        fontSize: "13px",
-                                        lineHeight: "20px",
-                                        letterSpacing: "normal",
-                                        borderRight: "1px solid #ccc",
-                                      }}
-                                    >
-                                      Point: {point}
-                                    </Grid>
-                                  </Grid>
-                                </AccordionDetails>
-                              </Accordion>
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </Grid>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </Grid>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleCloseMenu}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
-            sx={{ right: 20 }}
-          >
-            <MenuItem onClick={handleEdit}>Edit</MenuItem>
-            <MenuItem onClick={handleRemove}>Remove</MenuItem>
-          </Menu>
-        </Container>
-      )}
+                                </Grid>
+                              </AccordionDetails>
+                            </Accordion>
+                          </div>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </Grid>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Grid>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseMenu}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          sx={{ right: 20 }}
+        >
+          <MenuItem onClick={handleEdit}>Edit</MenuItem>
+          <MenuItem onClick={handleRemove}>Remove</MenuItem>
+        </Menu>
+      </Container>
     </Grid>
   );
 }

@@ -111,9 +111,14 @@ const CreateAssignment = ({ classId, openState, assignmentState, curAssignmentSt
             }
           )
           .then((res) => {
-            console.log(res.data);
             if (res.status === 201) {
-              setAssignment(assignment.concat(res.data));
+              const newdata = {
+                id: res.data._id,
+                name: res.data.name,
+                desc: res.data.desc,
+                point: res.data.point
+              }
+              setAssignment(assignment.concat(newdata));
               setOpen(false);
               setValue("");
               formik.resetForm();
@@ -121,10 +126,10 @@ const CreateAssignment = ({ classId, openState, assignmentState, curAssignmentSt
           })
           .catch((err) => {
             console.log(err);
-        });
-      }
-    },
-  });
+          });
+        }
+      },
+    });
   
   return (
     <React.Fragment>
