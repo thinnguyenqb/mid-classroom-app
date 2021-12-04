@@ -132,7 +132,7 @@ const Login = () => {
           </Grid>
         </form>
         <Typography variant="body1" className={classes.separator}>
-        ------------------------------------------------ OR ------------------------------------------------
+        ---------------------------------------------- OR ----------------------------------------------
         </Typography>
         <GoogleLogin
           clientId="593320437073-2ojo48v5551ovh11stopijh8264hhduv.apps.googleusercontent.com"

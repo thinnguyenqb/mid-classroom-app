@@ -18,3 +18,7 @@ export const isMatch = (password, cf_password) => {
   if(password === cf_password) return true
   return false
 }
+export const validateUserName = (username) => {
+    var usernameRegex = /^[a-z0-9]{3,30}$/;
+    return usernameRegex.test(username);
+}
