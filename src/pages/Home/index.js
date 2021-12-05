@@ -18,7 +18,6 @@ function Home() {
 
   useEffect(() => {
     if (token) {
-      
       const getUser = () => {
         dispatch(dispatchLogin())
         return fetchUser(token).then((res) => {
