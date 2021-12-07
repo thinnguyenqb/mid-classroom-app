@@ -138,6 +138,7 @@ const Material = () => {
                       <TextField
                         id="filled-multiline-flexible"
                         multiline
+                        fullWidth
                         label="Announce Something to class"
                         variant="filled"
                         value={inputValue}

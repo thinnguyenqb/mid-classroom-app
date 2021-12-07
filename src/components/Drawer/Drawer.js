@@ -27,9 +27,9 @@ export default function TemporaryDrawer() {
   const [classTeacher, setClassTeacher] = useState([]);
   const [classStudent, setClassStudent] = useState([]);
 
+  const token = localStorage.getItem('access_token')
 
   useEffect(()=>{
-    const token = localStorage.getItem('access_token')
   if (token) {
     const getData = async () => {
       try {
@@ -44,7 +44,7 @@ export default function TemporaryDrawer() {
           headers: { Authorization: token }
         })
         setClassStudent(students);
-        
+
       } catch (error) {
         if (error) {
           console.log(error)
@@ -53,7 +53,7 @@ export default function TemporaryDrawer() {
     }
     getData();
     }
-  },[])
+  },[token])
 
   ///
   const classes = useStyles();

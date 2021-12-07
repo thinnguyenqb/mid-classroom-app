@@ -93,6 +93,7 @@
   margin: -2.4rem;
   margin-left: 1rem;
   /* margin-top: 1.5rem; */
+
 }
 .material__subText {
   margin-top: 1.5rem;
@@ -116,8 +117,11 @@
   margin-top: 1.5rem;
 }
 .material__ancContent {
-  padding: 30px;
-  width: 42rem;
+  // padding: 30px;
+  // width: 42rem;
+  // color: rgba(0, 0, 0, 0.549);
+  padding: 15px;
+  width: 46rem;
   color: rgba(0, 0, 0, 0.549);
 }
 
@@ -142,8 +146,9 @@
 .material__buttons {
   display: flex;
   justify-content: space-between;
-  width: 50vw;
+  width: 48vw;
   margin-top: 20px;
+  margin-right: 20px;
 }
 
 .material__id{
