@@ -28,6 +28,7 @@ import {
 const initialState = {
   name: "",
   fullname: "",
+  studentID: "",
   gender: "",
   password: "",
   cf_password: "",
@@ -41,14 +42,13 @@ const Input = styled("input")({
 
 const Profile = () => {
   const auth = useSelector((status) => status.auth);
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem('access_token');
   const { user } = auth;
   const [data, setData] = useState(initialState);
   const [avatar, setAvatar] = useState(false);
-  const { name, fullname, gender, password, cf_password, err, success } = data;
-  
-  const history = useHistory()
+  const { name, fullname, gender, studentID, password, cf_password, err, success } = data;
 
+  const history = useHistory()
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -83,13 +83,13 @@ const Profile = () => {
           name: name ? name : user.name,
           fullname: fullname ? fullname : user.fullname,
           gender: gender ? gender : user.gender,
+          studentID: studentID,
           avatar: avatar ? avatar : user.avatar,
         },
         {
           headers: { Authorization: token },
         }
       );
-
       setData({
         ...data,
         err: "",
@@ -124,8 +124,7 @@ const Profile = () => {
     }
   };
   const handleUpdateInfo = () => {
-    console.log({ name, fullname, gender, avatar });
-    if (name || fullname || gender || avatar) updateInfor();
+    if (name || fullname || gender || studentID || avatar) updateInfor();
   };
   const handleUpdatePassword = () => {
     if (password) updatePassword();
@@ -134,10 +133,10 @@ const Profile = () => {
   return (
     <>
       <div className="profile-wrapper">
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          {err && showErrMsg(err)}
-          {success && showSuccessMsg(success)}
-        </div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+                {err && showErrMsg(err)}
+                {success && showSuccessMsg(success)}
+              </div>
         <div className="profile-header">
           <h2>Personal Information</h2>
         </div>
@@ -153,8 +152,7 @@ const Profile = () => {
               {user.email}
             </div>
             <div className="teacher">Giới tính: {user.gender}</div>
-            <div className="teacher">Số lượng lớp giảng dạy: 1</div>
-            <div className="student">Số lượng lớp tham gia học: 1</div>
+            <div className="teacher">StudentID: {user.studentID}</div>
           </div>
           <div className="profile-avatar">
             <Avatar
@@ -194,6 +192,33 @@ const Profile = () => {
                   variant="outlined"
                   value={user.email}
                 />
+                 {
+                  user.studentID ? 
+                  <TextField
+                    id="outlined"
+                    label="StudentID"
+                    name="studentID"
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    disabled
+                    helperText="StudentID is only updated once"
+                    defaultValue={user.studentID}
+                    onChange={handleChangeInput}
+                    />
+                    :
+                  <TextField
+                    id="outlined"
+                    label="StudentID"
+                    name="studentID"
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    helperText="StudentID is only updated once"
+                    defaultValue={user.studentID}
+                    onChange={handleChangeInput}
+                  />
+                }
                 <TextField
                   variant="outlined"
                   margin="normal"
