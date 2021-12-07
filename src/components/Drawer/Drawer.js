@@ -2,10 +2,15 @@ import * as React from 'react';
 import { Box, Drawer, List, ListSubheader, Divider, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import ClassIcon from '@mui/icons-material/Class';
 import Navbar from '../Navbar/Navbar'
 import { makeStyles } from "@material-ui/core/styles";
 import { Menu } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import {API_URL} from '../../utils/config'
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   list: {
@@ -17,6 +22,40 @@ const useStyles = makeStyles({
 });
 
 export default function TemporaryDrawer() {
+
+  ///
+  const [classTeacher, setClassTeacher] = useState([]);
+  const [classStudent, setClassStudent] = useState([]);
+
+
+  useEffect(()=>{
+    const token = localStorage.getItem('access_token')
+  if (token) {
+    const getData = async () => {
+      try {
+        const { data: teachers} = await axios
+        .get(`${API_URL}/classroom/list-teacher`, {
+          headers: { Authorization: token }
+        })
+        setClassTeacher(teachers);
+
+        const {data: students} = await axios
+        .get(`${API_URL}/classroom/list-student`, {
+          headers: { Authorization: token }
+        })
+        setClassStudent(students);
+        
+      } catch (error) {
+        if (error) {
+          console.log(error)
+        }
+      }
+    }
+    getData();
+    }
+  },[])
+
+  ///
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -56,12 +95,12 @@ export default function TemporaryDrawer() {
           </ListSubheader>
         }
       >
-        {['Class 1'].map((text, index) => (
-          <ListItem button key={text}>
+        {classTeacher.map((item) => (
+          <ListItem button key={item.id} component={Link} to={`/class/${item.id}`}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+             <ClassIcon />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={item.name} />
           </ListItem>
         ))}
       </List>
@@ -74,13 +113,13 @@ export default function TemporaryDrawer() {
           </ListSubheader>
         }
       >
-        {['Class 2'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {classStudent.map((item) => (
+           <ListItem button key={item.id} component={Link} to={`/class/${item.id}`}>
+           <ListItemIcon>
+             <ClassIcon />
+           </ListItemIcon>
+              <ListItemText primary={item.name} />
+         </ListItem>
         ))}
       </List>
     </Box>
