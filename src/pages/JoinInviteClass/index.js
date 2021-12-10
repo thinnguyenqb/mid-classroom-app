@@ -87,7 +87,9 @@ function JoinInviteClass() {
   return (
     <>
       <div className="home">
-        {!token ? (
+
+        123121212111111111111111111111111111111111111
+        {/* {!token ? (
           <Typography variant="h5" gutterBottom>
             Nếu bạn chưa có tài khoản thì hãy đăng ký với email đã mời rồi đăng
             nhập lại. Sau đó bạn hãy quay lại link mời trong mail để tham gia
@@ -152,7 +154,7 @@ function JoinInviteClass() {
               )}
             </div>
           </>
-        )}
+        )} */}
       </div>
     </>
   );
