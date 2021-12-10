@@ -38,7 +38,7 @@ const PeopleClass = (props) => {
       .catch((err) => {
         console.log(err);
       });
-    }, [token, id.id, auth]);
+  }, [token, id.id, auth]);
     
   return (
     <div>
@@ -64,7 +64,7 @@ const PeopleClass = (props) => {
               {auth.user._id === teacher.teacherId ? (
                 <Tooltip title="Invite">
                   <IconButton color="primary">
-                    <PersonAddAlt1Icon />
+                    <PersonAddAlt1Icon />*
                   </IconButton>
                 </Tooltip>
               ) : (

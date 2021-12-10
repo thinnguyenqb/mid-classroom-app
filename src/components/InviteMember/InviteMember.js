@@ -30,13 +30,12 @@ const InviteMember = (props) => {
         email: email,
         classroom_id: id.id
       };
-      // console.log(email)
+      console.log(data)
       axios
         .post(`${API_URL}/classroom/invite-student`, data, {
           headers: { Authorization: token },
         })
         .then((result) => {
-          
           alert(result.data.msg);
           if(!result.data.showErr) setShowInviteDiglog(false)
         })

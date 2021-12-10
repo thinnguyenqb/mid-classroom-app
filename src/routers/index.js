@@ -30,7 +30,7 @@ const Body = () => {
         <Route path="/profile" component={token ? Profile : NotFound} exact/>
         <Route path="/class/:id" component={token ? Material : NotFound} exact/>
         <Route path="/class/:id/exercises" component={Exercises} exact/>
-        <Route path="/class/:id/join-student/:email/:join_token" component={JoinInviteClass} exact/>
+        <Route path="/class/:id/joinStudent" component={JoinInviteClass} />
       </Switch>
     </section>
   )

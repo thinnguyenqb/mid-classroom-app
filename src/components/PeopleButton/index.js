@@ -8,7 +8,7 @@ import { Tooltip, IconButton } from '@mui/material';
 
 const PeopleButton = (id) => {
   const [peopleDiglog, setPeopleDiglog] = useState(false);
-  const handleJoin = () => {
+  const showPeople = () => {
     setPeopleDiglog(true);
   };
   
@@ -22,7 +22,7 @@ const PeopleButton = (id) => {
               backgroundColor: "#fff",
               marginBottom: "10px",
             }}
-            onClick={handleJoin}
+            onClick={showPeople}
           >
             <Tooltip title="Everyone">
               <IconButton color="primary">

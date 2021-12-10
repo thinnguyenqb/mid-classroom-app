@@ -9,7 +9,9 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Box,
 } from "@material-ui/core";
+import LoadingButton from '@mui/lab/LoadingButton';
 import "./styles.scss";
 import { Divider } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -19,6 +21,7 @@ import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { isLength, isMatch } from "../../components/Validation/Validation";
 import AlternateEmailRoundedIcon from "@mui/icons-material/AlternateEmailRounded";
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useHistory } from 'react-router-dom';
 import {
   showErrMsg,
@@ -45,8 +48,9 @@ const Profile = () => {
   const token = localStorage.getItem('access_token');
   const { user } = auth;
   const [data, setData] = useState(initialState);
-  const [avatar, setAvatar] = useState(false);
   const { name, fullname, gender, studentID, password, cf_password, err, success } = data;
+  const [avatar, setAvatar] = useState(false);
+  const [loading, setLoading]= useState(false)
 
   const history = useHistory()
 
@@ -60,9 +64,17 @@ const Profile = () => {
     try {
       const file = e.target.files[0];
 
+      if(!file) return setData({...data, err: "No files were uploaded." , success: ''})
+
+      if(file.size > 5*1024 * 1024)
+          return setData({...data, err: "Size too large." , success: ''})
+
+      if(file.type !== 'image/jpeg' && file.type !== 'image/png')
+          return setData({...data, err: "File format is incorrect." , success: ''})
+
       let formData = new FormData();
       formData.append("file", file);
-
+      setLoading(true)
       const res = await axios.post(`${API_URL}/api/upload_avatar`, formData, {
         headers: {
           "content-type": "multipart/form-data",
@@ -70,6 +82,7 @@ const Profile = () => {
         },
       });
       setAvatar(res.data.url);
+      setLoading(false)
     } catch (err) {
       setData({...data, err: err.response.data.msg , success: ''})
     }
@@ -160,17 +173,7 @@ const Profile = () => {
               src={user.avatar}
               sx={{ width: 200, height: 200 }}
             />
-            <label htmlFor="contained-button-file">
-              <Input
-                id="contained-button-file"
-                type="file"
-                name="file"
-                onChange={changeAvatar}
-              />
-              <Button variant="contained" component="span">
-                Update Photo
-              </Button>
-            </label>
+            
           </div>
         </div>
         <Divider />
@@ -181,7 +184,45 @@ const Profile = () => {
                 <Typography variant="h5" component="h5">
                   Update Information
                 </Typography>
-                <TextField
+                <div className="avatar-update">
+                  <label htmlFor="contained-button-file">
+                    <Input
+                      id="contained-button-file"
+                      type="file"
+                      name="file"
+                      onChange={changeAvatar}
+                    />
+                    <LoadingButton
+                      endIcon={<PhotoCamera />}
+                      loading={loading}
+                      loadingPosition="end"
+                      variant="contained"
+                      component="span"
+                      style={{backgroundColor: "#3f51b5"}}
+                    >
+                      Update Photo
+                    </LoadingButton>
+                    {/* <Button variant="contained" component="span">
+                      Update Photo
+                      <PhotoCamera/>
+                    </Button> */}
+                  </label>
+                  <Avatar
+                    alt="img-avatar"
+                    src={avatar}
+                    sx={{ width: 100, height: 100 }}
+                  />
+
+                </div>
+                <Box
+                  component="form"
+                  sx={{
+                    '& .MuiTextField-root': { m: 1, width: '32ch' },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                  <TextField
                   required
                   id="outlined-multiline-flexible"
                   label="Email"
@@ -219,6 +260,8 @@ const Profile = () => {
                     onChange={handleChangeInput}
                   />
                 }
+                </Box>
+                
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -305,7 +348,7 @@ const Profile = () => {
                     type="primary"
                     shape="round"
                     variant="contained"
-                    style={{ marginTop: "20px" }}
+                    style={{ marginTop: "20px"}}
                     onClick={handleUpdatePassword}
                   >
                     Save Changes
