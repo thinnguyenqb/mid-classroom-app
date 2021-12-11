@@ -12,6 +12,7 @@ import Profile from '../pages/Profile'
 import Material from '../pages/Material'
 import Exercises from './../pages/Exercises/index';
 import JoinInviteClass from '../pages/JoinInviteClass';
+import GradeClass from '../pages/GradeClass';
 
 const Body = () => {
   const auth = useSelector(state => state.auth);
@@ -31,6 +32,8 @@ const Body = () => {
         <Route path="/class/:id" component={token ? Material : NotFound} exact/>
         <Route path="/class/:id/exercises" component={Exercises} exact/>
         <Route path="/class/:id/join-student/:email/:join_token" component={JoinInviteClass} exact/>
+        <Route path="/class/:id/gradeclass" component={GradeClass} exact/>
+
       </Switch>
     </section>
   )
