@@ -11,8 +11,9 @@ export const useStyles = makeStyles((theme) => ({
     color: "black",
   },
   title: {
-    fontSize: "1.38rem",
-    color: "#5f6368",
+    fontSize: "1.4rem",
+    fontWeight: "500",
+    color: "#004192",
     marginLeft: "5px",
     cursor: "pointer",
   },

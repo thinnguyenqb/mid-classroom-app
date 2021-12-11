@@ -58,12 +58,12 @@ const Navbar = ({ children }) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.headerWrapper}>
             {children}
-            <Link to="/">
-              <img src={Logo} alt="Classroom" style={{ width: "110px" }} />
+            <Link to="/" style={{textDecoration: 'none'}}>
+              <Typography variant="h6" className={classes.title}>
+                Grade Management System - 
+              </Typography>
             </Link>
-            <Typography variant="h6" className={classes.title}>
-              Classroom
-            </Typography>
+              <img src={Logo} alt="Classroom" style={{ width: "70px" }} />
           </div>
           <div className={classes.header__wrapper__right}>
           </div>

@@ -27,7 +27,7 @@ function App() {
     <Router>
       <Drawer />
       <Body />
-  </Router>
+    </Router>
   )
 }
 

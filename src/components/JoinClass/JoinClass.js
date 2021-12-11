@@ -14,17 +14,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const JoinClass = (props) => {
   const { joinClassDiglog, setJoinClassDiglog } = props;
   const [classCode, setClassCode] = useState("");
-  const [studentCode, setStudentCode] = useState("");
   const token = useSelector((state) => state.token);
   const history = useHistory()
 
   const joinClass = (e) => {
     e.preventDefault();
-    if (classCode.trim().length > 0 && studentCode.trim().length > 0) {
-      if (!classCode.includes(' ') && !studentCode.includes(' ')) {
+    if (classCode.trim().length > 0) {
+      if (!classCode.includes(' ')) {
         const data = {
           classroom_id: classCode,
-          student_code: studentCode
         }
         axios
           .post(`${API_URL}/classroom/join`, data, {
@@ -93,23 +91,6 @@ const JoinClass = (props) => {
                 fullWidth
                 value={classCode}
                 onChange={(e) => setClassCode(e.target.value)}
-              />
-            </div>
-
-            <div
-              style={{ color: "#3c4043", marginTop: "15px", marginBottom: "5px" }}
-              className="joinClass__formText"
-            >
-              Each student can only use 1 student ID.
-            </div>
-            <div className="joinClass__loginInfo">
-              <TextField
-                id="outlined-basic"
-                label="Student ID"
-                variant="outlined"
-                fullWidth
-                value={studentCode}
-                onChange={(e) => setStudentCode(e.target.value)}
               />
             </div>
           </div>

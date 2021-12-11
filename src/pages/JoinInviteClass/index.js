@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Divider, Avatar, Button } from "@material-ui/core";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams, useLocation } from "react-router-dom";
 import "./styles.scss";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
@@ -14,16 +14,20 @@ import { Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function JoinInviteClass() {
+  let location = useLocation()
+  let query = new URLSearchParams(location.search)
+  const email = query.get("email")
+  const join_token = query.get("token")
+  const { id } = useParams();
+  //console.log(id, query.get("email"), query.get("token"))
   const [data, setData] = useState({});
   const history = useHistory();
   const dispatch = useDispatch();
-  const token = localStorage.getItem("access_token");
-  const { id, email, join_token } = useParams();
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("access_token");
   const auth = useSelector((state) => state.auth);
   const { user } = auth;
 
-  console.log(user.email);
   useEffect(() => {
     if (token) {
       const getUser = () => {
@@ -47,7 +51,6 @@ function JoinInviteClass() {
               headers: { Authorization: token },
             }
           );
-          console.log(classInfo);
           setData(classInfo);
           setLoading(true);
         } catch (error) {
@@ -101,10 +104,18 @@ function JoinInviteClass() {
                 <CircularProgress disableShrink />
               ) : (
                 <>
-                  {user.email !== email ? (
-                    <Typography variant="h5" gutterBottom>
-                      Vui lòng đăng nhập đúng email được mời!
-                    </Typography>
+                      {user.email !== email ? (
+                        <>
+                          <Typography variant="h5" gutterBottom>
+                            Vui lòng đăng nhập đúng email được mời!
+                          </Typography>
+                          <Divider />
+                          <Typography variant="h6" gutterBottom>
+                          Nếu bạn chưa có tài khoản thì hãy đăng ký với email đã mời rồi đăng
+                          nhập lại. Sau đó bạn hãy quay lại link mời trong mail để tham gia
+                          lớp học này nhé !
+                          </Typography>
+                        </>
                   ) : (
                     <>
                       <div className="home__class--item">
@@ -127,7 +138,7 @@ function JoinInviteClass() {
                           </div>
                           <div className="card__bot">
                             <Link to="/">
-                              <Button style={{ fontSize: "12px" }}>
+                              <Button >
                                 Don't Join
                               </Button>
                             </Link>

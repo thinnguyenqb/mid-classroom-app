@@ -31,9 +31,13 @@ const Body = () => {
         <Route path="/profile" component={token ? Profile : NotFound} exact/>
         <Route path="/class/:id" component={token ? Material : NotFound} exact/>
         <Route path="/class/:id/exercises" component={Exercises} exact/>
+<<<<<<< HEAD
         <Route path="/class/:id/join-student/:email/:join_token" component={JoinInviteClass} exact/>
         <Route path="/class/:id/gradeclass" component={GradeClass} exact/>
 
+=======
+        <Route path="/class/:id/joinStudent" component={JoinInviteClass} />
+>>>>>>> c621d240458fcbe4b4e0cb0a4e043f14e1595e11
       </Switch>
     </section>
   )
