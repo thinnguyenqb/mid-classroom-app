@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import PeopleButton from "../../components/PeopleButton/index";
 import ExercisesButton from "./../../components/ExercisesButton/index";
 import { Divider } from "@mui/material";
+import GradeButton from "../../components/GradeButton";
 
 const Material = () => {
   const { id } = useParams();
@@ -103,6 +104,7 @@ const Material = () => {
               <div className="material__button">
                 <ExercisesButton id={id} />
                 <PeopleButton id={id} />
+                <GradeButton id={id} />
               </div>
             </div>
           </div>

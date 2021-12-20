@@ -1,89 +1,55 @@
-import * as React from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import React, { useState, useEffect } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { Grid, Paper, Box, Button } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { API_URL } from "../../utils/config";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Grid, Paper, Box, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 import GetAppIcon from "@mui/icons-material/GetApp";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { styled } from "@mui/material/styles";
+import LoadingButton from "@mui/lab/LoadingButton";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { CSVLink } from "react-csv";
 
-const initcolumns = [
-  { field: "id", headerName: "Student ID", width: 150 },
-  {
-    field: "fullname",
-    headerName: "Full Name",
-    width: 180,
-    editable: true,
-  },
-  {
-    field: "bt1",
-    headerName: "BT1",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "bt2",
-    headerName: "BT2",
-    width: 150,
-    editable: true,
-  },
+const Input = styled("input")({
+  display: "none",
+});
 
-  {
-    field: "total",
-    headerName: "Total",
-    width: 150,
-    editable: true,
-  },
+const studentImportTemp = [
+  ["studentid", "fullname"],
+  ["1712787", "Nguyễn Văn Thìn"],
+  ["1712788", "Trần Thiên Quàng"],
+  ["1712789", "Nguyễn Công Sơn"],
 ];
 
-const initrows = [
-  {
-    id: 1712700,
-    fullname: "Edward Snowden",
-    bt1: "100",
-    bt2: "100",
-    age: 35,
-    total: 100,
-  },
-  {
-    id: 1712701,
-    fullname: "Edward Snowden",
-    bt1: "100",
-    bt2: "100",
-    age: 35,
-    total: 100,
-  },
-  {
-    id: 1712702,
-    fullname: "Edward Snowden",
-    bt1: "100",
-    bt2: "100",
-    age: 35,
-    total: 100,
-  },
-  {
-    id: 1712703,
-    fullname: "Edward Snowden3",
-    bt1: "100",
-    bt2: "100",
-    age: 35,
-    total: 100,
-  },
-  {
-    id: 1712704,
-    fullname: "Edward Snowden",
-    bt1: "100",
-    bt2: "100",
-    age: 35,
-    total: 100,
-  },
+const gradeImportTemp = [
+  ["studentid", "grade"],
+  ["1712787", "70"],
+  ["1712788", "80"],
+  ["1712789", "90"],
 ];
-export default function GradeClass() {
-  const [columns, setColumns] = useState(initcolumns);
-  const [rows, setRows] = useState(initrows);
+
+const initrows = 
+  {
+    id: "1712878",
+    fullname: "NGuyen van a",
+  };
+
+export default function DenseTable() {
+  const [rows, setRows] = useState([]);
+  const [classes, setClasses] = useState(false);
+  const [exercise, setExercise] = useState([])
   const { id } = useParams();
   const token = useSelector((state) => state.token);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (token) {
       const getDetailClass = async () => {
@@ -94,8 +60,7 @@ export default function GradeClass() {
             })
             .then((result) => {
               console.log(result.data);
-              //   setClasses(result.data);
-              //   setTeacherName(result.data.teacher.name);
+              setClasses(result.data);
             })
             .catch((err) => {
               console.log(err);
@@ -106,90 +71,151 @@ export default function GradeClass() {
           }
         }
       };
-
-      //   const getExercise = async () => {
-      //     try {
-      //       const res = await axios.get(
-      //         `${API_URL}/exercise/list-exercise/${id}`,
-      //         {
-      //           headers: { Authorization: token },
-      //         }
-      //       );
-      //       setAssignment(res.data);
-      //     } catch (error) {
-      //       if (error) {
-      //         console.log(error.response.data.msg);
-      //       }
-      //     }
-      //   };
-      getDetailClass();
-      //   getExercise();
-    }
-  }, [token, id]);
-  useEffect(() => {
-    if (token) {
-      const getData = async () => {
+      const getGradeClass = async () => {
         try {
-          const res = await axios.get(
-            `${API_URL}/exercise/list-exercise/${id}`,
-            {
+          axios
+            .get(`${API_URL}/classroom/${id}/grade-student`, {
               headers: { Authorization: token },
-            }
-          );
-          // setAssignment(res.data);
-          console.log(res.data);
+            })
+            .then((result) => {
+              console.log(result.data);
+              setExercise(result.data.exercise)
+              setRows(result.data.studentGrade)
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } catch (error) {
           if (error) {
             console.log(error.response.data.msg);
           }
         }
       };
-
-      getData();
+      getDetailClass();
+      getGradeClass();
     }
-  }, [id, token]);
+  }, [token, id]);
+
+  const importFile = async (e) => {
+    e.preventDefault();
+    try {
+      const file = e.target.files[0];
+      let formData = new FormData();
+      formData.append("file", file);
+      setLoading(true);
+      await axios.post(
+        `${API_URL}/classroom/${id}/import-student`,
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+            Authorization: token,
+          },
+        }
+      );
+      setLoading(false);
+    } catch (err) {}
+  };
+  console.log(rows)
   return (
     <>
-    <Grid container>
-      <Paper elevation={2} sx={{ display: 'flex', width: '100%', mx: 2, my: 1 }}>
-      <Grid xs={6} sx={{display: 'flex', justifyContent: 'flex-start' }}>
-          <Box p={2} sx={{  display: 'inline-flex' }} style={{}}>
-            <Button variant="contained">Upload Student List</Button>
-            <Button startIcon={<GetAppIcon />} variant="default">
-              Export Students Grade
+      <Grid container>
+        <Box sx={{ display: "flex",width: "100%", mx: 3, my: 1 }}>
+          <Link to={`/class/${id}`} style={{ textDecoration: "none" }}>
+            <Button variant="outlined" startIcon={<ArrowBackIcon />}>
+              Back
             </Button>
-          </Box>
+          </Link>
+        </Box>
+        <Paper
+          elevation={2}
+          sx={{ display: "flex",justifyContent:"space-between",width: "100%", mx: 3, my: 1 }}
+        >
+          <Grid sx={{ display: "flex", justifyContent: "flex-start" }}>
+            <Box p={2} sx={{ display: "inline-flex" }}>
+              <label htmlFor="contained-button-file">
+                <Input
+                  id="contained-button-file"
+                  type="file"
+                  name="file"
+                  onChange={importFile}
+                />
+                <LoadingButton
+                  startIcon={<FileUploadIcon />}
+                  loading={loading}
+                  loadingPosition="start"
+                  variant="contained"
+                  component="span"
+                  style={{ backgroundColor: "#3f51b5" }}
+                >
+                  Update Student List
+                </LoadingButton>
+              </label>
+              <Button startIcon={<GetAppIcon />} variant="default">
+                Export Students Grade
+              </Button>
+            </Box>
           </Grid>
-      <Grid xs={6} sx={{display: 'flex', justifyContent: 'flex-end' }}>
-        
-          <Box p={2} sx={{  justifyContent: 'flex-end' }} style={{ }}>
-            <Button startIcon={<GetAppIcon />} variant="default">
-              Students Import Template
-            </Button>
-            <Button startIcon={<GetAppIcon />} variant="default">
-              Grades Import Template
-            </Button>
-          </Box>
-          </Grid>
-      </Paper>
+          <Grid sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box p={2} sx={{ justifyContent: "flex-end" }} style={{}}>
+              <CSVLink
+                data={studentImportTemp}
+                filename={"students.csv"}
+                target="_blank"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Button startIcon={<GetAppIcon />} variant="default">
+                  Students Import Template
+                </Button>
+              </CSVLink>
 
-      <Grid item xs={12}>
-        <div style={{ height: 500}}>
-          <DataGrid
-            sx={{
-                mx: 2,
-                mt: 1,
-                boxShadow: 2,
-              }}
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            checkboxSelection
-            disableSelectionOnClick
-          />
-        </div>
-      </Grid>
+              <CSVLink
+                data={gradeImportTemp}
+                filename={"grades.csv"}
+                target="_blank"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Button startIcon={<GetAppIcon />} variant="default">
+                  Grades Import Template
+                </Button>
+              </CSVLink>
+            </Box>
+          </Grid>
+        </Paper>
+
+        <TableContainer component={Paper} sx={{ display: "flex", width: "100%", mx: 3, my: 1 }}>
+          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">StudentID</TableCell>
+                <TableCell >Full Name</TableCell>
+                {
+                  exercise.map(({ id, name, grade }, index) => 
+                    <TableCell key={id}>{name}</TableCell>
+                  )
+                }
+                <TableCell align="right">Total</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.studentId}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell align="left" component="th" scope="row">
+                    {row.studentId}
+                  </TableCell>
+                  <TableCell >{row.studentName}</TableCell>
+                  
+                  {/* 
+                  <TableCell >{row.bt2}</TableCell> */}
+                  <TableCell align="right">{row.totalGrade}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Grid>
     </>
   );
