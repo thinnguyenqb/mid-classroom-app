@@ -13,6 +13,7 @@ import Material from '../pages/Material'
 import Exercises from './../pages/Exercises/index';
 import JoinInviteClass from '../pages/JoinInviteClass';
 import GradeClass from '../pages/GradeClass';
+import StudentInfor from '../components/StudentInfor';
 
 const Body = () => {
   const auth = useSelector(state => state.auth);
@@ -33,6 +34,7 @@ const Body = () => {
         <Route path="/class/:id/exercises" component={Exercises} exact/>
         <Route path="/class/:id/join-student/:email/:join_token" component={JoinInviteClass} exact/>
         <Route path="/class/:id/gradeclass" component={GradeClass} exact/>
+        <Route path="/class/:id/inforStudent/:studentid" component={StudentInfor} exact/>
       </Switch>
     </section>
   )

@@ -5,9 +5,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Grid, Paper, Box, Button } from "@mui/material";
+import { Grid, Paper, Box, Button, IconButton , MenuItem, Menu } from "@mui/material";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { API_URL } from "../../utils/config";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -17,60 +16,47 @@ import { styled } from "@mui/material/styles";
 import LoadingButton from "@mui/lab/LoadingButton";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { CSVLink } from "react-csv";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const Input = styled("input")({
   display: "none",
 });
 
 const studentImportTemp = [
-  ["studentid", "fullname"],
+  ["StudentId", "Fullname"],
   ["1712787", "Nguyễn Văn Thìn"],
   ["1712788", "Trần Thiên Quàng"],
   ["1712789", "Nguyễn Công Sơn"],
 ];
 
 const gradeImportTemp = [
-  ["studentid", "grade"],
+  ["StudentId", "Grade"],
   ["1712787", "70"],
   ["1712788", "80"],
   ["1712789", "90"],
 ];
 
-const initrows = 
-  {
-    id: "1712878",
-    fullname: "NGuyen van a",
-  };
 
 export default function DenseTable() {
   const [rows, setRows] = useState([]);
-  const [classes, setClasses] = useState(false);
   const [exercise, setExercise] = useState([])
   const { id } = useParams();
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem('access_token')
   const [loading, setLoading] = useState(false);
+  const [exerciseId, setExerciseId] = useState('');
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     if (token) {
-      const getDetailClass = async () => {
-        try {
-          axios
-            .get(`${API_URL}/classroom/detail/${id}`, {
-              headers: { Authorization: token },
-            })
-            .then((result) => {
-              console.log(result.data);
-              setClasses(result.data);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } catch (error) {
-          if (error) {
-            console.log(error.response.data.msg);
-          }
-        }
-      };
       const getGradeClass = async () => {
         try {
           axios
@@ -78,9 +64,8 @@ export default function DenseTable() {
               headers: { Authorization: token },
             })
             .then((result) => {
-              console.log(result.data);
-              setExercise(result.data.exercise)
-              setRows(result.data.studentGrade)
+              setExercise(result.data.exer)
+              setRows(result.data.students)
             })
             .catch((err) => {
               console.log(err);
@@ -91,7 +76,6 @@ export default function DenseTable() {
           }
         }
       };
-      getDetailClass();
       getGradeClass();
     }
   }, [token, id]);
@@ -99,6 +83,7 @@ export default function DenseTable() {
   const importFile = async (e) => {
     e.preventDefault();
     try {
+      console.log(123)
       const file = e.target.files[0];
       let formData = new FormData();
       formData.append("file", file);
@@ -116,7 +101,27 @@ export default function DenseTable() {
       setLoading(false);
     } catch (err) {}
   };
-  console.log(rows)
+
+  const importGrade = async (e) => {
+    e.preventDefault();
+    try {
+      const file = e.target.files[0];
+      let formData = new FormData();
+      formData.append("file", file);
+      const res = await axios.post(
+        `${API_URL}/exercise/${exerciseId}/import-grade`,
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+            Authorization: token,
+          },
+        }
+      );
+      console.log(res)
+    } catch (err) {}
+  };
+
   return (
     <>
       <Grid container>
@@ -190,8 +195,47 @@ export default function DenseTable() {
                 <TableCell align="left">StudentID</TableCell>
                 <TableCell >Full Name</TableCell>
                 {
-                  exercise.map(({ id, name, grade }, index) => 
-                    <TableCell key={id}>{name}</TableCell>
+                  exercise.map(({ id, name }, index) => 
+                    <TableCell key={id}>
+                      {name}
+                      <IconButton 
+                        id="basic-button"
+                        aria-controls="basic-menu"
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        size="small"
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                          style: {
+                            maxHeight:  '30px',
+                            width: '15ch',
+                            paddingTop: '5px'
+                          },
+                        }}
+                      >
+                        <MenuItem>
+                          <label htmlFor={id}>
+                            <Input
+                              id={id}
+                              type="file"
+                              name="file"
+                              onChange={importGrade}
+                              onClick={() => setExerciseId(id)}
+                            />
+                            Import grade
+                          </label>
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
                   )
                 }
                 <TableCell align="right">Total</TableCell>
@@ -206,10 +250,21 @@ export default function DenseTable() {
                   <TableCell align="left" component="th" scope="row">
                     {row.studentId}
                   </TableCell>
-                  <TableCell >{row.studentName}</TableCell>
-                  
-                  {/* 
-                  <TableCell >{row.bt2}</TableCell> */}
+                  {
+                    row.student_id ?
+                      <Link to={`inforStudent/${row.student_id}`}>
+                        <TableCell >{row.studentName}</TableCell>
+                      </Link>
+                      :
+                      <TableCell >{row.studentName}</TableCell>
+                  }
+                  {
+                    row.exercises.map((item, index) => (
+                      <TableCell key={index}>
+                        {item.point}/{exercise[index].point}
+                      </TableCell>
+                    ))
+                  }
                   <TableCell align="right">{row.totalGrade}</TableCell>
                 </TableRow>
               ))}
