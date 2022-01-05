@@ -18,13 +18,21 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const PeopleClass = (props) => {
   const { peopleDiglog, setPeopleDiglog, id } = props;
   const [showInviteDiglog, setShowInviteDiglog] = useState(false);
-  const [teacher, setTeacher] = useState({});
+  const [teacher, setTeacher] = useState([]);
   const [students, setStudents] = useState([]);
   const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
   const handleCreate = () => {
     setShowInviteDiglog(true);
   };
+
+  const checkTeacher = (user_cur, teacher) => {
+    for (let i = 0; i < teacher.length; i++) {
+      if (teacher[i].teacherId === user_cur)
+        return true
+    }
+    return false
+  }
 
   useEffect(() => {
     axios
@@ -61,7 +69,7 @@ const PeopleClass = (props) => {
           <div className="peopleClass__table">
             <div className="peopleClass__table-header">
               Teacher
-              {auth.user._id === teacher.teacherId ? (
+              {checkTeacher(auth.user._id, teacher) ? (
                 <Tooltip title="Invite">
                   <IconButton color="primary">
                     <PersonAddAlt1Icon />*
@@ -73,8 +81,11 @@ const PeopleClass = (props) => {
             </div>
             <div className="">
               <Divider />
-              <UserCard user={teacher} isTeacher={true}/>
-              
+              {teacher.map((item, index) => (
+                <div key={index}>
+                  <UserCard user={item} isTeacher={true}/>
+                </div>
+              ))}
             </div>
           </div>
           <div className="peopleClass__table">
@@ -84,7 +95,7 @@ const PeopleClass = (props) => {
                 <span style={{ fontSize: "18px", color: "#1967d2" }}>
                   {students.length} Member
                 </span>
-                {auth.user._id === teacher.teacherId ? (
+                {checkTeacher(auth.user._id, teacher) ? (
                   <Tooltip title="Invite" onClick={handleCreate}>
                     <IconButton color="primary">
                       <PersonAddAlt1Icon />

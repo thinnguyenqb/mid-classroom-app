@@ -33,7 +33,6 @@ function Exercise() {
   const [curAssignment, setCurAssignment] = useState(null);
   const token = localStorage.getItem("access_token");
   const auth = useSelector((state) => state.auth);
-
   const classId = useParams();
 
   //handle the menu item]
@@ -51,6 +50,14 @@ function Exercise() {
     setOpen(true);
     setAnchorEl(null);
   };
+  
+  const checkTeacher = (user_cur, teacher) => {
+    for (let i = 0; i < teacher.length; i++) {
+      if (teacher[i].teacherId === user_cur)
+        return true
+    }
+    return false
+  }
 
   const handleRemove = () => {
     axios
@@ -159,7 +166,7 @@ function Exercise() {
 
       {!assignment.length ? <Typography>Hiện tại không có bài tập</Typography> : <></>}
       <Container sx={{ maxWidth: "850px !important", mt: 2 }}>
-        {auth.user._id === teacher.teacherId ? (
+        {checkTeacher(auth.user._id, teacher) ? (
           <CreateAssignment
             openState={[open, setOpen]}
             classId={classId.id}
@@ -220,7 +227,7 @@ function Exercise() {
                                   >
                                     {name}
                                   </Typography>
-                                  {auth.user._id === teacher.teacherId ? (
+                                  {checkTeacher(auth.user._id, teacher) ? (
                                     <IconButton
                                       sx={{
                                         ml: "auto",

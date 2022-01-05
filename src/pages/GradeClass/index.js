@@ -77,6 +77,14 @@ export default function DenseTable() {
     setAnchorEl(null);
   };
 
+  const checkTeacher = (user_cur, teacher) => {
+    for (let i = 0; i < teacher.length; i++) {
+      if (teacher[i].teacherId === user_cur)
+        return true
+    }
+    return false
+  }
+
   useEffect(() => {
     if (token) {
       const getTeacher = async () => {
@@ -223,7 +231,7 @@ export default function DenseTable() {
             </Button>
           </Link>
         </Box>
-        {auth.user._id === teacher.teacherId ? (
+        {checkTeacher(auth.user._id, teacher) ? (
           <Paper
             elevation={2}
             sx={{
@@ -310,7 +318,7 @@ export default function DenseTable() {
                   <>
                     <TableCell key={index} onClick={() => { setExerciseId(id); setMark(exercise[index].markDone) }}>
                       {name}
-                      {auth.user._id === teacher.teacherId ? (
+                      {checkTeacher(auth.user._id, teacher) ? (
                         <IconButton
                           id="basic-button"
                           aria-controls="basic-menu"
@@ -371,7 +379,7 @@ export default function DenseTable() {
             <TableBody>
               {rows.map((row, i) => (
                 <>
-                  {auth.user._id === teacher.teacherId ? (
+                  {checkTeacher(auth.user._id, teacher) ? (
                     <TableRow
                     key={i}
                     sx={{
@@ -449,7 +457,7 @@ export default function DenseTable() {
                           )}
                           {row.exercises.map((item, index) => (
                             <TableCell key={index}>
-                              {auth.user._id === teacher.teacherId ? (
+                              {checkTeacher(auth.user._id, teacher) ? (
                                 <>
                                   <TextField
                                     hiddenLabel

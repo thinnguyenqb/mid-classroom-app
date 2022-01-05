@@ -31,7 +31,7 @@ const Material = () => {
             })
             .then((result) => {
               setClasses(result.data);
-              setTeacherName(result.data.teacher.name);
+              setTeacherName(result.data.teacher[0].name);
             })
             .catch((err) => {
               console.log(err);
@@ -67,6 +67,8 @@ const Material = () => {
     //   setImage(e.target.files[0]);
     // }
   };
+
+  // console.log(detailClass)
 
   return (
     <>
