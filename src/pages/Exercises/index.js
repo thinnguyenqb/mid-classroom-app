@@ -246,7 +246,7 @@ function Exercise() {
                                 </Grid>
                               </AccordionSummary>
                               <AccordionDetails
-                                sx={{ border: "1px solid #ccc", padding: 0 }}
+                                sx={{ borderTop: "1px solid #ccc", padding: 0 }}
                               >
                                 <Grid container direction="row">
                                   <Grid
@@ -258,7 +258,7 @@ function Exercise() {
                                       fontSize: "13px",
                                       lineHeight: "20px",
                                       letterSpacing: "normal",
-                                      borderRight: "1px solid #ccc",
+                                      borderRight: "1px dashed #ccc",
                                     }}
                                     dangerouslySetInnerHTML={{ __html: desc }}
                                   ></Grid>
@@ -267,14 +267,19 @@ function Exercise() {
                                     xs={4}
                                     sx={{
                                       p: 2,
-                                      pl: 4,
-                                      fontSize: "13px",
-                                      lineHeight: "20px",
-                                      letterSpacing: "normal",
-                                      borderRight: "1px solid #ccc",
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      flexDirection: 'column'
                                     }}
                                   >
-                                    Point: {point}
+                                    <Typography variant="h4" gutterBottom component="div">
+                                      Điểm
+                                    </Typography>
+                                    <Typography variant="h5" gutterBottom component="div">
+                                      {point}
+                                    </Typography>
+                                    
                                   </Grid>
                                 </Grid>
                               </AccordionDetails>

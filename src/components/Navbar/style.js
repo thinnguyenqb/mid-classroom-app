@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: "1.4rem",
     fontWeight: "500",
-    color: "#004192",
+    color: "#3f51b5",
     marginLeft: "5px",
     cursor: "pointer",
   },
