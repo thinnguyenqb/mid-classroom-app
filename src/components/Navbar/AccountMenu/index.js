@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Logout from '@mui/icons-material/Logout';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -65,7 +66,7 @@ export default function AccountMenu({ avatar }) {
               display: 'block',
               position: 'absolute',
               top: 0,
-              right: 14,
+              right: 120,
               width: 10,
               height: 10,
               bgcolor: 'background.paper',
@@ -74,12 +75,15 @@ export default function AccountMenu({ avatar }) {
             },
           },
         }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
       >
         <MenuItem>
           <Link to="/profile" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'black' }}>
-            <Avatar /> My account
+            <ListItemIcon>
+              <PersonOutlineRoundedIcon />
+            </ListItemIcon> 
+            My account
           </Link>
         </MenuItem>
         <Divider />

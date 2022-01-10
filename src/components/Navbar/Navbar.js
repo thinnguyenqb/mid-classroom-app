@@ -9,35 +9,26 @@ import {
   Button,
 } from "@material-ui/core";
 import { Tooltip } from '@mui/material';
-import AddIcon from "@mui/icons-material/Add";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
 import { useStyles } from "./style";
 import CreateClass from "../CreateClass/CreateClass";
 import JoinClass from "../JoinClass/JoinClass";
 import Logo from "../../assets/images/logo_fit.png";
 import { Link } from "react-router-dom";
 import AccountMenu from "./AccountMenu";
+import CreateAndJoin from "./CreateAndJoin";
+import Notification from "./Notification";
 
 const Navbar = ({ children }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [createClassDiglog, setCreateClassDiglog] = useState(false);
   const [joinClassDiglog, setJoinClassDiglog] = useState(false);
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
   const auth = useSelector((state) => state.auth);
   const { user, isLogged } = auth;
 
-  const handleCreate = () => {
-    handleClose();
-    setCreateClassDiglog(true);
-  };
-  const handleJoin = () => {
-    handleClose();
-    setJoinClassDiglog(true);
-  };
 
   const userLink = () => {
     return (
@@ -49,8 +40,6 @@ const Navbar = ({ children }) => {
       </>
     );
   };
-
-  
 
   return (
     <div className={classes.root}>
@@ -68,35 +57,16 @@ const Navbar = ({ children }) => {
           <div className={classes.header__wrapper__right}>
           </div>
           <div className={classes.header__wrapper__right}>
-            <Link to="/" style={{marginRight: "10px"}}>
-              <Button variant="outlined">
-                <HomeRoundedIcon className={classes.icon} />
-              </Button>
+            <Link to="/" style={{marginRight: "5px"}}>
+              <IconButton variant="outlined" size="large" style={{ color: '#3f51b5' }}>
+                <HomeRoundedIcon fontSize="inherit"/>
+              </IconButton>
             </Link>
-            <Tooltip title="Create & Join" style={{marginRight: "10px"}}>
-                <Button
-                  id="basic-button"
-                  aria-controls="basic-menu"
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
-                  variant="outlined"
-                >
-                  <AddIcon className={classes.icon} />
-                </Button>
-              
-            </Tooltip>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              className={classes.menu}
-            >
-              <MenuItem onClick={handleJoin}>Join Class</MenuItem>
-              <MenuItem onClick={handleCreate}>Create Class</MenuItem>
-            </Menu>
+            <CreateAndJoin
+              setJoinClassDiglog={setJoinClassDiglog}
+              setCreateClassDiglog={setCreateClassDiglog}
+            />
+            <Notification />
             <div>
               {isLogged ? (
                 userLink()

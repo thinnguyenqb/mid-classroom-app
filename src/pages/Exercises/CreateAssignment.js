@@ -135,10 +135,9 @@ const CreateAssignment = ({ classId, openState, assignmentState, curAssignmentSt
     <React.Fragment>
       <Button
         variant="contained"
-        size="large"
+        size="medium"
         startIcon={<AddIcon />}
         sx={{
-          borderRadius: "25px",
           textTransform: "none",
           fontWeight: 500,
           height: "50px",
