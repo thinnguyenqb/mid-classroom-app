@@ -14,6 +14,7 @@ import Exercises from './../pages/Exercises/index';
 import JoinInviteClass from '../pages/JoinInviteClass';
 import GradeClass from '../pages/GradeClass';
 import StudentInfor from '../components/StudentInfor';
+import ReviewPoint from '../pages/ReviewPoint';
 
 const Body = () => {
   const auth = useSelector(state => state.auth);
@@ -24,7 +25,7 @@ const Body = () => {
     <section>
       <Switch>
         <Route path="/" component={Home} exact/>
-        <Route path="/login" component={Login} exact/>
+        <Route path="/login" component={isLogged ? NotFound : Login} exact/>
         <Route path="/signup" component={isLogged ? NotFound : SignUp} exact/>
         <Route path="/user/activate/:activation_token" component={ActivationEmail} exact/>
         <Route path="/user/reset/:token" component={ResetPassword} exact/>
@@ -35,6 +36,7 @@ const Body = () => {
         <Route path="/class/:id/join-student/:email/:join_token" component={JoinInviteClass} exact/>
         <Route path="/class/:id/gradeclass" component={GradeClass} exact/>
         <Route path="/class/:id/inforStudent/:studentid" component={StudentInfor} exact/>
+        <Route path="/class/:id/gradeclass/:exerciseid/:studentid" component={ReviewPoint} exact/>
       </Switch>
     </section>
   )

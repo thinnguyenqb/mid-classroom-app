@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
@@ -11,10 +10,7 @@ import './styles.scss'
 import { Typography } from "@material-ui/core";
 import Avatar from '@mui/material/Avatar';
 
-export default function CreateAndJoin({
-  setCreateClassDiglog,
-  setJoinClassDiglog,
-}) {
+export default function Notification() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -23,15 +19,6 @@ export default function CreateAndJoin({
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleCreate = () => {
-    handleClose();
-    setCreateClassDiglog(true);
-  };
-  const handleJoin = () => {
-    handleClose();
-    setJoinClassDiglog(true);
   };
 
   return (

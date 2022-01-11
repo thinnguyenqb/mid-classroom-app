@@ -21,36 +21,21 @@ import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { useParams, useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import GetAppIcon from "@mui/icons-material/GetApp";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { styled } from "@mui/material/styles";
-import LoadingButton from "@mui/lab/LoadingButton";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { CSVLink } from "react-csv";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Snackbar from "../../components/Snackbar/Snackbar";
 import { useSelector } from "react-redux";
-
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ImportExportCSV from './ImportExportCSV'
+import ReviewPoint from './ReviewPoint'
+import CommentPoint from "./CommentPoint";
+
 
 const Input = styled("input")({
   display: "none",
 });
-
-const studentImportTemp = [
-  ["StudentId", "Fullname"],
-  ["1712787", "Nguyễn Văn Thìn"],
-  ["1712788", "Trần Thiên Quàng"],
-  ["1712789", "Nguyễn Công Sơn"],
-];
-
-const gradeImportTemp = [
-  ["StudentId", "Grade"],
-  ["1712787", "70"],
-  ["1712788", "80"],
-  ["1712789", "90"],
-];
 
 export default function DenseTable() {
   const [teacher, setTeacher] = useState([]);
@@ -142,24 +127,6 @@ export default function DenseTable() {
     }
   }, [token, id]);
 
-  const importFile = async (e) => {
-    e.preventDefault();
-    try {
-      console.log(123);
-      const file = e.target.files[0];
-      let formData = new FormData();
-      formData.append("file", file);
-      setLoading(true);
-      await axios.post(`${API_URL}/classroom/${id}/import-student`, formData, {
-        headers: {
-          "content-type": "multipart/form-data",
-          Authorization: token,
-        },
-      });
-      setLoading(false);
-    } catch (err) {}
-  };
-
   const importGrade = async (e) => {
     e.preventDefault();
     try {
@@ -181,6 +148,8 @@ export default function DenseTable() {
       history.go(0);
     } catch (err) {}
   };
+
+  console.log(exerciseId);
 
   const handleChangePoint = (e) => {
     const { value } = e.target;
@@ -232,75 +201,12 @@ export default function DenseTable() {
           </Link>
         </Box>
         {checkTeacher(auth.user._id, teacher) ? (
-          <Paper
-            elevation={2}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              mx: 3,
-              my: 1,
-            }}
-          >
-            <Grid sx={{ display: "flex", justifyContent: "flex-start" }}>
-              <Box p={2} sx={{ display: "inline-flex" }}>
-                <label htmlFor="contained-button-file">
-                  <Input
-                    id="contained-button-file"
-                    type="file"
-                    name="file"
-                    onChange={importFile}
-                  />
-                  <LoadingButton
-                    startIcon={<FileUploadIcon />}
-                    loading={loading}
-                    loadingPosition="start"
-                    variant="contained"
-                    component="span"
-                    style={{ backgroundColor: "#3f51b5" }}
-                  >
-                    Update Student List
-                  </LoadingButton>
-                </label>
-
-                <CSVLink
-                  data={gradeBoard}
-                  filename={"AllClassroom.csv"}
-                  target="_blank"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <Button startIcon={<GetAppIcon />} variant="default">
-                    Export Students Grade
-                  </Button>
-                </CSVLink>
-              </Box>
-            </Grid>
-            <Grid sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Box p={2} sx={{ justifyContent: "flex-end" }} style={{}}>
-                <CSVLink
-                  data={studentImportTemp}
-                  filename={"students.csv"}
-                  target="_blank"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <Button startIcon={<GetAppIcon />} variant="default">
-                    Students Import Template
-                  </Button>
-                </CSVLink>
-
-                <CSVLink
-                  data={gradeImportTemp}
-                  filename={"grades.csv"}
-                  target="_blank"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <Button startIcon={<GetAppIcon />} variant="default">
-                    Grades Import Template
-                  </Button>
-                </CSVLink>
-              </Box>
-            </Grid>
-          </Paper>
+          <ImportExportCSV
+            id={id}
+            loading={loading}
+            setLoading={setLoading}
+            gradeBoard={gradeBoard}
+          />
         ) : (
           <></>
         )}
@@ -317,21 +223,25 @@ export default function DenseTable() {
                 {exercise.map(({ id, name }, index) => (
                   <>
                     <TableCell key={index} onClick={() => { setExerciseId(id); setMark(exercise[index].markDone) }}>
-                      {name}
-                      {checkTeacher(auth.user._id, teacher) ? (
-                        <IconButton
-                          id="basic-button"
-                          aria-controls="basic-menu"
-                          aria-haspopup="true"
-                          aria-expanded={open ? "true" : undefined}
-                          onClick={handleClick}
-                          size="small"
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                      ) : (
-                        <></>
-                      )}
+                      
+                        {name}
+                        {checkTeacher(auth.user._id, teacher) ? (
+                          <IconButton
+                            id="basic-button"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                            onClick={handleClick}
+                            size="small"
+                            
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                        ) : (
+                            <>
+                           
+                            </>
+                        )}
                     </TableCell>
                     <Menu
                       id="basic-menu"
@@ -494,8 +404,18 @@ export default function DenseTable() {
                                 <>
                                   {exercise[index].markDone ? (
                                     <>
-                                      {" "}
-                                      {item.point} /{exercise[index].point}
+                                        {item.point} /{exercise[index].point}
+                                        <ReviewPoint
+                                          exerciseId={exercise[index].id}
+                                          studentId={auth.user.studentID}
+                                          curPoint={item.point}
+                                          defPoint={exercise[index].point}
+                                          nameExercise={exercise[index].name}
+                                        />
+                                        <CommentPoint
+                                          exerciseId={exercise[index].id}
+                                          studentId={auth.user.studentID}
+                                        />
                                     </>
                                   ) : (
                                     <span>Chưa có điểm</span>

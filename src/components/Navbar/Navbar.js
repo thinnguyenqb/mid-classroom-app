@@ -2,17 +2,13 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   AppBar,
-  Menu,
-  MenuItem,
   Toolbar,
   Typography,
   Button,
 } from "@material-ui/core";
-import { Tooltip } from '@mui/material';
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import { useStyles } from "./style";
 import CreateClass from "../CreateClass/CreateClass";
 import JoinClass from "../JoinClass/JoinClass";
@@ -59,7 +55,7 @@ const Navbar = ({ children }) => {
           <div className={classes.header__wrapper__right}>
             <Link to="/" style={{marginRight: "5px"}}>
               <IconButton variant="outlined" size="large" style={{ color: '#3f51b5' }}>
-                <HomeRoundedIcon fontSize="inherit"/>
+                <HomeOutlinedIcon fontSize="inherit"/>
               </IconButton>
             </Link>
             <CreateAndJoin
@@ -71,7 +67,7 @@ const Navbar = ({ children }) => {
               {isLogged ? (
                 userLink()
               ) : (
-                <Link to="/login" style={{ textDecoration: "none" }}>
+                <Link to="/login" style={{ textDecoration: "none", marginLeft: '13px' }}>
                   <Button variant="outlined">
                     <LoginOutlinedIcon className={classes.icon} />
                     Sign in

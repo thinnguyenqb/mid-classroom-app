@@ -135,7 +135,7 @@ const CreateAssignment = ({ classId, openState, assignmentState, curAssignmentSt
     <React.Fragment>
       <Button
         variant="contained"
-        size="medium"
+        size="large"
         startIcon={<AddIcon />}
         sx={{
           textTransform: "none",
@@ -170,7 +170,7 @@ const CreateAssignment = ({ classId, openState, assignmentState, curAssignmentSt
           </AppBar>
 
           <Container maxWidth="sm" sx={{ mt: 3 }}>
-            <Grid container direction="column" spacing={2}>
+            <Grid container direction="column" spacing={2} style={{border: '1px solid #ccc', padding: '5px 20px 30px 0px', borderRadius: '5px'}}>
               <Grid item>
                 <Grid container spacing={2}>
                   <Grid item xs={1}>
