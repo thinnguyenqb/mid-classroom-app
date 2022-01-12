@@ -28,6 +28,7 @@ import { useDispatch } from "react-redux";
 
 const initialState = {
     username: '',
+    fullname: '',
     email: '',
     password: '',
     cf_password: '',
@@ -44,7 +45,7 @@ const SignUp = () => {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const { username, email, password, cf_password, err, success } = user
+    const { username, fullname, email, password, cf_password, err, success } = user
     
     
     const handleChangeInput = e => {
@@ -78,7 +79,7 @@ const SignUp = () => {
         if (!isMatch(password, cf_password))
             return setUser({ ...user, err: "Password did not match", success: '' })
         try {
-            const res = await axios.post(`${API_URL}/user/register`, {name, email, password})
+            const res = await axios.post(`${API_URL}/user/register`, {name, fullname, email, password})
             setLoading(false)
             setUser({ ...user, err: '', success: res.data.msg })
             localStorage.setItem('access_token', res.data.access_token);
@@ -90,7 +91,7 @@ const SignUp = () => {
     }
     
     return (
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" style={{marginTop: '100px'}}>
             <Paper className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -103,6 +104,7 @@ const SignUp = () => {
 
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField
+                        size="small"
                         variant="outlined"
                         margin="normal"
                         required
@@ -114,6 +116,19 @@ const SignUp = () => {
                         onChange={handleChangeInput}
                     />
                     <TextField
+                        size="small"
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        label="Fullname"
+                        name="fullname"
+                        autoFocus
+                        value={user.fullname}
+                        onChange={handleChangeInput}
+                    />
+                    <TextField
+                        size="small"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -124,7 +139,7 @@ const SignUp = () => {
                         value={user.email}
                         onChange={handleChangeInput}
                     />
-                    <FormControl variant="outlined" fullWidth margin="normal">
+                    <FormControl variant="outlined" fullWidth margin="normal" size="small">
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-password"
@@ -147,7 +162,7 @@ const SignUp = () => {
                             }
                         />
                     </FormControl>
-                    <FormControl variant="outlined" fullWidth margin="normal">
+                    <FormControl variant="outlined" fullWidth margin="normal" size="small">
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-password"
@@ -186,7 +201,7 @@ const SignUp = () => {
                     <Grid container>
                         <Grid item xs></Grid>
                         <Grid item>
-                            <Link to="/login" variant="body2" style={{textDecoration: 'none'}}>
+                            <Link to="/login" variant="body2" style={{textDecoration: 'none', color: '#3f51b5'}}>
                                 {'Return to login'}
                             </Link>
                         </Grid>

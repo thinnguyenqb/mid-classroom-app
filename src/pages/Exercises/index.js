@@ -156,7 +156,7 @@ function Exercise() {
       alignItems="center"
       justifyContent="center"
     >
-      <Box>
+      <Box sx={{mt: 2}}>
         <Link to={`/class/${classId.id}`} style={{ textDecoration: "none" }}>
           <Button variant="outlined" startIcon={<ArrowBackIcon />}>
             Back
@@ -177,7 +177,7 @@ function Exercise() {
           <></>
         )}
 
-        <Grid container direction="column" sx={{ mt: 4 }}>
+        <Grid container direction="column" sx={{ mt: 2 }}>
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="assigns">
               {(provided) => (

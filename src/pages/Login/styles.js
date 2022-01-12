@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+    boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
     borderRadius: '15px'
   },
   avatar: {

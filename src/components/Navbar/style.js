@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     zIndex: '100',
-    marginBottom: '80px'
+    marginBottom: '65px'
   },
   menuButton: {
     marginRight: theme.spacing(1),

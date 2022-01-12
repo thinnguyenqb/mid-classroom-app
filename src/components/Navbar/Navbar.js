@@ -53,19 +53,20 @@ const Navbar = ({ children }) => {
           <div className={classes.header__wrapper__right}>
           </div>
           <div className={classes.header__wrapper__right}>
-            <Link to="/" style={{marginRight: "5px"}}>
-              <IconButton variant="outlined" size="large" style={{ color: '#3f51b5' }}>
-                <HomeOutlinedIcon fontSize="inherit"/>
-              </IconButton>
-            </Link>
-            <CreateAndJoin
-              setJoinClassDiglog={setJoinClassDiglog}
-              setCreateClassDiglog={setCreateClassDiglog}
-            />
-            <Notification />
-            <div>
               {isLogged ? (
-                userLink()
+                <>
+                <Link to="/" style={{marginRight: "5px"}}>
+                  <IconButton variant="outlined" size="large" style={{ color: '#3f51b5' }}>
+                    <HomeOutlinedIcon fontSize="inherit"/>
+                  </IconButton>
+                </Link>
+                <CreateAndJoin
+                  setJoinClassDiglog={setJoinClassDiglog}
+                  setCreateClassDiglog={setCreateClassDiglog}
+                  />
+                <Notification />
+                {userLink()}
+                </>
               ) : (
                 <Link to="/login" style={{ textDecoration: "none", marginLeft: '13px' }}>
                   <Button variant="outlined">
@@ -74,7 +75,6 @@ const Navbar = ({ children }) => {
                   </Button>
                 </Link>
               )}
-            </div>
           </div>
         </Toolbar>
       </AppBar>

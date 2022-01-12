@@ -47,6 +47,7 @@ export const TextInput = ({ user_id, setChat }) => {
         }
       );
       setChat(oldArray => [...oldArray, res.data.dataComment])
+      setMessage("")
     } catch (err) {
       console.log(err);
     }

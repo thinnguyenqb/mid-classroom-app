@@ -18,6 +18,7 @@ import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notifi
 import {dispatchLogin } from '../../redux/actions/authAction'
 import { useDispatch } from "react-redux";
 import { API_URL } from "../../utils/config";
+import { Chip, Divider } from "@mui/material";
 
 const initialState = {
   email: '',
@@ -69,16 +70,14 @@ const Login = () => {
       setUser({...user, err: err.response.data.msg, success: ''})
     }
   }
-  
 
   return (
-    <Container component="main" maxWidth="sm">
+    <Container component="main" maxWidth="sm" style={{marginTop: '100px'}}>
       <Paper className={classes.paper}>
         <Avatar className={classes.avatar}> <LockOutlinedIcon /> </Avatar>
         <Typography component="h1" variant="h5"> Login </Typography>
         {err && showErrMsg(err)}
         {success && showSuccessMsg(success)}
-
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             margin="normal"
@@ -118,22 +117,23 @@ const Login = () => {
                 'Login'
             )}
           </Button>
-          <Grid container>
+          <Grid container >
             <Grid item xs>
-              <Link to="/forgot-password" variant="body2" style={{textDecoration: 'none'}}>
+              <Link to="/forgot-password" variant="body2" style={{textDecoration: 'none', color: '#3f51b5'}}>
                 Forgot your password?
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/signup" variant="body2" style={{textDecoration: 'none'}}>
+              <Link to="/signup" variant="body2" style={{textDecoration: 'none', color: '#3f51b5'}}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
+          <Divider sx={{mt: 1}}>
+            <Chip label="OR" />
+          </Divider>
         </form>
-        <Typography variant="body1" className={classes.separator}>
-        ---------------------------------------------- OR ----------------------------------------------
-        </Typography>
+        
         <GoogleLogin
           clientId="243157071866-dv8qfonmlum4u3kkv2asdi0qph1pb882.apps.googleusercontent.com"
           buttonText="Login with google"
@@ -142,6 +142,7 @@ const Login = () => {
           className={classes.googleBtn}
         />
       </Paper>
+      
     </Container>
   );
 };
