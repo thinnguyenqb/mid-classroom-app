@@ -15,6 +15,7 @@ import {
   Menu,
   InputAdornment,
   TextField,
+  Tooltip
 } from "@mui/material";
 import { FcOk } from "react-icons/fc";
 import axios from "axios";
@@ -31,7 +32,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ImportExportCSV from './ImportExportCSV'
 import ReviewPoint from './ReviewPoint'
 import CommentPoint from "./CommentPoint";
-
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 const Input = styled("input")({
   display: "none",
@@ -54,7 +55,7 @@ export default function DenseTable() {
   const [mark, setMark] = useState(false);
 
   const open = Boolean(anchorEl);
-
+  console.log(exercise)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -149,8 +150,6 @@ export default function DenseTable() {
     } catch (err) {}
   };
 
-  console.log(exerciseId);
-
   const handleChangePoint = (e) => {
     const { value } = e.target;
     setPoint(value);
@@ -199,6 +198,14 @@ export default function DenseTable() {
               Back
             </Button>
           </Link>
+          {checkTeacher(auth.user._id, teacher) ? 
+            <Link to={`/class/${id}/gradeClass/gradeReview`} style={{ textDecoration: "none" }}>
+              <Button variant="outlined" startIcon={<ListAltIcon />}>
+                List request grade review
+              </Button>
+            </Link>
+            : <></>
+          }
         </Box>
         {checkTeacher(auth.user._id, teacher) ? (
           <ImportExportCSV
@@ -325,21 +332,23 @@ export default function DenseTable() {
                                 ),
                               }}
                               onChange={handleChangePoint}
-                            />
-                            <IconButton
-                              id="basic-button"
-                              aria-controls="basic-menu"
-                              aria-haspopup="true"
-                              size="small"
-                              onClick={() =>
-                                handleUpdatePoint(
-                                  exercise[index].id,
-                                  row.studentId
-                                )
-                              }
-                            >
-                              <FcOk />
-                            </IconButton>
+                        />
+                        <Tooltip title="Update" placement="right">
+                          <IconButton
+                            id="basic-button"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            size="small"
+                            onClick={() =>
+                              handleUpdatePoint(
+                                exercise[index].id,
+                                row.studentId
+                              )
+                            }
+                          >
+                            <FcOk />
+                          </IconButton>
+                         </Tooltip>
                       </TableCell>
                     ))}
                     <TableCell align="right">{row.totalGrade}</TableCell>
@@ -405,26 +414,34 @@ export default function DenseTable() {
                                   {exercise[index].markDone ? (
                                     <>
                                         {item.point} /{exercise[index].point}
-                                        <ReviewPoint
-                                          exerciseId={exercise[index].id}
-                                          studentId={auth.user.studentID}
-                                          curPoint={item.point}
-                                          defPoint={exercise[index].point}
-                                          nameExercise={exercise[index].name}
-                                        />
+                                        {!item.isReport ?
+                                          <ReviewPoint
+                                            exerciseId={exercise[index].id}
+                                            studentId={auth.user.studentID}
+                                            curPoint={item.point}
+                                            defPoint={exercise[index].point}
+                                            nameExercise={exercise[index].name}
+                                          />
+                                          :
+                                          <></>
+                                        }
                                         <CommentPoint
                                           exerciseId={exercise[index].id}
                                           studentId={auth.user.studentID}
                                         />
                                     </>
-                                  ) : (
-                                    <span>Chưa có điểm</span>
+                                    ) : (
+                                    <>
+                                      <span>Chưa có điểm</span>
+                                    </>
                                   )}
                                 </>
                               )}
                             </TableCell>
                           ))}
-                          <TableCell align="right">{row.totalGrade}</TableCell>
+                            {
+                              row.isShowTotalPoint ? <TableCell align="right">{row.totalGrade}</TableCell> : <TableCell align="right">0.00</TableCell>
+                            }
                         </TableRow>
                       ) : (
                         <></>
@@ -439,7 +456,7 @@ export default function DenseTable() {
         <Snackbar
           open={snackbar}
           setOpen={setSnackbar}
-          msg="Update point successfully"
+          msg="Update successfully"
         />
       </Grid>
     </>

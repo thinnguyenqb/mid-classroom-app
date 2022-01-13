@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Comment = ({ chat }) => {
-  console.log({chat})
   const classes = useStyles();
   return (
     <List className={classes.root}>

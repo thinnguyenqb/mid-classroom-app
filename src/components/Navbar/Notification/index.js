@@ -72,7 +72,7 @@ export default function Notification() {
            
               <div>
                 <Link to='/' className="notify-body">
-                  <Avatar src='https://res.cloudinary.com/ericnguyen-cop/image/up…/v1625668136/avatar/avatar-1577909_640_nrt1sc.png' sx={{ width: 32, height: 32, marginRight: '10px' }}/>
+                  <Avatar src='https://res.cloudinary.com/ericnguyen-cop/image/upload/v1642046858/Classroom/fkwfz8i072rrbu3im9ol.png' sx={{ width: 32, height: 32, marginRight: '10px' }}/>
                   <div>
                     <strong style={{marginRight: '5px'}}>huykhanh99</strong>
                     <span>has commented on your review grade </span>
