@@ -19,20 +19,19 @@ import ReviewPoint from '../pages/ReviewPoint';
 
 const Body = () => {
   const auth = useSelector(state => state.auth);
-  const { isLogged } = auth;
   const token = localStorage.getItem('access_token')
 
   return (
     <section>
       <Switch>
         <Route path="/" component={Home} exact/>
-        <Route path="/login" component={isLogged ? NotFound : Login} exact/>
-        <Route path="/signup" component={isLogged ? NotFound : SignUp} exact/>
-        <Route path="/user/activate/:activation_token" component={ActivationEmail} exact/>
-        <Route path="/user/reset/:token" component={ResetPassword} exact/>
-        <Route path="/forgot-password" component={ForgotPassword} exact/>
-        <Route path="/profile" component={token ? Profile : NotFound} exact/>
-        <Route path="/class/:id" component={token ? Material : NotFound} exact/>
+        <Route path="/login" component={token ? NotFound : Login} exact/>
+        <Route path="/signup" component={token ? NotFound : SignUp} exact/>
+        <Route path="/user/activate/:activation_token" component={token ? NotFound : ActivationEmail} exact/>
+        <Route path="/user/reset/:token" component={auth.token ? NotFound : ResetPassword} exact/>
+        <Route path="/forgot-password" component={auth.token ? NotFound : ForgotPassword} exact/>
+        <Route path="/profile" component={auth.token && Profile} exact/>
+        <Route path="/class/:id" component={auth.token && Material } exact/>
         <Route path="/class/:id/exercises" component={Exercises} exact/>
         <Route path="/class/:id/join-student/:email/:join_token" component={JoinInviteClass} exact/>
         <Route path="/class/:id/gradeclass" component={GradeClass} exact/>

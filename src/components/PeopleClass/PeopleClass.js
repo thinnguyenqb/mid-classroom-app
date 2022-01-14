@@ -21,7 +21,7 @@ const PeopleClass = (props) => {
   const [teacher, setTeacher] = useState([]);
   const [students, setStudents] = useState([]);
   const auth = useSelector((state) => state.auth);
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem('access_token');
   const handleCreate = () => {
     setShowInviteDiglog(true);
   };

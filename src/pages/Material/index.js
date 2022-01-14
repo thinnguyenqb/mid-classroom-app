@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import Announcment from "../../components/Announcment/Announcment";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { API_URL } from "../../utils/config";
 import { useParams } from "react-router-dom";
 import PeopleButton from "../../components/PeopleButton/index";
@@ -14,7 +13,7 @@ import GradeButton from "../../components/GradeButton";
 const Material = () => {
   const { id } = useParams();
   const [classes, setClasses] = useState([]);
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem('access_token');
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInput] = useState("");
   const [teacherName, setTeacherName] = useState("");
@@ -67,8 +66,6 @@ const Material = () => {
     //   setImage(e.target.files[0]);
     // }
   };
-
-  // console.log(detailClass)
 
   return (
     <>

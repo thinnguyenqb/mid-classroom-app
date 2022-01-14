@@ -4,12 +4,7 @@ import { Link, useHistory, useParams, useLocation } from "react-router-dom";
 import "./styles.scss";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  dispatchGetUser,
-  dispatchLogin,
-  fetchUser,
-} from "../../redux/actions/authAction";
+import { useSelector } from "react-redux";
 import { Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -22,24 +17,11 @@ function JoinInviteClass() {
   //console.log(id, query.get("email"), query.get("token"))
   const [data, setData] = useState({});
   const history = useHistory();
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("access_token");
   const auth = useSelector((state) => state.auth);
   const { user } = auth;
-
-  useEffect(() => {
-    if (token) {
-      const getUser = () => {
-        dispatch(dispatchLogin());
-        return fetchUser(token).then((res) => {
-          dispatch(dispatchGetUser(res));
-        });
-      };
-      getUser();
-      dispatch({ type: "GET_TOKEN", payload: token });
-    }
-  }, [token, dispatch]);
 
   useEffect(() => {
     if (token) {

@@ -10,13 +10,15 @@ import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import Logout from '@mui/icons-material/Logout';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../redux/actions/authAction'
 
 
 export default function AccountMenu({ avatar }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const history = useHistory()
+  const dispatch = useDispatch()
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,13 +28,7 @@ export default function AccountMenu({ avatar }) {
   };
   
   const handleLogout = async () => {
-    try {
-      localStorage.removeItem('access_token')
-      history.push("/")
-      history.go(0)
-    } catch (err) {
-      history.push("/")
-    }
+    dispatch(logout())
   }
 
   return (

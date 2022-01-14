@@ -13,62 +13,37 @@ import React, {useState} from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useStyles } from "./styles";
 import { GoogleLogin } from "react-google-login";
-import axios from 'axios'
-import { showErrMsg, showSuccessMsg } from '../../components/Notification/Notification'
-import {dispatchLogin } from '../../redux/actions/authAction'
 import { useDispatch } from "react-redux";
-import { API_URL } from "../../utils/config";
 import { Chip, Divider } from "@mui/material";
+import { login, loginGoogle } from '../../redux/actions/authAction'
 
 const initialState = {
   email: '',
   password: '',
-  err: '',
-  success: ''
 }
 
 
 const Login = () => {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch()
-  const history = useHistory()
-
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(initialState);
-  const { email, password, err, success } = user;
-
+  const history = useHistory()
   const handleChangeInput = e => {
     const { name, value } = e.target;
-    setUser({...user, [name]: value, err: '', success: ''})
+    setUser({...user, [name]: value})
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
-    try {
-      setLoading(true)
-      const res = await axios.post(`${API_URL}/user/login`, { email, password })
-      console.log(res)
-      setUser({...user, err: '', success: res.data.msg})
-      localStorage.setItem('access_token', res.data.access_token);
-      dispatch(dispatchLogin())
-      history.push("/")
-    } catch (err) {
-      err.response.data.msg &&
-      setUser({...user, err: err.response.data.msg, success: ''})
-    }
+    setLoading(true)
+    await dispatch(login(user))
+    history.push("/")
+    setLoading(false)
   }
+
   const responseGoogle = async (response) => {
-    try {
-      const res = await axios.post(`${API_URL}/user/google_login`, { tokenId: response.tokenId })
-      console.log(res)
-      setUser({...user, err: '', success: res.data.msg})
-      localStorage.setItem('access_token', res.data.access_token);
-      dispatch(dispatchLogin())
-      history.push("/")
-    } catch (err) {
-      err.response.data.msg &&
-      setUser({...user, err: err.response.data.msg, success: ''})
-    }
+    await dispatch(loginGoogle({ tokenId: response.tokenId }))
   }
 
   return (
@@ -76,8 +51,6 @@ const Login = () => {
       <Paper className={classes.paper}>
         <Avatar className={classes.avatar}> <LockOutlinedIcon /> </Avatar>
         <Typography component="h1" variant="h5"> Login </Typography>
-        {err && showErrMsg(err)}
-        {success && showSuccessMsg(success)}
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             margin="normal"
@@ -91,7 +64,6 @@ const Login = () => {
             autoFocus
             value={user.email}
             onChange={handleChangeInput}
-            
           />
           <TextField
             fullWidth
@@ -117,6 +89,8 @@ const Login = () => {
                 'Login'
             )}
           </Button>
+        </form>
+        <div className={classes.form}>
           <Grid container >
             <Grid item xs>
               <Link to="/forgot-password" variant="body2" style={{textDecoration: 'none', color: '#3f51b5'}}>
@@ -129,11 +103,10 @@ const Login = () => {
               </Link>
             </Grid>
           </Grid>
-          <Divider sx={{mt: 1}}>
+          <Divider sx={{mt: 1, mb: 2}}>
             <Chip label="OR" />
           </Divider>
-        </form>
-        
+        </div>
         <GoogleLogin
           clientId="243157071866-dv8qfonmlum4u3kkv2asdi0qph1pb882.apps.googleusercontent.com"
           buttonText="Login with google"
@@ -142,7 +115,6 @@ const Login = () => {
           className={classes.googleBtn}
         />
       </Paper>
-      
     </Container>
   );
 };

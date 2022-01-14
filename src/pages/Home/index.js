@@ -5,12 +5,7 @@ import { useHistory } from "react-router-dom";
 import "./styles.scss";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
-import { useDispatch } from "react-redux";
-import {
-  dispatchGetUser,
-  dispatchLogin,
-  fetchUser,
-} from "../../redux/actions/authAction";
+import { useSelector } from "react-redux";
 import { Typography, Box } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -18,32 +13,21 @@ function Home() {
   const [classTeacher, setClassTeacher] = useState([]);
   const [classStudent, setClassStudent] = useState([]);
   const history = useHistory();
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const token = localStorage.getItem("access_token");
+
+  const {auth} = useSelector(state => state)
   const [loading, setLoading] =useState(false)
-  useEffect(() => {
-    if (token) {
-      const getUser = () => {
-        dispatch(dispatchLogin());
-        return fetchUser(token).then((res) => {
-          dispatch(dispatchGetUser(res));
-        });
-      };
-      getUser();
-      dispatch({ type: "GET_TOKEN", payload: token });
-    }
-  }, [token, dispatch]);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
+    if (auth.token) {
       const getData = async () => {
         setLoading(true)
         try {
           const { data: teachers } = await axios.get(
             `${API_URL}/classroom/list-teacher`,
             {
-              headers: { Authorization: token },
+              headers: { Authorization: auth.token },
             }
           );
 
@@ -51,7 +35,7 @@ function Home() {
           const { data: students } = await axios.get(
             `${API_URL}/classroom/list-student`,
             {
-              headers: { Authorization: token },
+              headers: { Authorization: auth.token },
             }
           );
           setLoading(false)
@@ -67,7 +51,7 @@ function Home() {
       };
       getData();
     }
-  }, [history]);
+  }, [history, auth.token]);
 
   return (
     <>

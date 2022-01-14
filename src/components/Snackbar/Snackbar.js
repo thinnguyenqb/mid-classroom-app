@@ -9,7 +9,7 @@ function TransitionRight(props) {
   return <Slide {...props} direction="right" />;
 }
 
-export default function SimpleSnackbar({ open, setOpen, msg }) {
+export default function SimpleSnackbar({ open, setOpen, bgColor, msg }) {
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -42,7 +42,7 @@ export default function SimpleSnackbar({ open, setOpen, msg }) {
         style={{ boxShadow: 'none' }}
         //anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity={bgColor} sx={{ width: '100%' }}>
           {msg}
         </Alert>
       </Snackbar>
