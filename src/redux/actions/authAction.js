@@ -9,8 +9,13 @@ export const TYPES = {
 
 export const login = (data) => async (dispatch) => {
   try {
-    dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true}})
-    const res = await axios.post(`${API_URL}/user/login`, data);
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } })
+    const res = await axios.post(`${API_URL}/user/login`, data,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
     dispatch({
       type: GLOBALTYPES.AUTH,
       payload: {
@@ -40,7 +45,12 @@ export const login = (data) => async (dispatch) => {
 export const loginGoogle = (data) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true}})
-    const res = await axios.post(`${API_URL}/user/google_login`, data)
+    const res = await axios.post(`${API_URL}/user/google_login`, data,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
     dispatch({
       type: GLOBALTYPES.AUTH,
       payload: {
@@ -109,6 +119,11 @@ export const register = (data) => async(dispatch) => {
       fullname: data.fullname,
       email: data.email,
       password: data.password
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      }
     })
    
     dispatch({
@@ -133,7 +148,11 @@ export const activationEmail = (activation_token) => async(dispatch) => {
     //action loading
     dispatch({type: GLOBALTYPES.ALERT, payload: {loading: true}})
    
-    const res = await axios.post('/user/activation', { activation_token })
+    const res = await axios.post(`${API_URL}/user/activation`, { activation_token }, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
   
     dispatch({
       type: GLOBALTYPES.ALERT,
