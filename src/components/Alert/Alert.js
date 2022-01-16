@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useSelector } from 'react-redux'
 import Snackbar from '../Snackbar/Snackbar'
+import Loading from './Loading'
 
 const Alert = () => {
   const { alert } = useSelector(state => state)
@@ -12,14 +13,11 @@ const Alert = () => {
       setSnackbar(true)
     }
     checkAlert()
-    
   }, [alert])
-
 
   return (
     <div>
-      {/* {alert.loading && <Loading/>}  */}
-      
+      {alert.loading && <Loading/>} 
       {
         alert.error && 
         <Snackbar

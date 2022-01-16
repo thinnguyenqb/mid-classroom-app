@@ -5,17 +5,13 @@ import { API_URL } from "../../utils/config";
 
 export const TYPES = {
   AUTH: "AUTH",
+  GET_USER: "GET_USER"
 };
 
 export const login = (data) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } })
-    const res = await axios.post(`${API_URL}/user/login`, data,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+    const res = await axios.post(`${API_URL}/user/login`, data)
     dispatch({
       type: GLOBALTYPES.AUTH,
       payload: {
@@ -45,12 +41,7 @@ export const login = (data) => async (dispatch) => {
 export const loginGoogle = (data) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true}})
-    const res = await axios.post(`${API_URL}/user/google_login`, data,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+    const res = await axios.post(`${API_URL}/user/google_login`, data)
     dispatch({
       type: GLOBALTYPES.AUTH,
       payload: {
@@ -85,7 +76,7 @@ export const fetchUser = (token) => async (dispatch) => {
         headers: { Authorization: token },
       });
       dispatch({
-        type: GLOBALTYPES.AUTH,
+        type: TYPES.GET_USER,
         payload: {
           token: token,
           user: res.data.user,
@@ -119,13 +110,7 @@ export const register = (data) => async(dispatch) => {
       fullname: data.fullname,
       email: data.email,
       password: data.password
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-   
+    })   
     dispatch({
       type: GLOBALTYPES.ALERT,
       payload: {
@@ -148,11 +133,7 @@ export const activationEmail = (activation_token) => async(dispatch) => {
     //action loading
     dispatch({type: GLOBALTYPES.ALERT, payload: {loading: true}})
    
-    const res = await axios.post(`${API_URL}/user/activation`, { activation_token }, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+    const res = await axios.post(`${API_URL}/user/activation`, { activation_token })
   
     dispatch({
       type: GLOBALTYPES.ALERT,
@@ -187,6 +168,7 @@ export const logout = () => async(dispatch) => {
         success: "Logout successful!"
       }
     })
+    window.location.href = "/"
   } catch (err) {
     dispatch({
       type: GLOBALTYPES.ALERT,

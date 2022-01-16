@@ -25,11 +25,11 @@ const Body = () => {
     <section>
       <Switch>
         <Route path="/" component={Home} exact/>
-        <Route path="/login" component={auth.token ? NotFound : Login} exact/>
-        <Route path="/signup" component={auth.token ? NotFound : SignUp} exact/>
+        <Route path="/login" component={!token && Login} exact/>
+        <Route path="/signup" component={token ? NotFound : SignUp} exact/>
         <Route path="/user/activate/:activation_token" component={token ? NotFound : ActivationEmail} exact/>
-        <Route path="/user/reset/:token" component={auth.token ? NotFound : ResetPassword} exact/>
-        <Route path="/forgot-password" component={auth.token ? NotFound : ForgotPassword} exact/>
+        <Route path="/user/reset/:token" component={token ? NotFound : ResetPassword} exact/>
+        <Route path="/forgot-password" component={token ? NotFound : ForgotPassword} exact/>
         <Route path="/profile" component={auth.token && Profile} exact/>
         <Route path="/class/:id" component={auth.token && Material } exact/>
         <Route path="/class/:id/exercises" component={Exercises} exact/>

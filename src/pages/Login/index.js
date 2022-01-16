@@ -84,7 +84,7 @@ const Login = () => {
             type="submit"
           >
             {loading ? (
-                <CircularProgress size={25} thickness={4} color="white" />
+                <CircularProgress size={25} thickness={4}/>
             ) : (
                 'Login'
             )}
@@ -104,7 +104,7 @@ const Login = () => {
             </Grid>
           </Grid>
           <Divider sx={{mt: 1, mb: 2}}>
-            <Chip label="OR" />
+            <Chip label="OR" size="small"/>
           </Divider>
         </div>
         <GoogleLogin

@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import "./styles.scss";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 import { Typography, Box } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -16,18 +16,17 @@ function Home() {
   //const dispatch = useDispatch();
   const token = localStorage.getItem("access_token");
 
-  const {auth} = useSelector(state => state)
   const [loading, setLoading] =useState(false)
 
   useEffect(() => {
-    if (auth.token) {
+    if (token) {
       const getData = async () => {
         setLoading(true)
         try {
           const { data: teachers } = await axios.get(
             `${API_URL}/classroom/list-teacher`,
             {
-              headers: { Authorization: auth.token },
+              headers: { Authorization: token },
             }
           );
 
@@ -35,7 +34,7 @@ function Home() {
           const { data: students } = await axios.get(
             `${API_URL}/classroom/list-student`,
             {
-              headers: { Authorization: auth.token },
+              headers: { Authorization: token },
             }
           );
           setLoading(false)
@@ -51,7 +50,7 @@ function Home() {
       };
       getData();
     }
-  }, [history, auth.token]);
+  }, [history, token]);
 
   return (
     <>

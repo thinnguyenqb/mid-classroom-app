@@ -15,7 +15,7 @@ import {
   Menu,
   InputAdornment,
   TextField,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
 import { FcOk } from "react-icons/fc";
 import axios from "axios";
@@ -26,13 +26,13 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { styled } from "@mui/material/styles";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Snackbar from "../../components/Snackbar/Snackbar";
-import { useSelector } from "react-redux";
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import ImportExportCSV from './ImportExportCSV'
-import ReviewPoint from './ReviewPoint'
+import { useDispatch, useSelector } from "react-redux";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import ImportExportCSV from "./ImportExportCSV";
+import ReviewPoint from "./ReviewPoint";
 import CommentPoint from "./CommentPoint";
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import ListAltIcon from "@mui/icons-material/ListAlt";
 
 const Input = styled("input")({
   display: "none",
@@ -53,9 +53,10 @@ export default function DenseTable() {
   const [snackbar, setSnackbar] = useState(false);
   const history = useHistory();
   const [mark, setMark] = useState(false);
+  const dispatch = useDispatch()
 
   const open = Boolean(anchorEl);
-  console.log(exercise)
+  console.log(exercise);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -65,11 +66,29 @@ export default function DenseTable() {
 
   const checkTeacher = (user_cur, teacher) => {
     for (let i = 0; i < teacher.length; i++) {
-      if (teacher[i].teacherId === user_cur)
-        return true
+      if (teacher[i].teacherId === user_cur) return true;
     }
-    return false
-  }
+    return false;
+  };
+
+  useEffect(() => {
+    if (token) {
+      const getUser = async () => {
+        const res = await axios.get(`${API_URL}/user/infor`, {
+          headers: { Authorization: token },
+        });
+        dispatch({
+          type: 'AUTH',
+          payload: {
+            token: token,
+            user: res.data.user,
+            isLogged: true
+          },
+        })
+      }
+      getUser()
+    }
+  }, [dispatch, token]);
 
   useEffect(() => {
     if (token) {
@@ -176,12 +195,9 @@ export default function DenseTable() {
 
   const handleMarkDone = async (exerciseId) => {
     try {
-      await axios.post(
-        `${API_URL}/exercise/${exerciseId}/markdone`, token,
-        {
-          headers: { Authorization: token },
-        }
-      );
+      await axios.post(`${API_URL}/exercise/${exerciseId}/markdone`, token, {
+        headers: { Authorization: token },
+      });
       setSnackbar(true);
       if (!snackbar) history.go(0);
     } catch (err) {
@@ -189,48 +205,64 @@ export default function DenseTable() {
     }
   };
 
+  console.log(auth)
+
   return (
     <>
-      <Grid container>
-        <Box sx={{ display: "flex", width: "100%", mx: 3, my: 1 }}>
-          <Link to={`/class/${id}`} style={{ textDecoration: "none" }}>
-            <Button variant="outlined" startIcon={<ArrowBackIcon />}>
-              Back
-            </Button>
-          </Link>
-          {checkTeacher(auth.user._id, teacher) ? 
-            <Link to={`/class/${id}/gradeClass/gradeReview`} style={{ textDecoration: "none" }}>
-              <Button variant="outlined" startIcon={<ListAltIcon />}>
-                List request grade review
+      {auth ? (
+        <Grid container>
+          <Box sx={{ display: "flex", width: "100%", mx: 3, my: 1 }}>
+            <Link to={`/class/${id}`} style={{ textDecoration: "none" }}>
+              <Button variant="outlined" startIcon={<ArrowBackIcon />}>
+                Back
               </Button>
             </Link>
-            : <></>
-          }
-        </Box>
-        {checkTeacher(auth.user._id, teacher) ? (
-          <ImportExportCSV
-            id={id}
-            loading={loading}
-            setLoading={setLoading}
-            gradeBoard={gradeBoard}
-          />
-        ) : (
-          <></>
-        )}
+            {checkTeacher(auth.user._id, teacher) ? (
+              <Link
+                to={`/class/${id}/gradeClass/gradeReview`}
+                style={{ textDecoration: "none" }}
+              >
+                <Button variant="outlined" startIcon={<ListAltIcon />}>
+                  List request grade review
+                </Button>
+              </Link>
+            ) : (
+              <></>
+            )}
+          </Box>
+          {checkTeacher(auth.user._id, teacher) ? (
+            <ImportExportCSV
+              id={id}
+              loading={loading}
+              setLoading={setLoading}
+              gradeBoard={gradeBoard}
+            />
+          ) : (
+            <></>
+          )}
 
-        <TableContainer
-          component={Paper}
-          sx={{ display: "flex", width: "100%", mx: 3, my: 1 }}
-        >
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left">StudentID</TableCell>
-                <TableCell>Full Name</TableCell>
-                {exercise.map(({ id, name }, index) => (
-                  <>
-                    <TableCell key={index} onClick={() => { setExerciseId(id); setMark(exercise[index].markDone) }}>
-                      
+          <TableContainer
+            component={Paper}
+            sx={{ display: "flex", width: "100%", mx: 3, my: 1 }}
+          >
+            <Table
+              sx={{ minWidth: 650 }}
+              size="small"
+              aria-label="a dense table"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">StudentID</TableCell>
+                  <TableCell>Full Name</TableCell>
+                  {exercise.map(({ id, name }, index) => (
+                    <>
+                      <TableCell
+                        key={index}
+                        onClick={() => {
+                          setExerciseId(id);
+                          setMark(exercise[index].markDone);
+                        }}
+                      >
                         {name}
                         {checkTeacher(auth.user._id, teacher) ? (
                           <IconButton
@@ -240,84 +272,80 @@ export default function DenseTable() {
                             aria-expanded={open ? "true" : undefined}
                             onClick={handleClick}
                             size="small"
-                            
                           >
                             <MoreVertIcon />
                           </IconButton>
                         ) : (
-                            <>
-                           
-                            </>
+                          <></>
                         )}
-                    </TableCell>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                        style: {
-                          maxHeight: "70px",
-                          width: "25ch",
-                          paddingTop: "5px",
-                        },
-                      }}
-                    >
-                      <MenuItem>
-                        <label htmlFor={id}>
-                          <Input
-                            id={id}
-                            type="file"
-                            name="file"
-                            onChange={importGrade}
-                          />
-                          Import grade
-                        </label>
-                      </MenuItem>
-                      <MenuItem onClick={() => handleMarkDone(exerciseId)}>
-                        {
-                          mark ?
+                      </TableCell>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                          style: {
+                            maxHeight: "70px",
+                            width: "25ch",
+                            paddingTop: "5px",
+                          },
+                        }}
+                      >
+                        <MenuItem>
+                          <label htmlFor={id}>
+                            <Input
+                              id={id}
+                              type="file"
+                              name="file"
+                              onChange={importGrade}
+                            />
+                            Import grade
+                          </label>
+                        </MenuItem>
+                        <MenuItem onClick={() => handleMarkDone(exerciseId)}>
+                          {mark ? (
                             <>
                               <CheckBoxIcon /> Grade finalized
                             </>
-                            :
+                          ) : (
                             <>
                               <CheckBoxOutlineBlankIcon /> Grade finalized
                             </>
-                        }
-                      </MenuItem>
-                    </Menu>
-                  </>
-                ))}
-                <TableCell align="right">Total</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, i) => (
-                <>
-                  {checkTeacher(auth.user._id, teacher) ? (
-                    <TableRow
-                    key={i}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}
-                  >
-                    <TableCell align="left" component="th" scope="row">
-                      {row.studentId}
-                    </TableCell>
-                    {row.student_id ? (
-                      <TableCell>
-                        <Link to={`inforStudent/${row.student_id}`}>
-                          {row.studentName}
-                        </Link>
-                      </TableCell>
-                    ) : (
-                      <TableCell>{row.studentName}</TableCell>
-                    )}
-                    {row.exercises.map((item, index) => (
-                      <TableCell key={index}>
-                        <TextField
+                          )}
+                        </MenuItem>
+                      </Menu>
+                    </>
+                  ))}
+                  <TableCell align="right">Total</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, i) => (
+                  <>
+                    {checkTeacher(auth.user._id, teacher) ? (
+                      <TableRow
+                        key={i}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell align="left" component="th" scope="row">
+                          {row.studentId}
+                        </TableCell>
+                        {row.student_id ? (
+                          <TableCell>
+                            <Link to={`inforStudent/${row.student_id}`}>
+                              {row.studentName}
+                            </Link>
+                          </TableCell>
+                        ) : (
+                          <TableCell>{row.studentName}</TableCell>
+                        )}
+                        {row.exercises.map((item, index) => (
+                          <TableCell key={index}>
+                            <TextField
                               hiddenLabel
                               defaultValue={item.point}
                               name="point"
@@ -332,89 +360,89 @@ export default function DenseTable() {
                                 ),
                               }}
                               onChange={handleChangePoint}
-                        />
-                        <Tooltip title="Update" placement="right">
-                          <IconButton
-                            id="basic-button"
-                            aria-controls="basic-menu"
-                            aria-haspopup="true"
-                            size="small"
-                            onClick={() =>
-                              handleUpdatePoint(
-                                exercise[index].id,
-                                row.studentId
-                              )
-                            }
-                          >
-                            <FcOk />
-                          </IconButton>
-                         </Tooltip>
-                      </TableCell>
-                    ))}
-                    <TableCell align="right">{row.totalGrade}</TableCell>
-                  </TableRow>
-                  ) : (
-                    <>
-                      {auth.user.studentID === row.studentId ? (
-                        <TableRow
-                          key={i}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell align="left" component="th" scope="row">
-                            {row.studentId}
+                            />
+                            <Tooltip title="Update" placement="right">
+                              <IconButton
+                                id="basic-button"
+                                aria-controls="basic-menu"
+                                aria-haspopup="true"
+                                size="small"
+                                onClick={() =>
+                                  handleUpdatePoint(
+                                    exercise[index].id,
+                                    row.studentId
+                                  )
+                                }
+                              >
+                                <FcOk />
+                              </IconButton>
+                            </Tooltip>
                           </TableCell>
-                          {row.student_id ? (
-                            <TableCell>
-                              <Link to={`inforStudent/${row.student_id}`}>
-                                {row.studentName}
-                              </Link>
+                        ))}
+                        <TableCell align="right">{row.totalGrade}</TableCell>
+                      </TableRow>
+                    ) : (
+                      <>
+                        {auth.user.studentID === row.studentId ? (
+                          <TableRow
+                            key={i}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell align="left" component="th" scope="row">
+                              {row.studentId}
                             </TableCell>
-                          ) : (
-                            <TableCell>{row.studentName}</TableCell>
-                          )}
-                          {row.exercises.map((item, index) => (
-                            <TableCell key={index}>
-                              {checkTeacher(auth.user._id, teacher) ? (
-                                <>
-                                  <TextField
-                                    hiddenLabel
-                                    defaultValue={item.point}
-                                    name="point"
-                                    variant="standard"
-                                    size="small"
-                                    sx={{ width: "8ch" }}
-                                    InputProps={{
-                                      endAdornment: (
-                                        <InputAdornment position="end">
-                                          /{exercise[index].point}
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                    onChange={handleChangePoint}
-                                  />
-                                  <IconButton
-                                    id="basic-button"
-                                    aria-controls="basic-menu"
-                                    aria-haspopup="true"
-                                    size="small"
-                                    onClick={() =>
-                                      handleUpdatePoint(
-                                        exercise[index].id,
-                                        row.studentId
-                                      )
-                                    }
-                                  >
-                                    <FcOk />
-                                  </IconButton>
-                                </>
-                              ) : (
-                                <>
-                                  {exercise[index].markDone ? (
-                                    <>
+                            {row.student_id ? (
+                              <TableCell>
+                                <Link to={`inforStudent/${row.student_id}`}>
+                                  {row.studentName}
+                                </Link>
+                              </TableCell>
+                            ) : (
+                              <TableCell>{row.studentName}</TableCell>
+                            )}
+                            {row.exercises.map((item, index) => (
+                              <TableCell key={index}>
+                                {checkTeacher(auth.user._id, teacher) ? (
+                                  <>
+                                    <TextField
+                                      hiddenLabel
+                                      defaultValue={item.point}
+                                      name="point"
+                                      variant="standard"
+                                      size="small"
+                                      sx={{ width: "8ch" }}
+                                      InputProps={{
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            /{exercise[index].point}
+                                          </InputAdornment>
+                                        ),
+                                      }}
+                                      onChange={handleChangePoint}
+                                    />
+                                    <IconButton
+                                      id="basic-button"
+                                      aria-controls="basic-menu"
+                                      aria-haspopup="true"
+                                      size="small"
+                                      onClick={() =>
+                                        handleUpdatePoint(
+                                          exercise[index].id,
+                                          row.studentId
+                                        )
+                                      }
+                                    >
+                                      <FcOk />
+                                    </IconButton>
+                                  </>
+                                ) : (
+                                  <>
+                                    {exercise[index].markDone ? (
+                                      <>
                                         {item.point} /{exercise[index].point}
-                                        {!item.isReport ?
+                                        {!item.isReport ? (
                                           <ReviewPoint
                                             exerciseId={exercise[index].id}
                                             studentId={auth.user.studentID}
@@ -422,43 +450,50 @@ export default function DenseTable() {
                                             defPoint={exercise[index].point}
                                             nameExercise={exercise[index].name}
                                           />
-                                          :
+                                        ) : (
                                           <></>
-                                        }
+                                        )}
                                         <CommentPoint
                                           exerciseId={exercise[index].id}
                                           studentId={auth.user.studentID}
                                         />
-                                    </>
+                                      </>
                                     ) : (
-                                    <>
-                                      <span>Chưa có điểm</span>
-                                    </>
-                                  )}
-                                </>
-                              )}
-                            </TableCell>
-                          ))}
-                            {
-                              row.isShowTotalPoint ? <TableCell align="right">{row.totalGrade}</TableCell> : <TableCell align="right">0.00</TableCell>
-                            }
-                        </TableRow>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  )}
-                </>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Snackbar
-          open={snackbar}
-          setOpen={setSnackbar}
-          msg="Update successfully"
-        />
-      </Grid>
+                                      <>
+                                        <span>Chưa có điểm</span>
+                                      </>
+                                    )}
+                                  </>
+                                )}
+                              </TableCell>
+                            ))}
+                            {row.isShowTotalPoint ? (
+                              <TableCell align="right">
+                                {row.totalGrade}
+                              </TableCell>
+                            ) : (
+                              <TableCell align="right">0.00</TableCell>
+                            )}
+                          </TableRow>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    )}
+                  </>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Snackbar
+            open={snackbar}
+            setOpen={setSnackbar}
+            msg="Update successfully"
+          />
+        </Grid>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

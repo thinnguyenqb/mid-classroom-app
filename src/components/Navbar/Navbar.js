@@ -24,7 +24,7 @@ const Navbar = ({ children }) => {
   const [joinClassDiglog, setJoinClassDiglog] = useState(false);
   const auth = useSelector((state) => state.auth);
   const { user, isLogged } = auth;
-
+  const token = localStorage.getItem("access_token")
 
   const userLink = () => {
     return (
@@ -53,7 +53,7 @@ const Navbar = ({ children }) => {
           <div className={classes.header__wrapper__right}>
           </div>
           <div className={classes.header__wrapper__right}>
-              {isLogged ? (
+              {isLogged || token ? (
                 <>
                 <Link to="/" style={{marginRight: "5px"}}>
                   <IconButton variant="outlined" size="large" style={{ color: '#3f51b5' }}>
@@ -69,7 +69,7 @@ const Navbar = ({ children }) => {
                 </>
               ) : (
                 <Link to="/login" style={{ textDecoration: "none", marginLeft: '13px' }}>
-                  <Button variant="outlined">
+                  <Button variant="outlined" onClick={() => { localStorage.removeItem("access_token") }}>
                     <LoginOutlinedIcon className={classes.icon} />
                     Sign in
                   </Button>
