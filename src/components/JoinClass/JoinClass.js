@@ -4,7 +4,6 @@ import { Close } from "@material-ui/icons";
 import "./style.css";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -14,7 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const JoinClass = (props) => {
   const { joinClassDiglog, setJoinClassDiglog } = props;
   const [classCode, setClassCode] = useState("");
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem("access_token")
   const history = useHistory()
 
   const joinClass = (e) => {

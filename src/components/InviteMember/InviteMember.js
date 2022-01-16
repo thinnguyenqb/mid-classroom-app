@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -12,17 +12,38 @@ import {
 import "./style.css";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
-import { useSelector } from "react-redux";
+import CopyLink from "./CopyLink"
+import ShowMoreText from "react-show-more-text";
 
 const InviteMember = (props) => {
   const { showInviteDiglog, setShowInviteDiglog, id } = props;
-  //const handleOpen = () => setCreateClassDiglog(true);
   const handleClose = () => setShowInviteDiglog(false);
-
+  const [linkInvite, setLinkInvite] = useState("")
   const [email, setEmail] = useState("");
-
-  const token = useSelector((state) => state.token);
-  //console.log(id.id)
+  const token = localStorage.getItem("access_token");
+  
+  useEffect(() => {
+    if (token) {
+      const getData = async () => {
+        try {
+          const res = await axios.post(
+            `${API_URL}/classroom/invite-student-link`,
+            { classroom_id: id.id },
+            {
+              headers: { Authorization: token },
+            }
+          );
+          setLinkInvite(res.data.url);
+        } catch (error) {
+          if (error) {
+            console.log(error.response.data.msg);
+          }
+        }
+      };
+      getData();
+    }
+  }, [token, id])
+  
   const inviteMember = async (e) => {
     e.preventDefault();
     if (email.trim().length > 0) {
@@ -61,7 +82,14 @@ const InviteMember = (props) => {
         <DialogContentText>
           <h5>Invitation link</h5>
         </DialogContentText>
-        https://classroom.google.com/c/NDI0NzU0NTE3Mdfsfsdfsdfsdfsdfsdf
+        <ShowMoreText
+          lines={1}
+          width={500}
+          expanded={false}
+        >
+        {linkInvite}
+        </ShowMoreText>
+        <CopyLink linkInvite={linkInvite}/>
       </DialogContent>
       <DialogContent>
         <Divider />
@@ -77,7 +105,6 @@ const InviteMember = (props) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>

@@ -10,7 +10,6 @@ import {
 import "./style.css";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 const CreateClass = (props) => {
@@ -22,7 +21,7 @@ const CreateClass = (props) => {
   const [desc, setDesc] = useState("");
   const [topic, setTopic] = useState("");
   const [room, setRoom] = useState("");
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem("access_token");
   const history = useHistory()
 
   const addClass = async (e) => {
@@ -40,6 +39,7 @@ const CreateClass = (props) => {
           headers: { Authorization: token },
         })
         .then((result) => {
+          console.log(result)
           history.go(0)
         })
         .catch((err) => {

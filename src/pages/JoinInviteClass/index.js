@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Divider, Avatar, Button } from "@material-ui/core";
-import { Link, useHistory, useParams, useLocation } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import "./styles.scss";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
@@ -9,15 +9,9 @@ import { Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function JoinInviteClass() {
-  let location = useLocation()
-  let query = new URLSearchParams(location.search)
-  const email = query.get("email")
-  const join_token = query.get("token")
-  const { id } = useParams();
-  //console.log(id, query.get("email"), query.get("token"))
+  const { id, email, join_token } = useParams();
   const [data, setData] = useState({});
   const history = useHistory();
-  //const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("access_token");
   const auth = useSelector((state) => state.auth);
@@ -107,15 +101,15 @@ function JoinInviteClass() {
                               <div className="card__imgWrapper" />
                               <div className="card__image" />
                               <div className="card__content">
-                                <h2>{data.name}</h2>
+                                <h5 style={{color: 'white'}}>{data.name}</h5>
                                 <p className="card__owner">
-                                  {data.teacher.name}
+                                  {data.teacher[0].name}
                                 </p>
                               </div>
                             </div>
                             <Avatar
                               className="card__avatar"
-                              src={data.teacher.avatar}
+                              src={data.teacher[0].avatar}
                             />
                           </div>
                           <div className="card__bot">

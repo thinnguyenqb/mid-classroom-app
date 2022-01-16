@@ -6,12 +6,11 @@ import React from "react";
 import { Link, useHistory } from 'react-router-dom';
 import "./styles.scss";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { API_URL } from "../../utils/config";
 
 
 const ClassCard = ({ id, name, desc, teacherName, teacherAvatar }) => {
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem("access_token");
   const history = useHistory()
   const removeClass = () => {
     const data = {
