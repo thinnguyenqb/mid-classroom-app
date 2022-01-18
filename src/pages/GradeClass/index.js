@@ -209,7 +209,7 @@ export default function DenseTable() {
       const data = {
         idTeacher: auth.user._id,
         idExer: exerciseId,
-        text: 'finalizes a grade composition'
+        text: 'đã hoàn thành chấm điểm bài tập'
       }
       const res = await axios.post(`${API_URL}/notify/create-all-students`, data, {
         headers: { Authorization: token },
