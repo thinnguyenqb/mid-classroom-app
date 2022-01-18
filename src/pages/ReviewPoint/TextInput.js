@@ -22,12 +22,11 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export const TextInput = ({ user_id, setChat }) => {
+export const TextInput = ({ user_id, setChat, checkTeacher, teacher }) => {
   const token = localStorage.getItem("access_token");
   const classes = useStyles();
   const { exerciseid, studentid } = useParams()
   const [message, setMessage] = useState("")
-  
 
   const handleChangeInput = (e) => {
     setMessage(e.target.value)
@@ -52,6 +51,46 @@ export const TextInput = ({ user_id, setChat }) => {
       console.log(err);
     }
   };
+
+  const createNotifyComment = async () => {
+    try {
+      var arrT = []
+      //create array student id
+      for (var i = 0; i < teacher.length; i++) { 
+        arrT.push(teacher[i].teacherId)
+      }
+      if (checkTeacher === 0) {
+        await axios.post(
+          `${API_URL}/notify/create-teacher`,
+          {
+            sender: user_id,
+            receivers: arrT,
+            idExer: exerciseid,
+            text: "has commented on your review grade",
+          },
+          {
+            headers: { Authorization: token },
+          }
+        );
+      } else {
+          await axios.post(
+          `${API_URL}/notify/create-student`,
+          {
+            sender: user_id,
+            receivers: studentid,
+            idExer: exerciseid,
+            text: "has commented on your review grade",
+          },
+          {
+            headers: { Authorization: token },
+          }
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
   return (
     <>
       <form className={classes.wrapForm} noValidate autoComplete="off">
@@ -63,7 +102,12 @@ export const TextInput = ({ user_id, setChat }) => {
           value={message}
           onChange={handleChangeInput}
         />
-        <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit}>
+        <Button variant="contained" color="primary" className={classes.button} onClick={
+          () => {
+            createNotifyComment();
+            handleSubmit();
+          }
+        }>
           <SendIcon />
         </Button>
       </form>

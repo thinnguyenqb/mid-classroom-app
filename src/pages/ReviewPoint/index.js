@@ -134,7 +134,16 @@ function RewiewPoint() {
         console.log(err);
       });
       setSnackbar(true);
-      //if (!snackbar) history.go(0);
+      if (!checked) {
+        const data = {
+          idTeacher: auth.user._id,
+          idExer: exerciseid,
+          text: 'thông báo điểm cuối cùng sau phúc khảo.'
+        }
+        await axios.post(`${API_URL}/notify/create-all-students`, data, {
+          headers: { Authorization: token },
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -355,8 +364,22 @@ function RewiewPoint() {
                         Bình luận phúc khảo ({chat.length})
                       </Typography>
                     </Grid>
-                    <Comment chat={chat} />
-                    <TextInput user_id={auth.user._id} setChat={setChat} />
+                      <Comment chat={chat} />
+                      {checkTeacher(auth.user._id, teacher)
+                        ? 
+                        <TextInput
+                          user_id={auth.user._id}
+                          setChat={setChat}
+                          checkTeacher={1}
+                          teacher={teacher}/>
+                        :
+                        <TextInput
+                          user_id={auth.user._id}
+                          setChat={setChat}
+                          checkTeacher={0}
+                          teacher={teacher}
+                        />
+                      }
                   </Grid>
                 </Grid>
               </Grid>

@@ -56,7 +56,7 @@ export default function DenseTable() {
   const dispatch = useDispatch()
 
   const open = Boolean(anchorEl);
-  console.log(exercise);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -204,8 +204,22 @@ export default function DenseTable() {
       console.log(err);
     }
   };
-
-  console.log(auth)
+  const createNotifyAllStudent = async (exerciseId) => {
+    try {
+      const data = {
+        idTeacher: auth.user._id,
+        idExer: exerciseId,
+        text: 'finalizes a grade composition'
+      }
+      const res = await axios.post(`${API_URL}/notify/create-all-students`, data, {
+        headers: { Authorization: token },
+      });
+      console.log(res.data.notify)
+      if (!snackbar) history.go(0);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -304,7 +318,11 @@ export default function DenseTable() {
                             Import grade
                           </label>
                         </MenuItem>
-                        <MenuItem onClick={() => handleMarkDone(exerciseId)}>
+                        <MenuItem onClick={() => {
+                          handleMarkDone(exerciseId);
+                          createNotifyAllStudent(exerciseId);
+                        }
+                        }>
                           {mark ? (
                             <>
                               <CheckBoxIcon /> Grade finalized
@@ -452,11 +470,16 @@ export default function DenseTable() {
                                           />
                                         ) : (
                                           <></>
-                                        )}
-                                        <CommentPoint
-                                          exerciseId={exercise[index].id}
-                                          studentId={auth.user.studentID}
-                                        />
+                                          )}
+                                          {!item.isFinal ? 
+                                            <CommentPoint
+                                              exerciseId={exercise[index].id}
+                                              studentId={auth.user.studentID}
+                                            />
+                                           : 
+                                            <></>
+                                          }
+                                        
                                       </>
                                     ) : (
                                       <>

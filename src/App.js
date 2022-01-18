@@ -22,20 +22,5 @@ function App() {
     </Router>
   )
 }
-// const getUser = async () => {
-//   const res = await axios.get(`${API_URL}/user/infor`, {
-//     headers: { Authorization: token },
-//   });
-//   dispatch({
-//     type: 'AUTH',
-//     payload: {
-//       token: token,
-//       user: res.data.user,
-//       isLogged: true
-//     },
-//   })
-//   localStorage.setItem('auth', res.data.user)
-// }
-// getUser()
 
 export default App

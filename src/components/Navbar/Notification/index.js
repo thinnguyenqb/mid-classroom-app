@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Menu from "@mui/material/Menu";
+import React, { useState, useEffect } from "react";
+import { Menu } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
@@ -9,10 +9,17 @@ import { Link } from "react-router-dom";
 import './styles.scss'
 import { Typography } from "@material-ui/core";
 import Avatar from '@mui/material/Avatar';
+import { API_URL } from "../../../utils/config";
+import axios from 'axios'
+import { useSelector } from 'react-redux';
+import moment from "moment";
 
 export default function Notification() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [dataNotify, setDataNotify] = useState([])
+  const token = localStorage.getItem("access_token")
+  const auth = useSelector((state) => state.auth);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -20,6 +27,27 @@ export default function Notification() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (token) {
+      const getNotify = async () => {
+        try {
+          const res = await axios.get(
+            `${API_URL}/notify/${auth.user._id}`,
+            {
+              headers: { Authorization: token },
+            }
+          );
+          setDataNotify(res.data.dataNotify);
+        } catch (error) {
+          if (error) {
+            console.log(error.response.data.msg);
+          }
+        }
+      };
+      getNotify();
+    }
+  }, [token, auth]);
 
   return (
     <React.Fragment>
@@ -35,7 +63,7 @@ export default function Notification() {
           variant="outlined"
           style={{ color: "#3f51b5", marginLeft: "5px" }}
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={dataNotify.length} color="error">
             <NotificationsNoneRoundedIcon fontSize="inherit" />
           </Badge>
         </IconButton>
@@ -69,17 +97,22 @@ export default function Notification() {
           <div
             style={{ maxHeight: "calc(100vh - 200px)", overflow: "auto" }}
           >
-           
-              <div>
-                <Link to='/' className="notify-body">
-                  <Avatar src='https://res.cloudinary.com/ericnguyen-cop/image/upload/v1642046858/Classroom/fkwfz8i072rrbu3im9ol.png' sx={{ width: 32, height: 32, marginRight: '10px' }}/>
-                  <div>
-                    <strong style={{marginRight: '5px'}}>huykhanh99</strong>
-                    <span>has commented on your review grade </span>
+            {dataNotify.map((item, index) => (
+                <div className="notify-body" key={index}>
+                    <Avatar src={item.senderAvatar} sx={{ width: 32, height: 32, marginRight: '10px' }}/>
+                    <div>
+                      <div>
+                        <span style={{marginRight: '5px', fontWeight: '500'}}>{item.senderFullname}</span>
+                        <Link to={`/${item.url}`} style={{textDecoration: 'none', color: '#343a40'}} >
+                          <span>{item.text} </span>
+                        </Link>
+                      </div>
+                    <div className="notify-items-time">
+                      {moment(item.createdAt).fromNow()}
+                    </div>
                   </div>
-                </Link>
-              </div>
-           
+                </div>
+            ))}
           </div>
         </div>
       </Menu>
