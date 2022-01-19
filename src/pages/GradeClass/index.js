@@ -54,7 +54,8 @@ export default function DenseTable() {
   const history = useHistory();
   const [mark, setMark] = useState(false);
   const dispatch = useDispatch()
-
+  console.log(rows);
+  
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -130,6 +131,7 @@ export default function DenseTable() {
               headers: { Authorization: token },
             })
             .then((result) => {
+              console.log(result.data);
               setGradeBoard(result.data.students);
             })
             .catch((err) => {
@@ -464,9 +466,11 @@ export default function DenseTable() {
                                           <ReviewPoint
                                             exerciseId={exercise[index].id}
                                             studentId={auth.user.studentID}
+                                            studentid={auth.user._id}
                                             curPoint={item.point}
                                             defPoint={exercise[index].point}
                                             nameExercise={exercise[index].name}
+                                            teacher={teacher}
                                           />
                                         ) : (
                                           <></>

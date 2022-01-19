@@ -66,7 +66,7 @@ export const TextInput = ({ user_id, setChat, checkTeacher, teacher }) => {
             sender: user_id,
             receivers: arrT,
             idExer: exerciseid,
-            text: "đã bình luận về bài phúc khảo",
+            text: "đã bình luận về bài phúc khảo.",
           },
           {
             headers: { Authorization: token },
@@ -79,7 +79,7 @@ export const TextInput = ({ user_id, setChat, checkTeacher, teacher }) => {
             sender: user_id,
             receivers: studentid,
             idExer: exerciseid,
-            text: "has commented on your review grade",
+            text: "đã bình luận về bài phúc khảo.",
           },
           {
             headers: { Authorization: token },

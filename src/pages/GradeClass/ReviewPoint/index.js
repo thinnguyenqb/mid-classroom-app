@@ -4,7 +4,7 @@ import ReplyIcon from "@mui/icons-material/Reply";
 import Tooltip from "@mui/material/Tooltip";
 import { CreateRequestPoint } from "./CreateRequestPoint";
 
-export default function ReviewPoint({exerciseId, studentId, curPoint, defPoint, nameExercise }) {
+export default function ReviewPoint({exerciseId, studentId, studentid, curPoint, defPoint, nameExercise, teacher }) {
   const [open, setOpen] = useState(false);
   const [isReport, setIsReport] = useState(false);
 
@@ -38,10 +38,12 @@ export default function ReviewPoint({exerciseId, studentId, curPoint, defPoint, 
         openState={[open, setOpen]}
         exerciseId={exerciseId}
         studentId={studentId}
+        studentid={studentid}
         curPoint={curPoint}
         defPoint={defPoint}
         nameExercise={nameExercise}
         setIsReport={setIsReport}
+        teacher={teacher}
       />
     </React.Fragment>
   );

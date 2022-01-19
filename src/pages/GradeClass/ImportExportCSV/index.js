@@ -12,28 +12,29 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { CSVLink } from "react-csv";
 import GetAppIcon from "@mui/icons-material/GetApp";
+import { useHistory } from "react-router-dom";
 
 const studentImportTemp = [
   ["StudentId", "Fullname"],
   ["1712787", "Nguyễn Văn Thìn"],
   ["1712788", "Trần Thiên Quàng"],
-  ["1712789", "Nguyễn Công Sơn"],
+  ["18120000", "Nguyễn Công Sơn"],
 ];
 
 const gradeImportTemp = [
   ["StudentId", "Grade"],
   ["1712787", "70"],
   ["1712788", "80"],
-  ["1712789", "90"],
+  ["18120000", "90"],
 ];
 
 const Input = styled("input")({
   display: "none",
 });
 
-export default function ImportExportCSV({ id, loading, setLoading, gradeBoard}) {
+export default function ImportExportCSV({ id, loading, setLoading, gradeBoard }) {
   const token = localStorage.getItem("access_token");
-
+  const history = useHistory()
   const importFile = async (e) => {
     e.preventDefault();
     try {
@@ -48,6 +49,7 @@ export default function ImportExportCSV({ id, loading, setLoading, gradeBoard}) 
         },
       });
       setLoading(false);
+      history.go(0)
     } catch (err) {}
   };
 
