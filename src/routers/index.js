@@ -11,6 +11,7 @@ import ResetPassword from './../pages/ResetPassword/index';
 import Profile from '../pages/Profile'
 import Material from '../pages/Material'
 import Exercises from './../pages/Exercises/index';
+import JoinInviteClassTeacher from '../pages/JoinInviteClassTeacher';
 import JoinInviteClass from '../pages/JoinInviteClass';
 import JoinInviteClassByLink from '../pages/JoinInviteClassByLink';
 import GradeClass from '../pages/GradeClass';
@@ -35,6 +36,7 @@ const Body = () => {
         <Route path="/class/:id" component={auth.token && Material } exact/>
         <Route path="/class/:id/exercises" component={Exercises} exact/>
         <Route path="/class/:id/join-student/:email/:join_token" component={JoinInviteClass} exact/>
+        <Route path="/class/:id/join-teacher/:email/:join_token" component={JoinInviteClassTeacher} exact/>
         <Route path="/class/:id/join-student/:join_token" component={JoinInviteClassByLink} exact/>
         <Route path="/class/:id/gradeclass" component={GradeClass} exact/>
         <Route path="/class/:id/gradeclass/gradereview" component={GradeReview} exact/>

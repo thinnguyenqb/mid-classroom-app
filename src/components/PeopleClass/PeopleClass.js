@@ -10,6 +10,7 @@ import UserCard from "../UserCard/UserCard";
 import { Tooltip, IconButton } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import InviteMember from "./../InviteMember/InviteMember";
+import InviteTeacher from "../InviteTeacher/InviteTeacher";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -18,12 +19,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const PeopleClass = (props) => {
   const { peopleDiglog, setPeopleDiglog, id } = props;
   const [showInviteDiglog, setShowInviteDiglog] = useState(false);
+  const [showInviteDiglogTeacher, setShowInviteDiglogTeacher] = useState(false);
   const [teacher, setTeacher] = useState([]);
   const [students, setStudents] = useState([]);
   const auth = useSelector((state) => state.auth);
   const token = localStorage.getItem('access_token');
+
   const handleCreate = () => {
     setShowInviteDiglog(true);
+  };
+  const handleCreateTeacher = () => {
+    setShowInviteDiglogTeacher(true);
   };
 
   const checkTeacher = (user_cur, teacher) => {
@@ -70,9 +76,9 @@ const PeopleClass = (props) => {
             <div className="peopleClass__table-header">
               Teacher
               {checkTeacher(auth.user._id, teacher) ? (
-                <Tooltip title="Invite">
+                <Tooltip title="Invite" onClick={handleCreateTeacher}>
                   <IconButton color="primary">
-                    <PersonAddAlt1Icon />*
+                    <PersonAddAlt1Icon />
                   </IconButton>
                 </Tooltip>
               ) : (
@@ -120,6 +126,11 @@ const PeopleClass = (props) => {
       <InviteMember
         showInviteDiglog={showInviteDiglog}
         setShowInviteDiglog={setShowInviteDiglog}
+        id={id}
+      />
+      <InviteTeacher
+        showInviteDiglogTeacher={showInviteDiglogTeacher}
+        setShowInviteDiglogTeacher={setShowInviteDiglogTeacher}
         id={id}
       />
     </div>

@@ -76,7 +76,7 @@ const InviteMember = (props) => {
       open={showInviteDiglog}
       onClose={handleClose}
     >
-      <DialogTitle>INVITE MEMBER</DialogTitle>
+      <DialogTitle>INVITE STUDENT</DialogTitle>
 
       <DialogContent>
         <DialogContentText>
