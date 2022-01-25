@@ -11,7 +11,7 @@ const GradeButton = (id) => {
 
   return (
     <>
-      <Box>
+      <Box sx={{ mr:1 }}>
         <Link to={`${location.pathname}/gradeClass`}>
           <ButtonGroup variant="outlined" aria-label="outlined button group">
             <Button

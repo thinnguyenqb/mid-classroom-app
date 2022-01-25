@@ -1,24 +1,60 @@
-import { Avatar, Button, TextField } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import "./styles.scss";
-import Announcment from "../../components/Announcment/Announcment";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import {
+  Button,
+  Container,
+  Typography,
+  Link,
+} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ControlledEditor from "./ControlledEditor";
+import CopyClipboard from "./CopyClipboard";
+import GradeStructure from "./GradeStructure";
 import axios from "axios";
 import { API_URL } from "../../utils/config";
 import { useParams } from "react-router-dom";
 import PeopleButton from "../../components/PeopleButton/index";
 import ExercisesButton from "./../../components/ExercisesButton/index";
-import { Divider } from "@mui/material";
 import GradeButton from "../../components/GradeButton";
+import { Divider } from "@mui/material";
+import { useSelector } from "react-redux";
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  color: theme.palette.text.secondary,
+  padding: "16px",
+  borderRadius: "5px",
+  border: "1px solid #ddd",
+  variant: "outlined",
+}));
+
+const styles = {
+  infoLabel: {
+    minWidth: 120,
+    display: "inline-block",
+    fontWeight: 600,
+    fontStyle: "normal",
+    fontSize: "0.875rem",
+  },
+  sizeText: {
+    fontSize: "0.875rem",
+  },
+};
 
 const Material = () => {
+  const [addPost, setAddPost] = useState(false);
+  const [value, setValue] = useState("");
   const { id } = useParams();
   const [classes, setClasses] = useState([]);
-  const token = localStorage.getItem('access_token');
-  const [showInput, setShowInput] = useState(false);
-  const [inputValue, setInput] = useState("");
+  const token = localStorage.getItem("access_token");
   const [teacherName, setTeacherName] = useState("");
-  const [assignment, setAssignment] = useState([])
-  //const [image, setImage] = useState(null);
+  const { auth } = useSelector(state => state)
 
   useEffect(() => {
     if (token) {
@@ -36,151 +72,205 @@ const Material = () => {
               console.log(err);
             });
         } catch (error) {
-          if (error) {
-            console.log(error.response.data.msg);
-          }
-        }
-      };
-
-      const getExercise = async () => {
-        try {
-          const res = await axios.get(
-            `${API_URL}/exercise/list-exercise/${id}`,
-            {
-              headers: { Authorization: token },
-            }
-          );
-          setAssignment(res.data);
-        } catch (error) {
-          if (error) {
-            console.log(error.response.data.msg);
-          }
+          console.log(error.response.data.msg);
         }
       };
       getDetailClass();
-      getExercise();
     }
   }, [token, id]);
-  const handleChange = (e) => {
-    // if (e.target.files[0]) {
-    //   setImage(e.target.files[0]);
-    // }
-  };
 
   return (
     <>
-      <div className="material">
-        <div className="material__wrapper">
-          <div className="material__content">
-            <div className="material__wrapper1">
-              <div className="material__bgImage">
-                <div className="material__emptyStyles" />
-              </div>
-              <div className="material__text">
-                <h1 className="material__heading material__overflow">
-                  {classes.name}
-                </h1>
-                <div className="material__section material__overflow">
-                  {classes.desc}
-                </div>
-                <div className="material__wrapper2">
-                  <em className="material__code">Topic :</em>
-                  <div className="material__id">{classes.topic}</div>
-                  <em className="material__code" style={{ marginLeft: "20px" }}>
-                    - Room :
-                  </em>
-                  <div className="material__id">{classes.room}</div>
-                </div>
-                <div className="material__wrapper2">
-                  <em className="material__code">Teacher :</em>
-                  <div className="material__id">{teacherName}</div>
-                </div>
-                <div className="material__wrapper2">
-                  <em className="material__code">Class Code :</em>
-                  <div className="material__id">{classes.id}</div>
-                </div>
-              </div>
-              <div className="material__button">
-                <ExercisesButton id={id} />
-                <PeopleButton id={id} />
-                <GradeButton id={id} />
-              </div>
-            </div>
-          </div>
-
-          <div className="material__announce">
-            <div>
-              <div className="material__status">
-                <p>Upcoming</p>
-                <p className="material__subText ">No work due</p>
-              </div>
-              <div className="material__status" style={{marginTop: '10px'}}>
-                <div>
-                  <h3 style={{marginBottom: '10px'}}>Current grade structure</h3>
-                  <Divider />
-                  {
-                    assignment.map(({ id, name, point }, index) => {
-                      return (
-                        <div style={{margin:'10px 0px 10px 0px', display: 'flex', justifyContent: 'space-between'}} index={index} key={id}>
-                          <span  style={{fontWeight:'500'}}>{name}:</span>
-                          <span style={{color:'#4285f4'}}>{point} point</span>
-                        </div>
-                      )
-                    })
-                  }
-                </div>
-              </div>
-            </div>
-            <div className="material__announcements">
-              <div className="material__announcementsWrapper">
-                <div className="material__ancContent">
-                  {showInput ? (
-                    <div className="material__form">
-                      <TextField
-                        id="filled-multiline-flexible"
-                        multiline
-                        fullWidth
-                        label="Announce Something to class"
-                        variant="filled"
-                        value={inputValue}
-                        onChange={(e) => setInput(e.target.value)}
-                      />
-                      <div className="material__buttons">
-                        <input
-                          onChange={handleChange}
-                          variant="outlined"
-                          color="primary"
-                          type="file"
-                        />
-
-                        <div>
-                          <Button onClick={() => setShowInput(false)}>
-                            Cancel
-                          </Button>
-
-                          <Button color="primary" variant="contained">
-                            Post
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div
-                      className="material__wrapper100"
-                      onClick={() => setShowInput(true)}
+      <Container
+        maxWidth="lg"
+        sx={{ marginTop: 11, maxWidth: "1000px !important" }}
+      >
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Paper xs={{ padding: 0, borderRadius: "10px !important" }}>
+                <Accordion disableGutters xs={{ borderRadius: "10px" }}>
+                  <AccordionSummary
+                    id="panel1a-header"
+                    aria-controls="panel1a-content"
+                    sx={{
+                      height: 250,
+                      width: "100%",
+                      background: `radial-gradient(
+                          45rem 18.75rem ellipse at bottom right,
+                          #3f51b5,
+                          transparent
+                        ), 
+                        url('https://www.gstatic.com/classroom/themes/img_code.jpg')`,
+                      alignItems: "end",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <Grid sx={{ width: "100%" }}>
+                      <Typography sx={{ color: "white", fontSize: 36 }}>
+                        {classes.name}
+                      </Typography>
+                      <Typography sx={{ color: "white", fontSize: 20 }}>
+                        {classes.desc}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="flex-end"
+                      alignItems="center"
                     >
-                      <Avatar />
-                      <div>Announce Something to class</div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <Announcment />
-              <Announcment />
-            </div>
-          </div>
-        </div>
-      </div>
+                      <ExercisesButton id={id} />
+                      <PeopleButton id={id} />
+                      <GradeButton id={id} />
+                    </Grid>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      <b style={styles.infoLabel}>Room:</b>
+                      <span style={styles.sizeText}>{classes.room}</span>
+                    </Typography>
+                    <Typography>
+                      <b style={styles.infoLabel}>Topic:</b>
+                      <span style={styles.sizeText}>{classes.topic}</span>
+                    </Typography>
+                    <Typography>
+                      <b style={styles.infoLabel}>Teacher:</b>
+                      <span style={styles.sizeText}>{teacherName}</span>
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Paper>
+            </Grid>
+            <Grid item xs={3.5}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Item sx={{boxShadow: 'none'}}>
+                    <Grid container alignItems={"center"}>
+                      <Grid item>
+                        <Typography>
+                          <span style={styles.infoLabel}>Invite code</span>
+                        </Typography>
+                      </Grid>
+                      <Grid item sx={{ ml: "auto" }}>
+                        <CopyClipboard classCode={classes.id} />
+                      </Grid>
+                    </Grid>
+                    <Box
+                      sx={{
+                        paddingTop: 2,
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontWeight: "400",
+                          fontSize: "1 rem",
+                          textAlign: "center",
+                          backgroundColor: "#66b2ff26",
+                          color: "black",
+                          borderRadius: "5px",
+                          padding: "3px",
+                        }}
+                      >
+                        {classes.id}
+                      </p>
+                    </Box>
+                  </Item>
+                </Grid>
+                <Grid item xs={12}>
+                  <Item sx={{boxShadow: 'none'}}>
+                    <Typography>
+                      <span style={styles.infoLabel}>
+                        Current grade structure
+                      </span>
+                    </Typography>
+                    <Divider sx={{ mt: 1 }} />
+                    <GradeStructure class_id={classes.id} />
+                  </Item>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={8.5}>
+              <Item >
+                {addPost ? (
+                  <Box>
+                    <ControlledEditor value={value} setValue={setValue} />
+                    <Grid container justifyContent="end" sx={{ marginTop: 2 }}>
+                      <Button
+                        sx={{ marginRight: 1 }}
+                        color="primary"
+                        aria-label="add"
+                        onClick={() => setAddPost(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        aria-label="add"
+                        sx={{ backgroundColor: "#3f51b5" }}
+                        onClick={() => setAddPost(false)}
+                      >
+                        Post
+                      </Button>
+                    </Grid>
+                  </Box>
+                ) : (
+                    <>
+                      <Box
+                        onClick={() => setAddPost(true)}
+                        sx={{ marginBottom: 1, "&:hover": { cursor: "pointer" } }}
+                      >
+                        <Grid container alignItems="center">
+                          <Avatar src={auth.user.avatar} height="35" wihth="35"></Avatar>
+                          <Link
+                            sx={{
+                              marginLeft: "10px",
+                              color: "rgba(0,0,0,0.55)",
+                              textDecoration: "none",
+                              "&:hover": {
+                                color: "#000",
+                                cursor: "pointer",
+                              },
+                            }}
+                          >
+                            Annouce something to your class
+                          </Link>
+                        </Grid>
+                      </Box>
+                     
+                    </>
+                )}
+              </Item>
+              <Item sx={{mt: 3, boxShadow: 'none'}}>
+                <Grid
+                  container
+                  direction={"column"}
+                  justify={"center"}
+                  alignItems={"center"}
+                >
+                  <Box
+                    component="img"
+                    sx={{
+                      width: "20%",
+                    }}
+                    alt="The house from the offer."
+                    src="https://res.cloudinary.com/ericnguyen-cop/image/upload/v1643095971/Classroom/vrtdkpjdcksm9zooxxvl.png"
+                  />
+                  <Typography>
+                    <span style={styles.infoLabel}>
+                      Đây là nơi đăng thông báo cho lớp học của bạn
+                    </span>
+                  </Typography>
+                  <Typography>
+                    Sử dụng bảng tin để thông báo và trả lời câu hỏi của học viên
+                  </Typography>
+                </Grid>
+              </Item>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </>
   );
 };

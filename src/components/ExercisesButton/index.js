@@ -11,7 +11,7 @@ const ExercisesButton = (id) => {
 
   return (
     <>
-      <Box>
+      <Box sx={{ mr:1 }}>
         <Link to={`${location.pathname}/exercises`}>
           <ButtonGroup variant="outlined" aria-label="outlined button group">
             <Button

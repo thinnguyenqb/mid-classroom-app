@@ -14,7 +14,7 @@ const PeopleButton = (id) => {
   
   return (
     <>
-      <Box>
+      <Box sx={{ mr:1 }}>
         <ButtonGroup variant="outlined" aria-label="outlined button group">
           <Button
             style={{
