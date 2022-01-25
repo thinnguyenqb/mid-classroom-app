@@ -8,6 +8,7 @@ import {
   Container,
   Typography,
   Link,
+  Skeleton
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Accordion from "@mui/material/Accordion";
@@ -17,7 +18,6 @@ import ControlledEditor from "./ControlledEditor";
 import CopyClipboard from "./CopyClipboard";
 import GradeStructure from "./GradeStructure";
 import axios from "axios";
-import { API_URL } from "../../utils/config";
 import { useParams } from "react-router-dom";
 import PeopleButton from "../../components/PeopleButton/index";
 import ExercisesButton from "./../../components/ExercisesButton/index";
@@ -48,25 +48,28 @@ const styles = {
 };
 
 const Material = () => {
+  const { auth } = useSelector(state => state)
+  const token = localStorage.getItem("access_token");
   const [addPost, setAddPost] = useState(false);
   const [value, setValue] = useState("");
   const { id } = useParams();
   const [classes, setClasses] = useState([]);
-  const token = localStorage.getItem("access_token");
   const [teacherName, setTeacherName] = useState("");
-  const { auth } = useSelector(state => state)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (token) {
+      setLoading(true)
       const getDetailClass = async () => {
         try {
           axios
-            .get(`${API_URL}/classroom/detail/${id}`, {
+            .get(process.env.REACT_APP_USER_BASE_URL + `/classroom/detail/${id}`, {
               headers: { Authorization: token },
             })
             .then((result) => {
               setClasses(result.data);
               setTeacherName(result.data.teacher[0].name);
+              setLoading(false)
             })
             .catch((err) => {
               console.log(err);
@@ -106,14 +109,21 @@ const Material = () => {
                       borderRadius: "5px",
                     }}
                   >
-                    <Grid sx={{ width: "100%" }}>
-                      <Typography sx={{ color: "white", fontSize: 36 }}>
-                        {classes.name}
-                      </Typography>
-                      <Typography sx={{ color: "white", fontSize: 20 }}>
-                        {classes.desc}
-                      </Typography>
-                    </Grid>
+                    {loading ? 
+                      <Grid sx={{ width: "100%" }}>
+                        <Skeleton animation="wave" width={300} height={60} sx={{ backgroundColor: "#8d9effc7" }} />
+                        <Skeleton animation="wave" width={200} height={30} sx={{ backgroundColor: "#8d9effc7" }} />
+                      </Grid>
+                    :
+                      <Grid sx={{ width: "100%" }}>
+                        <Typography sx={{ color: "white", fontSize: 36 }}>
+                          {classes.name}
+                        </Typography>
+                        <Typography sx={{ color: "white", fontSize: 20 }}>
+                          {classes.desc}
+                        </Typography>
+                      </Grid>
+                    }
                     <Grid
                       container
                       direction="row"
@@ -126,18 +136,20 @@ const Material = () => {
                     </Grid>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography>
-                      <b style={styles.infoLabel}>Room:</b>
-                      <span style={styles.sizeText}>{classes.room}</span>
-                    </Typography>
-                    <Typography>
-                      <b style={styles.infoLabel}>Topic:</b>
-                      <span style={styles.sizeText}>{classes.topic}</span>
-                    </Typography>
-                    <Typography>
-                      <b style={styles.infoLabel}>Teacher:</b>
-                      <span style={styles.sizeText}>{teacherName}</span>
-                    </Typography>
+                    {!loading && <>
+                      <Typography>
+                        <b style={styles.infoLabel}>Room:</b>
+                        <span style={styles.sizeText}>{classes.room}</span>
+                      </Typography>
+                      <Typography>
+                        <b style={styles.infoLabel}>Topic:</b>
+                        <span style={styles.sizeText}>{classes.topic}</span>
+                      </Typography>
+                      <Typography>
+                        <b style={styles.infoLabel}>Teacher:</b>
+                        <span style={styles.sizeText}>{teacherName}</span>
+                      </Typography>
+                    </>}
                   </AccordionDetails>
                 </Accordion>
               </Paper>
@@ -153,7 +165,7 @@ const Material = () => {
                         </Typography>
                       </Grid>
                       <Grid item sx={{ ml: "auto" }}>
-                        <CopyClipboard classCode={classes.id} />
+                       {!loading && <CopyClipboard classCode={classes.id} />} 
                       </Grid>
                     </Grid>
                     <Box
@@ -170,9 +182,10 @@ const Material = () => {
                           color: "black",
                           borderRadius: "5px",
                           padding: "3px",
+                          height: '20px'
                         }}
                       >
-                        {classes.id}
+                        {!loading && <>{classes.id}</>} 
                       </p>
                     </Box>
                   </Item>
@@ -185,7 +198,8 @@ const Material = () => {
                       </span>
                     </Typography>
                     <Divider sx={{ mt: 1 }} />
-                    <GradeStructure class_id={classes.id} />
+                    {!loading && <GradeStructure class_id={classes.id} />}
+                    
                   </Item>
                 </Grid>
               </Grid>
