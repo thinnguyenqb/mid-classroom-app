@@ -86,10 +86,10 @@ const Material = () => {
     <>
       <Container
         maxWidth="lg"
-        sx={{ marginTop: 11, maxWidth: "1000px !important" }}
+        sx={{ marginTop: 9, maxWidth: "1000px !important" }}
       >
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={3} direction="row">
+          <Grid container spacing={2.5} direction="row">
             <Grid item xs={12}>
               <Paper xs={{ padding: 0, borderRadius: "10px !important" }}>
                 <Accordion disableGutters xs={{ borderRadius: "10px" }}>
@@ -128,7 +128,7 @@ const Material = () => {
                       container
                       direction="row"
                       justifyContent="flex-end"
-                      alignItems="center"
+                      alignItems="flex-end"
                     >
                       <ExercisesButton id={id} />
                       <PeopleButton id={id} />
@@ -155,7 +155,7 @@ const Material = () => {
               </Paper>
             </Grid>
             <Grid item xs={3.5}>
-              <Grid container direction="row" spacing={3}>
+              <Grid container direction="row" spacing={2}>
                 <Grid item xs={12}>
                   <Item sx={{boxShadow: 'none'}}>
                     <Grid container direction="row" alignItems={"center"}>
@@ -219,7 +219,7 @@ const Material = () => {
                         sx={{"&:hover": { cursor: "pointer" } }}
                       >
                         <Grid container alignItems="center">
-                          <Avatar src={auth.user.avatar} height="35" wihth="35"></Avatar>
+                          <Avatar src={auth && auth.user ? auth.user.avatar : 'avtar'} height="35" wihth="35"></Avatar>
                           <Link
                             sx={{
                               marginLeft: "10px",
@@ -231,7 +231,7 @@ const Material = () => {
                               },
                             }}
                           >
-                            Annouce something to your class
+                            Thông báo nội dung nào đó cho lớp của bạn
                           </Link>
                         </Grid>
                       </Box>
