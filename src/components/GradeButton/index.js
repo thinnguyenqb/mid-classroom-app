@@ -1,6 +1,4 @@
 import React from "react";
-import { Button } from "@material-ui/core";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import GradingIcon from '@mui/icons-material/Grading';
 import { Tooltip, IconButton } from "@mui/material";
@@ -11,23 +9,20 @@ const GradeButton = (id) => {
 
   return (
     <>
-      <Box sx={{ mr:1 }}>
+      <Box sx={{ mr: 2 }}
+        style={{
+          color: "black",
+          backgroundColor: "#fff",
+          marginBottom: "10px",
+          borderRadius: "5px",
+          padding: '5px'
+        }}>
         <Link to={`${location.pathname}/gradeClass`}>
-          <ButtonGroup variant="outlined" aria-label="outlined button group">
-            <Button
-              style={{
-                color: "black",
-                backgroundColor: "#fff",
-                marginBottom: "10px",
-              }}
-            >
-              <Tooltip title="Grade">
-                <IconButton color="primary">
-                  <GradingIcon />
-                </IconButton>
-              </Tooltip>
-            </Button>
-          </ButtonGroup>
+          <Tooltip title="Grade">
+            <IconButton color="primary" size="large">
+              <GradingIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
       </Box>
     </>

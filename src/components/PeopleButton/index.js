@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "@material-ui/core";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import PeopleClass from "../PeopleClass/PeopleClass";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
@@ -14,24 +12,22 @@ const PeopleButton = (id) => {
   
   return (
     <>
-      <Box sx={{ mr:1 }}>
-        <ButtonGroup variant="outlined" aria-label="outlined button group">
-          <Button
-            style={{
-              color: "black",
-              backgroundColor: "#fff",
-              marginBottom: "10px",
-            }}
+      <Box sx={{ mr: 2 }}
+        style={{
+          color: "black",
+          backgroundColor: "#fff",
+          marginBottom: "10px",
+          borderRadius: "5px",
+          padding: '5px'
+        }}>
+        <Tooltip title="Everyone">
+          <IconButton color="primary"
+            size="large"
             onClick={showPeople}
           >
-            <Tooltip title="Everyone">
-              <IconButton color="primary">
-                <AssignmentIndIcon />
-              </IconButton>
-            </Tooltip>
-          </Button>
-          
-        </ButtonGroup>
+            <AssignmentIndIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
       <PeopleClass
         peopleDiglog={peopleDiglog}

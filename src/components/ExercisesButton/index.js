@@ -1,6 +1,4 @@
 import React from "react";
-import { Button } from "@material-ui/core";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Tooltip, IconButton } from "@mui/material";
@@ -11,23 +9,20 @@ const ExercisesButton = (id) => {
 
   return (
     <>
-      <Box sx={{ mr:1 }}>
+      <Box sx={{ mr: 2 }}
+        style={{
+          color: "black",
+          backgroundColor: "#fff",
+          marginBottom: "10px",
+          borderRadius: "5px",
+          padding: '5px'
+        }}>
         <Link to={`${location.pathname}/exercises`}>
-          <ButtonGroup variant="outlined" aria-label="outlined button group">
-            <Button
-              style={{
-                color: "black",
-                backgroundColor: "#fff",
-                marginBottom: "10px",
-              }}
-            >
-              <Tooltip title="Exercises">
-                <IconButton color="primary">
-                  <AssignmentIcon />
-                </IconButton>
-              </Tooltip>
-            </Button>
-          </ButtonGroup>
+          <Tooltip title="Exercises" >
+            <IconButton color="primary" size="large">
+              <AssignmentIcon/>
+            </IconButton>
+          </Tooltip>
         </Link>
       </Box>
     </>

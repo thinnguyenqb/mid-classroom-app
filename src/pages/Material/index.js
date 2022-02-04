@@ -4,17 +4,15 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import {
-  Button,
   Container,
   Typography,
   Link,
-  Skeleton
+  Skeleton,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import ControlledEditor from "./ControlledEditor";
 import CopyClipboard from "./CopyClipboard";
 import GradeStructure from "./GradeStructure";
 import axios from "axios";
@@ -24,6 +22,8 @@ import ExercisesButton from "./../../components/ExercisesButton/index";
 import GradeButton from "../../components/GradeButton";
 import { Divider } from "@mui/material";
 import { useSelector } from "react-redux";
+import CreatePost from "./CreatePost";
+import ContentPost from "./ContentPost";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -51,7 +51,7 @@ const Material = () => {
   const { auth } = useSelector(state => state)
   const token = localStorage.getItem("access_token");
   const [addPost, setAddPost] = useState(false);
-  const [value, setValue] = useState("");
+  const [post, setPost] = useState([]);
   const { id } = useParams();
   const [classes, setClasses] = useState([]);
   const [teacherName, setTeacherName] = useState("");
@@ -89,7 +89,7 @@ const Material = () => {
         sx={{ marginTop: 11, maxWidth: "1000px !important" }}
       >
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} direction="row">
             <Grid item xs={12}>
               <Paper xs={{ padding: 0, borderRadius: "10px !important" }}>
                 <Accordion disableGutters xs={{ borderRadius: "10px" }}>
@@ -155,10 +155,10 @@ const Material = () => {
               </Paper>
             </Grid>
             <Grid item xs={3.5}>
-              <Grid container spacing={3}>
+              <Grid container direction="row" spacing={3}>
                 <Grid item xs={12}>
                   <Item sx={{boxShadow: 'none'}}>
-                    <Grid container alignItems={"center"}>
+                    <Grid container direction="row" alignItems={"center"}>
                       <Grid item>
                         <Typography>
                           <span style={styles.infoLabel}>Invite code</span>
@@ -207,33 +207,16 @@ const Material = () => {
             <Grid item xs={8.5}>
               <Item >
                 {addPost ? (
-                  <Box>
-                    <ControlledEditor value={value} setValue={setValue} />
-                    <Grid container justifyContent="end" sx={{ marginTop: 2 }}>
-                      <Button
-                        sx={{ marginRight: 1 }}
-                        color="primary"
-                        aria-label="add"
-                        onClick={() => setAddPost(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        aria-label="add"
-                        sx={{ backgroundColor: "#3f51b5" }}
-                        onClick={() => setAddPost(false)}
-                      >
-                        Post
-                      </Button>
-                    </Grid>
-                  </Box>
+                  <CreatePost
+                    setPost={setPost}
+                    setAddPost={setAddPost}
+                    classId={classes.id}
+                  />
                 ) : (
                     <>
                       <Box
                         onClick={() => setAddPost(true)}
-                        sx={{ marginBottom: 1, "&:hover": { cursor: "pointer" } }}
+                        sx={{"&:hover": { cursor: "pointer" } }}
                       >
                         <Grid container alignItems="center">
                           <Avatar src={auth.user.avatar} height="35" wihth="35"></Avatar>
@@ -252,10 +235,10 @@ const Material = () => {
                           </Link>
                         </Grid>
                       </Box>
-                     
                     </>
                 )}
               </Item>
+              <ContentPost postState={[post, setPost]} classId={classes.id}/>
               <Item sx={{mt: 3, boxShadow: 'none'}}>
                 <Grid
                   container
