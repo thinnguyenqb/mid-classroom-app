@@ -238,7 +238,7 @@ const Material = () => {
                     </>
                 )}
               </Item>
-              <ContentPost postState={[post, setPost]} classId={classes.id}/>
+              <ContentPost postState={[post, setPost]} classId={classes.id} auth={auth}/>
               <Item sx={{mt: 3, boxShadow: 'none'}}>
                 <Grid
                   container

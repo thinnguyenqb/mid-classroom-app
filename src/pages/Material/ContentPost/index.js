@@ -1,15 +1,14 @@
 import React, {useState, useEffect} from "react";
 import {
-  Grid, Typography, Box, Paper, Avatar, IconButton,
-  FormControl, OutlinedInput, InputAdornment,
-  Tooltip, CircularProgress 
+  Grid, Typography, Box, Paper, Avatar, IconButton, CircularProgress 
 } from "@mui/material";
 import axios from "axios";
-import SendIcon from '@mui/icons-material/Send';
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import moment from 'moment'
+import Comment from "./Comment";
+import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 
-const ContentPost = ({ postState, classId }) => {
+const ContentPost = ({ postState, classId, auth }) => {
   const [post, setPost] = postState;
   const token = localStorage.getItem("access_token");
   const [loading, setLoading] = useState(false)
@@ -30,7 +29,7 @@ const ContentPost = ({ postState, classId }) => {
         .catch((err) => console.log(err));
     }
   }, [token, classId, setPost]);
-
+  console.log(post)
   return (
     <React.Fragment>
       {
@@ -103,35 +102,24 @@ const ContentPost = ({ postState, classId }) => {
                     dangerouslySetInnerHTML={{ __html: item.content }}
                   ></Grid>
                 </Box>
-                <Box sx={{borderTop: '1px solid #ccc', padding: "8px 16px 8px 16px",}}>
-                  <Grid container alignItems="center" direction="row">
-                    <Grid item xs={1}>
-                      <Avatar src="" height="35" wihth="35"></Avatar>
-                    </Grid>
-                    <Grid item xs={11}>
-                      <Grid>
-                        <FormControl sx={{ ml: 0, pr: 2, width: '100%' }} variant="outlined">
-                          <OutlinedInput
-                            placeholder="Thêm nhận xét trong lớp học..."
-                            variant="outlined"
-                            size="small"
-                            endAdornment={
-                              <InputAdornment position="end">
-                                <Tooltip title="Đăng">
-                                  <IconButton
-                                    aria-label="toggle password visibility"
-                                    edge="end"
-                                  >
-                                    <SendIcon />
-                                  </IconButton>
-                                </Tooltip>
-                              </InputAdornment>
-                            }
-                          />
-                        </FormControl>
+                <Box sx={{ borderTop: '1px solid #ccc', }}>
+                  <Grid item container alignItems="center" sx={{ ml: 2 }}>
+                        <IconButton className="menu-button">
+                          <PeopleOutlineRoundedIcon fontSize="large"/>
+                        </IconButton>
+                        <Typography
+                          sx={{
+                            mr: "auto",
+                            color: "#3c4043",
+                            fontWeight: "500",
+                            fontSize: "16px",
+                          }}
+                        >
+                          {item.comments.length} Nhận xét về lớp học
+                        </Typography>
                       </Grid>
-                    </Grid>
-                  </Grid>
+                  <Comment item={item} auth={auth}/>
+                    
                 </Box>  
               </Paper>
             ))}
